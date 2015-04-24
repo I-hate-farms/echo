@@ -245,14 +245,33 @@ namespace Echo
 			}
 		}
 
-		public Gee.ArrayList<Symbol> get_symbols () {
+		public Vala.List<Symbol> get_symbols () {
 				// TODO 
-				return new Gee.ArrayList<Symbol>() ;
+				return new Vala.ArrayList<Symbol>() ;
 		} 
 
-		public Gee.ArrayList<Symbol> get_symbols_for_file (string full_path) {
+		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 				// TODO 
-				return new Gee.ArrayList<Symbol>() ;
+
+				// FIXME use a hashmap!
+				Vala.SourceFile source = null ;
+				foreach (var source_file in context.get_source_files ())
+				{
+					print ("FILE %s\n", source_file.filename) ;
+					if( source_file.filename == full_path) {
+						source = source_file ; 
+						break ;
+					}
+				} 
+
+				var result = new Vala.ArrayList<Symbol>() ;
+				if( source != null ) {
+					var symbol = code_tree.get_code_tree (source) ;
+					if (symbol != null)
+						result.add (symbol) ;
+				}
+
+				return result ; 
 		} 
 
 		public void complete (string filename, int line, int column) throws CompleterError

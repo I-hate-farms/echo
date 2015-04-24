@@ -66,6 +66,10 @@ namespace Echo
 					"%s.%s".printf (parent.fully_qualified_name, name);
 			}
 		}
+
+		public string to_string () {
+			return "%s: %s".printf(fully_qualified_name, symbol_type.to_string ()) ;
+		}
 	}
 
 	public class CodeTree : Vala.CodeVisitor
