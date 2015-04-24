@@ -7,21 +7,17 @@ library (
     NAME
         echo
     AUTHOR
-        "Tom95"
+        "Echo Developers"
     HOMEPAGE
-        "https://github.com/I-hate-farms/echo"      
+        "https://github.com/I-hate-farms/echo"
     LICENSE
-        "Apache 2.0"  
+        "Apache 2.0"
     TITLE
         "Have your editor bark back at you"
     VERSION
         "0.1"
     SOURCE_PATH
-        .
-    VALA_FILES
-        Project.vala 
-        CodeTree.vala 
-        Utils.vala
+        echo
     LINKING
         shared
     PACKAGES
@@ -29,4 +25,19 @@ library (
         gio-2.0
 )
 
-# PS: how to pick a license: http://choosealicense.com/
+console_application (
+    NAME
+        echo-testing
+    LICENSE
+        "Apache 2.0"
+    VERSION
+        "0.1"
+    TITLE
+        "Echo Testing"
+    SOURCE_PATH
+        src
+    PACKAGES
+        gtk+-3.0
+        echo
+)
+
