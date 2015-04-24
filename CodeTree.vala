@@ -3,26 +3,29 @@ namespace Echo
 {
 	public enum SymbolType
 	{
-		FILE,
-		NAMESPACE,
-		CLASS,
-		CONSTRUCTOR,
-		DESTRUCTOR,
-		ENUM,
-		INTERFACE,
-		METHOD,
-		STRUCT,
-		PROPERTY,
-		FIELD,
-		SIGNAL
+		FILE = 1,
+		NAMESPACE  = 1 << 1,
+		CLASS = 1 << 2,
+		CONSTRUCTOR = 1 << 3,
+		DESTRUCTOR = 1 << 4,
+		ENUM = 1 << 5,
+		INTERFACE = 1 << 6,
+		METHOD = 1 << 7,
+		STRUCT = 1 << 8,
+		PROPERTY = 1 << 9,
+		FIELD = 1 << 10,
+		SIGNAL  = 1 << 11
 	}
 
+  [Flags]
 	public enum AccessType
 	{
-		PRIVATE,
-		INTERNAL,
-		PROTECTED,
-		PUBLIC
+		PRIVATE = 1,
+		INTERNAL = 1 << 1,
+		PROTECTED = 1 << 2,
+		PUBLIC = 1 << 3
+//		ANY = SymbolAccessibility.PRIVATE | SymbolAccessibility.INTERNAL | SymbolAccessibility.PROTECTED | SymbolAccessibility.PUBLIC
+
 	}
 
 	public class DataType
