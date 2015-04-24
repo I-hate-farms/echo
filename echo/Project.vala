@@ -183,12 +183,6 @@ namespace Echo
 			context.profile = Vala.Profile.GOBJECT;
 			context.report = new Reporter ();
 
-			context.add_external_package ("glib-2.0");
-			context.add_external_package ("gobject-2.0");
-
-			context.add_external_package ("clutter-gtk-1.0");
-			context.add_external_package ("granite");
-
 			parser = new Vala.Parser ();
 			parser.parse (context);
 
@@ -198,9 +192,34 @@ namespace Echo
 			cancellable = new Cancellable ();
 		}
 
+		public void add_external_package (string package) {
+			context.add_external_package (package);
+		}
+
 		public void add_file (string file)
 		{
 			context.add_source_filename (file);
+		}
+
+		public void update_sync ()
+		{
+			// TODO wrap in thread
+
+			lock (context) {
+				Vala.CodeContext.push (context);
+
+				foreach (var src in context.get_source_files ()) {
+
+					if (src.get_nodes ().size > 0)
+						continue;
+
+					parser.visit_source_file (src);
+				}
+
+				context.check ();
+
+				Vala.CodeContext.pop ();
+			}
 		}
 
 		public async void update ()
@@ -225,6 +244,16 @@ namespace Echo
 				Vala.CodeContext.pop ();
 			}
 		}
+
+		public Gee.ArrayList<Symbol> get_symbols () {
+				// TODO 
+				return new Gee.ArrayList<Symbol>() ;
+		} 
+
+		public Gee.ArrayList<Symbol> get_symbols_for_file (string full_path) {
+				// TODO 
+				return new Gee.ArrayList<Symbol>() ;
+		} 
 
 		public void complete (string filename, int line, int column) throws CompleterError
 		{

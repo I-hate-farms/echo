@@ -3,6 +3,7 @@
 set (BUILD_TYPE "Debug")
 
 # This new application will conquer the world
+
 library (
     NAME
         echo
@@ -23,21 +24,25 @@ library (
     PACKAGES
         libvala-0.28
         gio-2.0
+        gee-0.8
 )
 
-console_application (
-    NAME
-        echo-testing
-    LICENSE
-        "Apache 2.0"
-    VERSION
-        "0.1"
-    TITLE
-        "Echo Testing"
-    SOURCE_PATH
-        src
-    PACKAGES
-        gtk+-3.0
-        echo
-)
+#console_application (
+#    NAME
+#        echo-testing
+#    LICENSE
+#        "Apache 2.0"
+#    VERSION
+#        "0.1"
+#    TITLE
+#        "Echo Testing"
+#    SOURCE_PATH
+#        src
+#    PACKAGES
+#        gtk+-3.0
+#        echo
+#)
+
+
+
 
