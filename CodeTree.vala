@@ -24,7 +24,7 @@ namespace Echo
 		INTERNAL = 1 << 1,
 		PROTECTED = 1 << 2,
 		PUBLIC = 1 << 3
-//		ANY = SymbolAccessibility.PRIVATE | SymbolAccessibility.INTERNAL | SymbolAccessibility.PROTECTED | SymbolAccessibility.PUBLIC
+//	useful?	ANY = SymbolAccessibility.PRIVATE | SymbolAccessibility.INTERNAL | SymbolAccessibility.PROTECTED | SymbolAccessibility.PUBLIC
 
 	}
 
