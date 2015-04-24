@@ -1,0 +1,32 @@
+
+# You can also set Debug as your default build
+set (BUILD_TYPE "Debug")
+
+# This new application will conquer the world
+library (
+    NAME
+        echo
+    AUTHOR
+        "Tom95"
+    HOMEPAGE
+        "https://github.com/I-hate-farms/echo"      
+    LICENSE
+        "Apache 2.0"  
+    TITLE
+        "Have your editor bark back at you"
+    VERSION
+        "0.1"
+    SOURCE_PATH
+        .
+    VALA_FILES
+        Project.vala 
+        CodeTree.vala 
+        Utils.vala
+    LINKING
+        shared
+    PACKAGES
+        libvala-0.28
+        gio-2.0
+)
+
+# PS: how to pick a license: http://choosealicense.com/
