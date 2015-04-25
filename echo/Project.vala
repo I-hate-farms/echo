@@ -246,10 +246,22 @@ namespace Echo
 			}
 		}
 
-		public Vala.List<Symbol> get_symbols () {
-				// TODO 
-				return new Vala.ArrayList<Symbol>() ;
-		} 
+
+		/** 
+		 * Returns the symbol `symbol_name` at the specific position of the file.
+		 **/ 
+		public Symbol get_symbol_at_position (string file_full_path, string symbol_name, int line, int column) {
+			return null ;
+		}
+
+		/** 
+		 * Returns all the symbols (even the nested ones) for the file of type `type`.
+		 **/ 
+		public Vala.List<Symbol> all_symbols_for_file (string file_full_path, SymbolType type) {
+			var result = new Vala.ArrayList<Symbol>() ;
+			return result ;
+		}
+
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 				// TODO 
