@@ -28,42 +28,64 @@ namespace Echo
 
 	}
 
+	public class SourceReference {
+		public string file_full_path { get ; set ; } 
+		public int line { get ; set ; }
+		public int column { get ; set ; }
+
+		public SourceReference (string file_full_path, int line, int column) {
+			this.file_full_path = file_full_path ; 
+			this.line = line ; 
+			this.column = column ;
+		}
+	}
+
 	public class DataType
 	{
 		/**
 		 * Symbol this DataType belongs to
 		 */
-		public unowned Symbol? symbol;
+		public unowned Symbol? symbol  { get ; set ; }
 
-		public string name;
-		public string type_name;
+		public string name  { get ; set ; }
+		public string type_name  { get ; set ; }
 
-		public bool is_array;
-		public bool is_pointer;
-		public bool is_generic;
-		public bool is_nullable;
-		public bool is_out;
-		public bool is_ref;
+		public bool is_array  { get ; set ; }
+		public bool is_pointer  { get ; set ; }
+		public bool is_generic  { get ; set ; }
+		public bool is_nullable { get ; set ; }
+		public bool is_out  { get ; set ; }
+		public bool is_ref  { get ; set ; }
 	}
 
 	public class Symbol
 	{
-		public SymbolType symbol_type;
-		public AccessType access_type;
-		public string verbose_name;
-		public string name;
-		public Symbol? parent;
-		public List<Symbol> children = new List<Symbol> ();
-		public string source_file_name;
-		public int source_line;
-
-		public List<DataType>? parameters;
+		public SymbolType symbol_type { get ; set ; }
+		public AccessType access_type { get ; set ; }
+		public string verbose_name { get ; set ; }
+		public string name { get ; set ; }
+		public Symbol? parent { get ; set ; }
+		public Vala.List<Symbol> children { get ; set ; default = new Vala.ArrayList<Symbol> () ; }
+		public string source_file_name { get ; set ; }
+		public int source_line { get ; set ; }
+		public int source_column { get ; set ; }
+		public Vala.List<DataType>? parameters { get ; set ; }
 
 		public string fully_qualified_name {
 			owned get {
 				return parent == null || parent.parent == null ?
 					name :
 					"%s.%s".printf (parent.fully_qualified_name, name);
+			}
+		}
+
+		private SourceReference _declaration = null ; 
+
+		public SourceReference declaration {
+			owned get {
+				if( _declaration == null)
+					_declaration = new SourceReference (source_file_name, source_line, source_column) ;
+				return _declaration ;
 			}
 		}
 
@@ -109,6 +131,7 @@ namespace Echo
 			s.access_type = (AccessType) symbol.access;
 			s.source_file_name = symbol.source_reference.file.filename;
 			s.source_line = symbol.source_reference.begin.line;
+			s.source_column = symbol.source_reference.begin.column;
 			s.verbose_name = Utils.symbol_to_string (symbol);
 			s.name = Utils.symbol_to_name (symbol);
 			s.parent = current;
@@ -117,9 +140,11 @@ namespace Echo
 			var prev = current;
 			current = s;
 
-			prev.children.prepend (s);
+			// prev.children.prepend (s);
+			prev.children.insert (0, s) ;
 			symbol.accept_children (this);
-			s.children.reverse ();
+			// s.children.reverse ();
+			s.children = Utils.reverse (s.children);
 
 			current = prev;
 		}

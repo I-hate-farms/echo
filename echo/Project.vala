@@ -193,6 +193,7 @@ namespace Echo
 		}
 
 		public void add_external_package (string package) {
+			Utils.report_error ("Project.add_external_package", "started") ;
 			context.add_external_package (package);
 		}
 
@@ -252,12 +253,11 @@ namespace Echo
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 				// TODO 
-
+				Utils.report_debug ("Project.get_symbols_for_file", "for file '%s'".printf(full_path)) ;
 				// FIXME use a hashmap!
 				Vala.SourceFile source = null ;
 				foreach (var source_file in context.get_source_files ())
 				{
-					print ("FILE %s\n", source_file.filename) ;
 					if( source_file.filename == full_path) {
 						source = source_file ; 
 						break ;
@@ -265,11 +265,24 @@ namespace Echo
 				} 
 
 				var result = new Vala.ArrayList<Symbol>() ;
-				if( source != null ) {
+				if( source == null ) {
+					Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(full_path)) ;
+				}
+				else
+				{
 					var symbol = code_tree.get_code_tree (source) ;
 					if (symbol != null)
-						result.add (symbol) ;
+					{
+
+						if( symbol.symbol_type != SymbolType.FILE) 
+							result.add (symbol) ;
+					  else 
+						  // We skip the first level that is FILE
+							foreach (var child in symbol.children )
+								result.add (child) ;
+							}
 				}
+				Utils.report_debug ("Project.get_symbols_for_file", "Found '%d' symbols".printf(result.size)) ;
 
 				return result ; 
 		} 
@@ -309,7 +322,7 @@ namespace Echo
 			}
 		}
 
-		void print_node (Symbol symbol, int indent = 0)
+		public static void print_node (Symbol symbol, int indent = 0)
 		{
 			var s = "";
 			for (var i = 0; i < indent; i++)

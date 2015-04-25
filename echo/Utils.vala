@@ -1,6 +1,17 @@
 
 namespace Echo.Utils
 {
+
+ /**
+  * Report an error to the console for debugging purpose
+  */
+	public static void report_error (string origin, string message) {
+		critical ("echo:: %s: %s", origin, message) ;
+	}
+
+	public static void report_debug (string origin, string message) {
+		critical ("echo:: %s: %s", origin, message) ;
+	}
 	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given
 	 * symbol has no parameters.
@@ -8,7 +19,7 @@ namespace Echo.Utils
 	 * @param symbol The symbol for which to return a parameter list
 	 * @return       A list of parameters or %null
 	 */
-	public List<DataType>? extract_parameters (Vala.Symbol symbol)
+	public Vala.List<DataType>? extract_parameters (Vala.Symbol symbol)
 	{
 		Vala.List<Vala.Parameter>? parameters = null;
 
@@ -19,7 +30,7 @@ namespace Echo.Utils
 		else
 			return null;
 
-		var list = new List<DataType> ();
+		var list = new Vala.ArrayList<DataType> ();
 
 		foreach (var param in parameters) {
 			var data = new DataType ();
@@ -31,12 +42,30 @@ namespace Echo.Utils
 
 			data.type_name = type.to_string ();
 			process_type_name (data);
-
-			list.prepend (data);
+			list.insert( 0, data) ;
+			//list.prepend (data);
 		}
 
-		list.reverse ();
-		return list;
+		// list.reverse ();
+		return reverse_parameters(list);
+	}
+
+	public static Vala.List<Symbol> reverse (Vala.List<Symbol> list) 
+	{
+			var result = new Vala.ArrayList<Symbol>() ;
+			for (int i = list.size - 1; i >= 0; i--) {
+				result.add (list.@get(i)) ;
+			}
+			return result ;
+	}
+
+	public static Vala.List<DataType> reverse_parameters (Vala.List<DataType> list) 
+	{
+			var result = new Vala.ArrayList<DataType>() ;
+			for (int i = list.size - 1; i >= 0; i--) {
+				result.add (list.@get(i)) ;
+			}
+			return result ;
 	}
 
 	/**
