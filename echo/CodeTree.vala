@@ -32,11 +32,13 @@ namespace Echo
 		public string file_full_path { get ; set ; } 
 		public int line { get ; set ; }
 		public int column { get ; set ; }
-
-		public SourceReference (string file_full_path, int line, int column) {
+		public int last_line { get ; set ; }
+		
+		public SourceReference (string file_full_path, int line, int column, int last_line) {
 			this.file_full_path = file_full_path ; 
 			this.line = line ; 
 			this.column = column ;
+			this.last_line=last_line;
 		}
 	}
 
@@ -69,6 +71,7 @@ namespace Echo
 		public string source_file_name { get ; set ; }
 		public int source_line { get ; set ; }
 		public int source_column { get ; set ; }
+		public int source_last_line { get ; set ; }
 		public Vala.List<DataType>? parameters { get ; set ; }
 
 		public string fully_qualified_name {
@@ -84,7 +87,7 @@ namespace Echo
 		public SourceReference declaration {
 			owned get {
 				if( _declaration == null)
-					_declaration = new SourceReference (source_file_name, source_line, source_column) ;
+					_declaration = new SourceReference (source_file_name, source_line, source_column, source_last_line) ;
 				return _declaration ;
 			}
 		}
@@ -131,6 +134,7 @@ namespace Echo
 			s.access_type = (AccessType) symbol.access;
 			s.source_file_name = symbol.source_reference.file.filename;
 			s.source_line = symbol.source_reference.begin.line;
+			s.source_last_line = symbol.source_reference.end.line;
 			s.source_column = symbol.source_reference.begin.column;
 			s.verbose_name = Utils.symbol_to_string (symbol);
 			s.name = Utils.symbol_to_name (symbol);
