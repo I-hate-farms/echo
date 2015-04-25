@@ -6,11 +6,11 @@ namespace Echo.Utils
   * Report an error to the console for debugging purpose
   */
 	public static void report_error (string origin, string message) {
-		critical ("echo:: %s: %s", origin, message) ;
+		critical ("echo:: %s: %s", origin, message);
 	}
 
 	public static void report_debug (string origin, string message) {
-		critical ("echo:: %s: %s", origin, message) ;
+		critical ("echo:: %s: %s", origin, message);
 	}
 	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given
@@ -42,7 +42,7 @@ namespace Echo.Utils
 
 			data.type_name = type.to_string ();
 			process_type_name (data);
-			list.insert( 0, data) ;
+			list.insert( 0, data);
 			//list.prepend (data);
 		}
 
@@ -52,20 +52,20 @@ namespace Echo.Utils
 
 	public static Vala.List<Symbol> reverse (Vala.List<Symbol> list) 
 	{
-			var result = new Vala.ArrayList<Symbol>() ;
+			var result = new Vala.ArrayList<Symbol>();
 			for (int i = list.size - 1; i >= 0; i--) {
-				result.add (list.@get(i)) ;
+				result.add (list.@get(i));
 			}
-			return result ;
+			return result;
 	}
 
 	public static Vala.List<DataType> reverse_parameters (Vala.List<DataType> list) 
 	{
-			var result = new Vala.ArrayList<DataType>() ;
+			var result = new Vala.ArrayList<DataType>();
 			for (int i = list.size - 1; i >= 0; i--) {
-				result.add (list.@get(i)) ;
+				result.add (list.@get(i));
 			}
-			return result ;
+			return result;
 	}
 
 	/**

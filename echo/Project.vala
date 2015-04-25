@@ -193,7 +193,7 @@ namespace Echo
 		}
 
 		public void add_external_package (string package) {
-			Utils.report_error ("Project.add_external_package", "started") ;
+			Utils.report_error ("Project.add_external_package", "started");
 			context.add_external_package (package);
 		}
 
@@ -251,50 +251,50 @@ namespace Echo
 		 * Returns the symbol `symbol_name` at the specific position of the file.
 		 **/ 
 		public Symbol get_symbol_at_position (string file_full_path, string symbol_name, int line, int column) {
-			return null ;
+			return null;
 		}
 
 		/** 
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
 		public Vala.List<Symbol> all_symbols_for_file (string file_full_path, SymbolType type) {
-			var result = new Vala.ArrayList<Symbol>() ;
-			return result ;
+			var result = new Vala.ArrayList<Symbol>();
+			return result;
 		}
 
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 				// TODO 
-				Utils.report_debug ("Project.get_symbols_for_file", "for file '%s'".printf(full_path)) ;
+				Utils.report_debug ("Project.get_symbols_for_file", "for file '%s'".printf(full_path));
 				// FIXME use a hashmap!
-				Vala.SourceFile source = null ;
+				Vala.SourceFile source = null;
 				foreach (var source_file in context.get_source_files ())
 				{
 					if( source_file.filename == full_path) {
 						source = source_file ; 
-						break ;
+						break;
 					}
 				} 
 
-				var result = new Vala.ArrayList<Symbol>() ;
+				var result = new Vala.ArrayList<Symbol>();
 				if( source == null ) {
-					Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(full_path)) ;
+					Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(full_path));
 				}
 				else
 				{
-					var symbol = code_tree.get_code_tree (source) ;
+					var symbol = code_tree.get_code_tree (source);
 					if (symbol != null)
 					{
 
 						if( symbol.symbol_type != SymbolType.FILE) 
-							result.add (symbol) ;
+							result.add (symbol);
 					  else 
 						  // We skip the first level that is FILE
 							foreach (var child in symbol.children )
-								result.add (child) ;
+								result.add (child);
 							}
 				}
-				Utils.report_debug ("Project.get_symbols_for_file", "Found '%d' symbols".printf(result.size)) ;
+				Utils.report_debug ("Project.get_symbols_for_file", "Found '%d' symbols".printf(result.size));
 
 				return result ; 
 		} 

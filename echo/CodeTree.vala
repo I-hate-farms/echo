@@ -37,7 +37,7 @@ namespace Echo
 		public SourceReference (string file_full_path, int line, int column, int last_line) {
 			this.file_full_path = file_full_path ; 
 			this.line = line ; 
-			this.column = column ;
+			this.column = column;
 			this.last_line=last_line;
 		}
 	}
@@ -87,13 +87,13 @@ namespace Echo
 		public SourceReference declaration {
 			owned get {
 				if( _declaration == null)
-					_declaration = new SourceReference (source_file_name, source_line, source_column, source_last_line) ;
-				return _declaration ;
+					_declaration = new SourceReference (source_file_name, source_line, source_column, source_last_line);
+				return _declaration;
 			}
 		}
 
 		public string to_string () {
-			return "%s: %s".printf(fully_qualified_name, symbol_type.to_string ()) ;
+			return "%s: %s".printf(fully_qualified_name, symbol_type.to_string ());
 		}
 	}
 
@@ -145,7 +145,7 @@ namespace Echo
 			current = s;
 
 			// prev.children.prepend (s);
-			prev.children.insert (0, s) ;
+			prev.children.insert (0, s);
 			symbol.accept_children (this);
 			// s.children.reverse ();
 			s.children = Utils.reverse (s.children);
