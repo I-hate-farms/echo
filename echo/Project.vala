@@ -49,7 +49,7 @@ namespace Echo
 		}
 
 		public void add_external_package (string package) {
-			Utils.report_error ("Project.add_external_package", "started");
+			Utils.report_debug ("Project.add_external_package", "adding: %s".printf(package));
 			context.add_external_package (package);
 		}
 

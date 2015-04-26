@@ -10,7 +10,7 @@ namespace Echo.Utils
 	}
 
 	public static void report_debug (string origin, string message) {
-		critical ("echo:: %s: %s", origin, message);
+		debug ("echo:: %s: %s", origin, message);
 	}
 	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given

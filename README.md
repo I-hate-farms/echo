@@ -15,5 +15,14 @@ Code manipulation libraby for vala: useful for getting symbols from vala files, 
 The unit tests are defined in the folder `tests`
 
 ```
-gstester 
+cd tests
+make
+```
+or run `tests/test-suite` directly 
+
+Expected output : 
+```
+/SymbolListingTestCase/list_symbols_in_simple_main: OK
+<more tests>                                      : OK 
+
 ```
