@@ -47,13 +47,15 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
   printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
   foreach (var symbol in symbols)
 		Project.print_node (symbol, 2);
+	// print ("\n") ;
 }
 
 public static void report_passed () {
 	passed_count ++ ;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
-	assert (true) ;
+	// assert (true) ;
+	print ("\n") ;
 }
 
 public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
