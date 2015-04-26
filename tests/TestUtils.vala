@@ -36,6 +36,33 @@ public static void printline_message (string message) {
 	print (message + "\n") ; 
 }
 
+public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
+	var expected_count = 1 ; 
+	if ( symbols.size == expected_count) {
+		var actual_type = symbols.@get (0).symbol_type ;
+		if( actual_type == type) {
+			print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
+			assert (true) ;
+		}
+		else
+		{
+			printline_error ("ERROR") ;
+			printline_error ("Found symbols or type '%s' instead of expected '%s'".printf (actual_type.to_string (), type.to_string ())) ;
+		  foreach (var symbol in symbols)
+				Project.print_node (symbol, 2);
+		}
+		return ;
+	}
+	printline_error ("ERROR") ;
+	printline_error ("Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
+  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
+  foreach (var symbol in symbols)
+		Project.print_node (symbol, 2);
+
+	// We don't want the program to segfault
+	// assert (false) ;
+}
+
 public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
 	if ( symbols.size == expected_count) {
 		print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
@@ -43,10 +70,11 @@ public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_
 		return ;
 	}
 	printline_error ("ERROR") ;
-	printline_error ("Found '%d' symbols instead of '%d'".printf (symbols.size, expected_count)) ;
+	printline_error ("Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
   printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
   foreach (var symbol in symbols)
 		Project.print_node (symbol, 2);
 
-	assert (false) ;
+	// We don't want the program to segfault
+	// assert (false) ;
 }

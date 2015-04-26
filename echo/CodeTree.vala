@@ -14,7 +14,8 @@ namespace Echo
 		STRUCT = 1 << 8,
 		PROPERTY = 1 << 9,
 		FIELD = 1 << 10,
-		SIGNAL  = 1 << 11 ;
+		SIGNAL  = 1 << 11,
+    FUNCTION  = 1 << 12 ;
 
 		public string to_string () {
 			switch(this) {
@@ -40,6 +41,8 @@ namespace Echo
 					return "Field" ; 
 				case SIGNAL: 
 					return "Signal" ; 
+				case FUNCTION: 
+					return "Function" ; 					
         default:
           assert_not_reached ();
 			}
