@@ -42,30 +42,10 @@ namespace Echo.Utils
 
 			data.type_name = type.to_string ();
 			process_type_name (data);
-			list.insert( 0, data);
-			//list.prepend (data);
+			list.add (data);
 		}
 
-		// list.reverse ();
-		return reverse_parameters(list);
-	}
-
-	public static Vala.List<Symbol> reverse (Vala.List<Symbol> list) 
-	{
-			var result = new Vala.ArrayList<Symbol>();
-			for (int i = list.size - 1; i >= 0; i--) {
-				result.add (list.@get(i));
-			}
-			return result;
-	}
-
-	public static Vala.List<DataType> reverse_parameters (Vala.List<DataType> list) 
-	{
-			var result = new Vala.ArrayList<DataType>();
-			for (int i = list.size - 1; i >= 0; i--) {
-				result.add (list.@get(i));
-			}
-			return result;
+		return list;
 	}
 
 	/**
