@@ -1,9 +1,9 @@
 class SymbolListingTestCase : Gee.TestCase {
  
   public SymbolListingTestCase() {
-    // assign a name for this class
     base("SymbolListingTestCase");
     // add test methods
+    
     add_file_test ("test_simple_main", "(main.vala)", test_simple_main);
     add_file_test ("test_main_namespace", "(main_namespace.vala)", test_main_namespace);
    }

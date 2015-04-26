@@ -139,8 +139,6 @@ namespace Echo
 		}
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
-				// TODO 
-				Utils.report_debug ("Project.get_symbols_for_file", "for file '%s'".printf(full_path));
 				// FIXME PERF use a hashmap!
 				Vala.SourceFile source = null;
 				foreach (var source_file in context.get_source_files ())
@@ -169,8 +167,6 @@ namespace Echo
 								result.add (child);
 							}
 				}
-				Utils.report_debug ("Project.get_symbols_for_file", "Found '%d' symbols".printf(result.size));
-
 				return result ; 
 		} 
 
