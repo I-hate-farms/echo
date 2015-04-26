@@ -13,11 +13,11 @@ class SymbolListingTestCase : Gee.TestCase {
    }
  
    public void test_simple_main() {
-     assert(get_root_symbols ("./files/main.vala").size == 1);
+     assert_symbol_count( get_root_symbols ("./files/main.vala"),  1);
    }
  
   public void test_main_namespace() {
-     assert(get_root_symbols ("./files/main_namespace.vala").size == 1);
+    assert_symbol_count( get_root_symbols ("./files/main_namespace.vala"),  1);
    }
 
    public override void tear_down () {
