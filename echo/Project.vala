@@ -104,11 +104,17 @@ namespace Echo
 
 
 		/** 
-		 * Returns the symbol `symbol_name` at the specific position of the file.
+		 * Returns the enclosing symbol at the specific position of the file.
 		 **/ 
-		public Symbol get_symbol_at_position (string file_full_path, string symbol_name, int line, int column) {
-			// TODO
-			return null;
+		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
+			Symbol current = null ;
+			
+			foreach (var symbol in get_symbols_for_file (file_full_path)) { 
+				if (symbol.source_line > line) break; 
+				current = symbol; 
+			}
+			
+			return current;
 		}
 
 		/** 
@@ -135,7 +141,7 @@ namespace Echo
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 				// TODO 
 				Utils.report_debug ("Project.get_symbols_for_file", "for file '%s'".printf(full_path));
-				// FIXME use a hashmap!
+				// FIXME PERF use a hashmap!
 				Vala.SourceFile source = null;
 				foreach (var source_file in context.get_source_files ())
 				{
