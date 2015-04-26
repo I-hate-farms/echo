@@ -4,5 +4,7 @@ public static int main(string[] args) {
   // add any of your test cases here
   TestSuite.get_root().add_suite(new SymbolListingTestCase().get_suite());
   
-  return Test.run ();
+  var result =  Test.run ();
+  print_report () ; 
+  return result ; 
 }

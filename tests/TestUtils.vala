@@ -9,6 +9,9 @@ const string ANSI_COLOR_WHITE = "\033[1m\033[37m" ;
 const string ANSI_COLOR_RESET = "\x1b[0m" ;
 const string ANSI_COLOR_RED = BOLD_COLOR_RED ; 
 
+static int error_count = 0 ; 
+static int passed_count = 0 ; 
+
 public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
 		var project = new Project ();
 		// Sample libs
@@ -36,45 +39,64 @@ public static void printline_message (string message) {
 	print (message + "\n") ; 
 }
 
+public static void report_error (Vala.List<Symbol> symbols,  string message) {
+	error_count ++ ;
+	
+	printline_error ("ERROR") ;
+	printline_error (message) ;
+  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
+  foreach (var symbol in symbols)
+		Project.print_node (symbol, 2);
+}
+
+public static void report_passed () {
+	passed_count ++ ;
+
+	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
+	assert (true) ;
+}
+
 public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
 	var expected_count = 1 ; 
 	if ( symbols.size == expected_count) {
 		var actual_type = symbols.@get (0).symbol_type ;
 		if( actual_type == type) {
-			print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
-			assert (true) ;
+			report_passed () ;
+			return ;
 		}
 		else
 		{
-			printline_error ("ERROR") ;
-			printline_error ("Found symbols or type '%s' instead of expected '%s'".printf (actual_type.to_string (), type.to_string ())) ;
-		  foreach (var symbol in symbols)
-				Project.print_node (symbol, 2);
+			report_error (symbols, "Found symbols or type '%s' instead of expected '%s'".printf (actual_type.to_string (), type.to_string ())) ;
 		}
 		return ;
 	}
-	printline_error ("ERROR") ;
-	printline_error ("Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
-  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
-  foreach (var symbol in symbols)
-		Project.print_node (symbol, 2);
 
+	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
 	// We don't want the program to segfault
 	// assert (false) ;
 }
 
 public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
 	if ( symbols.size == expected_count) {
-		print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
-		assert (true) ;
+		report_passed () ;
 		return ;
 	}
-	printline_error ("ERROR") ;
-	printline_error ("Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
-  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
-  foreach (var symbol in symbols)
-		Project.print_node (symbol, 2);
 
+	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
 	// We don't want the program to segfault
 	// assert (false) ;
+}
+
+public static void print_report () { 
+	print ("\nResults\n------\n") ;
+	print ("  - Passed: %s%d%s\n", ANSI_COLOR_WHITE, passed_count, ANSI_COLOR_RESET) ;
+	if( error_count > 0) 
+	{
+		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET) ;
+		print ( "\n You can do %sbetter%s.\n\n", ANSI_COLOR_WHITE, ANSI_COLOR_RESET) ;
+	} 
+	else
+	{
+		print ( "\n No error, you %srock%s!\n\n", BOLD_COLOR_MAGENTA, ANSI_COLOR_RESET) ;
+	}
 }
