@@ -89,16 +89,87 @@ public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_
 	// assert (false) ;
 }
 
+const string[] betters = {
+	"You can do #WHITE#better#RESET#, #NAME#.",
+	"Your linker is bit #WHITE#miffed#RESET#, but your compiler believes in you (Harvey Dent).",
+  "Let's take the tests #RED#a little bit#RESET# more #WHITE#seriously#RESET#.",
+  "We got a problem. - And a #WHITE#knife#RESET#.",
+  "I'm hungry, please fix this.",
+  "There's always next time, #NAME#",
+  "This is what you call coding, #WHITE#maggot#RESET#? I mean, #MAGENTA##NAME##RESET#!",  
+  "I won't #MAGENTA#tweet#RESET# about it if you promise to #WHITE#fix it#RESET#", 
+	"Let's try a more #WHITE#failure-less#RESET# approach",
+	"Does your #WHITE#mama know#RESET#?",	
+	"Somewhere a French guy is #WHITE#fixing hen#RESET#...",	
+} ;
+
+const string[] victorys =  {
+	"No error, you #MAGENTA#rock#RESET#!",
+	"#MAGENTA#Flawless victory#RESET#",
+	"#NAME# is leaving the building! I repeat #WHITE##NAME##RESET# is leaving the building!!", 
+	"I can't believe my eyes, this is #WHITE#perfect#RESET#!",
+	"*#WHITE#drops the mic*#RESET#",
+	"Look #WHITE#ma#RESET#, easy!",
+	"That's #WHITE#why#RESET# it's called a Tsu!",
+	"The French #WHITE#ladies#RESET# are impressed!",
+	"#WHITE#Ouh la la!!#RESET#",
+	"#WHITE##success#RESET#",
+} ;
+
+public static string get_string (string [] strings) {
+	var i = Math.lround ((strings.length-1) * Random.next_double ()) ;
+	var result = strings[i] ;
+	result = result.replace ("#NAME#", Environment.get_user_name ()) ;
+	result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
+	result = result.replace ("#RESET#", ANSI_COLOR_RESET );
+	result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
+	result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
+	result = result.replace ("#MAGENTA#", BOLD_COLOR_MAGENTA) ;	
+	return result ; 
+}
+
+public static void print_all () {
+	foreach( var str in betters) {
+		var result = str ; 
+		result = result.replace ("#NAME#", Environment.get_user_name ()) ;
+		result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
+		result = result.replace ("#RESET#", ANSI_COLOR_RESET );
+		result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
+		result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
+		result = result.replace ("#MAGENTA", BOLD_COLOR_MAGENTA) ;	
+		print ("%s\n", result ) ; 
+	}
+	foreach( var str in victorys) {
+		var result = str ; 
+		result = result.replace ("#NAME#", Environment.get_user_name ()) ;
+		result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
+		result = result.replace ("#RESET#", ANSI_COLOR_RESET );
+		result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
+		result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
+		result = result.replace ("#MAGENTA", BOLD_COLOR_MAGENTA) ;	
+		print ("%s\n", result ) ; 
+	}
+}
+
+public static void print_better () {
+	print ( "\n %s\n\n", get_string (betters) ) ;
+}
+
+public static void print_victory () {
+	print ( "\n %s\n\n", get_string (victorys) ) ;
+}
+
+
 public static void print_report () { 
 	print ("\nResults\n------\n") ;
 	print ("  - Passed: %s%d%s\n", ANSI_COLOR_WHITE, passed_count, ANSI_COLOR_RESET) ;
 	if( error_count > 0) 
 	{
 		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET) ;
-		print ( "\n You can do %sbetter%s.\n\n", ANSI_COLOR_WHITE, ANSI_COLOR_RESET) ;
+		print_better () ; 
 	} 
 	else
 	{
-		print ( "\n No error, you %srock%s!\n\n", BOLD_COLOR_MAGENTA, ANSI_COLOR_RESET) ;
+		print_victory () ;
 	}
 }
