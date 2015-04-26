@@ -177,11 +177,8 @@ namespace Echo
 			var prev = current;
 			current = s;
 
-			// prev.children.prepend (s);
-			prev.children.insert (0, s);
+			prev.children.add (s);
 			symbol.accept_children (this);
-			// s.children.reverse ();
-			s.children = Utils.reverse (s.children);
 
 			current = prev;
 		}
