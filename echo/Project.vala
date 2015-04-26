@@ -3,7 +3,7 @@ namespace Echo
 {
 	public errordomain CompleterError
 	{
-		NO_ACCESOR,
+		NO_ACCESSOR,
 		NAME_TOO_SHORT
 	}
 
