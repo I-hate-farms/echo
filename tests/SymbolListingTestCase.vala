@@ -28,6 +28,5 @@ class SymbolListingTestCase : Gee.TestCase {
    }
 
    public override void tear_down () {
-     // tear down your test
    }
 }
