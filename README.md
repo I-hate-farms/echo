@@ -10,3 +10,10 @@ Code manipulation libraby for vala: useful for getting symbols from vala files, 
 ```
 ./hen install
 ```
+
+## How to run the test suite
+The unit tests are defined in the folder `tests`
+
+```
+gstester 
+```
