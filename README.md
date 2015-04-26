@@ -16,7 +16,7 @@ The unit tests are defined in the folder `tests`
 
 ```
 cd tests
-make
+make test
 ```
 or run `tests/test-suite` directly 
 

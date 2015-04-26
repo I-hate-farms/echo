@@ -14,7 +14,37 @@ namespace Echo
 		STRUCT = 1 << 8,
 		PROPERTY = 1 << 9,
 		FIELD = 1 << 10,
-		SIGNAL  = 1 << 11
+		SIGNAL  = 1 << 11 ;
+
+		public string to_string () {
+			switch(this) {
+				case FILE: 
+					return "File" ; 
+				case NAMESPACE: 
+					return "Namespace" ; 
+				case CLASS: 
+					return "Class" ; 
+				case CONSTRUCTOR: 
+					return "Constructor" ; 
+				case DESTRUCTOR: 
+					return "Destructor" ; 
+				case INTERFACE: 
+					return "Interface" ; 
+				case METHOD: 
+					return "Method" ; 
+				case STRUCT: 
+					return "Struct" ; 
+				case PROPERTY: 
+					return "Property" ; 
+				case FIELD: 
+					return "Field" ; 
+				case SIGNAL: 
+					return "Signal" ; 
+        default:
+          assert_not_reached ();
+			}
+		}
+
 	}
 
   [Flags]

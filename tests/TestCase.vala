@@ -41,6 +41,10 @@ public abstract class Gee.TestCase : Object {
 		                                   adaptor.tear_down ));
 	}
 
+  public void add_file_test (string name, string title, owned TestMethod test ) {
+      add_test ("%-20s %s %-25s %s".printf( name, ANSI_COLOR_WHITE, title, ANSI_COLOR_RESET), (owned) test) ;
+  }
+
 	public virtual void set_up () {
 	}
 

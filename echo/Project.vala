@@ -215,7 +215,7 @@ namespace Echo
 			for (var i = 0; i < indent; i++)
 				s += "  ";
 
-			print ("SYM: %s%s\n", s, symbol.fully_qualified_name);
+			print ("SYM: %s%s - %s\n", s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
 
 			foreach (var child in symbol.children)
 				print_node (child, indent + 1);
