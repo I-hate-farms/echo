@@ -142,8 +142,10 @@ namespace Echo
 		Vala.CodeContext context;
 		Vala.SourceFile current_file;
 		Symbol current;
-		Gee.HashMap<string, Symbol> trees = new Gee.HashMap<string, Symbol> () ; // (str_hash, str_equal);
-		Gee.HashMap<string, Vala.List<Symbol>> lists = new Gee.HashMap<string, Vala.List<Symbol>>  () ; //(str_hash, str_equal);
+		//Gee.HashMap<string, Symbol> trees = new Gee.HashMap<string, Symbol> () ; // (str_hash, str_equal);
+		//Gee.HashMap<string, Vala.List<Symbol>> lists = new Gee.HashMap<string, Vala.List<Symbol>>  () ; //(str_hash, str_equal);
+		HashTable<string, Symbol> trees = new HashTable<string, Symbol> (str_hash, str_equal);
+		HashTable<string, Vala.List<Symbol>> lists = new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
 
 		public CodeTree (Vala.CodeContext context)
 		{
@@ -152,7 +154,7 @@ namespace Echo
 
 		public void update_code_tree (Vala.SourceFile src)
 		{
-			message ("update_code_tree (%s)", src.filename);
+			//message ("update_code_tree (%s)", src.filename);
 			var symbols = new Vala.ArrayList<Symbol> () ;
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
@@ -185,9 +187,9 @@ namespace Echo
 		}
 
 		public Vala.List<Symbol>? find_symbols (string file_full_path) {
-			//return lists[file_full_path] ;
+			return lists[file_full_path] ;
 			
-			Vala.List<Symbol> result = null ; 
+			/*Vala.List<Symbol> result = null ; 
 			foreach (var entry in lists.entries) 
 			{
 				if( entry.key == file_full_path) {
@@ -197,7 +199,7 @@ namespace Echo
 			}
 			if (result == null)
 				message ("find_symbols: NULL for '%s'", file_full_path);
-			return result ;
+			return result ;*/
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
@@ -214,6 +216,7 @@ namespace Echo
 			}
 
 			if (symbol.source_reference.file != current_file) {
+				print ("VISITED %s\n", Utils.symbol_to_string (symbol));
 				return;
 			}
 

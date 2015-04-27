@@ -21,6 +21,8 @@ library (
         echo
     LINKING
         shared
+    VALA_OPTIONS
+        --target-glib=2.32
     PACKAGES
         libvala-0.28
         gio-2.0
