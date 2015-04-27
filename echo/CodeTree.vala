@@ -140,12 +140,15 @@ namespace Echo
 	public class CodeTree : Vala.CodeVisitor
 	{
 		Vala.CodeContext context;
+
+		HashTable<string, Symbol> trees =
+				new HashTable<string, Symbol> (str_hash, str_equal);
+		HashTable<string, Vala.List<Symbol>> lists =
+				new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
+
 		Vala.SourceFile current_file;
+		Vala.List<Symbol> current_symbol_list;
 		Symbol current;
-		//Gee.HashMap<string, Symbol> trees = new Gee.HashMap<string, Symbol> () ; // (str_hash, str_equal);
-		//Gee.HashMap<string, Vala.List<Symbol>> lists = new Gee.HashMap<string, Vala.List<Symbol>>  () ; //(str_hash, str_equal);
-		HashTable<string, Symbol> trees = new HashTable<string, Symbol> (str_hash, str_equal);
-		HashTable<string, Vala.List<Symbol>> lists = new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
 
 		public CodeTree (Vala.CodeContext context)
 		{
@@ -162,12 +165,14 @@ namespace Echo
 			root.symbols = symbols;
 			symbols.add (root);
 
+			current_symbol_list = new Vala.ArrayList<Symbol> ();
+
 			current_file = src;
 			current = root;
 			context.accept (this);
 
 			trees[src.filename] = root;
-			lists[src.filename] = root.symbols;
+			lists[src.filename] = current_symbol_list;
 		}
 
 		public Symbol? get_code_tree (Vala.SourceFile src)
@@ -225,6 +230,8 @@ namespace Echo
 			s.parent = current;
 			s.parameters = Utils.extract_parameters (symbol);
 			s.symbols = current.symbols;
+
+			current_symbol_list.add (s);
 
 			current.symbols.add (s);
 			var prev = current;

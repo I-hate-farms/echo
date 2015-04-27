@@ -16,8 +16,8 @@ class EnclosingSymbolTestCase : Gee.TestCase {
    }
  
    public void test_simple_method () {
-     // Should return Hello and main
-     assert_symbol_count (get_all_symbols_for_file ("./files/main.vala"), 2);
+     // Should return Hello, .new and main
+     assert_symbol_count (get_all_symbols_for_file ("./files/main.vala"), 3);
    }
  
   /*public void test_main_namespace () {
