@@ -183,10 +183,10 @@ namespace Echo
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
 		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
-			var result = code_tree.find_symbols (file_full_path)  ;
-			if( result == null)
-				return new Vala.ArrayList<Symbol>();
-			return result ; 
+			var src = files[file_full_path];
+			assert (src != null);
+
+			return code_tree.find_symbols (src);
 		}
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
