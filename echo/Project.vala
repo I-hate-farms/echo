@@ -159,7 +159,7 @@ namespace Echo
 				}
 				else
 				{*/
-					// var symbol = code_tree.find_root_symbol (file_full_path)  ;
+					//var symbol = code_tree.find_root_symbol (file_full_path)  ;
 					var symbol = code_tree.get_code_tree (find_source (file_full_path)) ;
 					if (symbol == null) 
 					{

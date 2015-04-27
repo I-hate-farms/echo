@@ -13,13 +13,14 @@ namespace Echo.Utils
 		debug ("echo:: %s: %s", origin, message);
 	}
 
-	public static void print_node (Symbol symbol, int indent = 0)
+	// Use prefix = "SYM: " to get the old display
+	public static void print_node (Symbol symbol, int indent = 0, string prefix =  "SYM: " )
 	{
 		var s = "";
 		for (var i = 0; i < indent; i++)
 			s += "  ";
 
-		print ("SYM: %s%s - %s\n", s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
+		print ("%s%s%s - %s\n", prefix, s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
 
 		foreach (var child in symbol.children)
 			print_node (child, indent + 1);

@@ -16,7 +16,7 @@ class EnclosingSymbolTestCase : Gee.TestCase {
    }
  
    public void test_simple_method () {
-     assert_symbol_type_and_name (get_root_symbols ("./files/main.vala"), "HelloClass.main", SymbolType.CLASS);
+     assert_symbol_type_and_name (get_all_symbols_for_file ("./files/main.vala"), "HelloClass.main", SymbolType.CLASS);
    }
  
   /*public void test_main_namespace () {

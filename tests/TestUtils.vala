@@ -4,6 +4,8 @@ const string COLOR_RED           = "\x1b[31m" ;
 const string BOLD_COLOR_RED      = "\033[1m\033[31m"  ;
 const string BOLD_COLOR_MAGENTA  = "\033[1m\033[35m" ;
 
+const string ANSI_COLOR_YELLOW = "\x1B[33m" ;
+
 const string ANSI_COLOR_GREEN = "\x1b[32m" ;
 const string ANSI_COLOR_WHITE = "\033[1m\033[37m" ;
 const string ANSI_COLOR_RESET = "\x1b[0m" ;
@@ -25,6 +27,21 @@ public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
 		project.update_sync ();
 
 		return project.get_symbols_for_file (full_path);
+}
+
+public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path) {
+		var project = new Project ();
+		// Sample libs
+		project.add_external_package ("glib-2.0");
+		project.add_external_package ("gobject-2.0");
+		project.add_external_package ("clutter-gtk-1.0");
+		//foreach( var file_full_path in file_full_paths) {
+		var full_path = File.new_for_path (file_full_path).get_path ();
+		project.add_file (full_path);
+		//}
+		project.update_sync ();
+
+		return project.get_all_symbols_for_file (full_path);
 }
 
 public static void printline_error (string message) {
@@ -50,13 +67,28 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
 	// print ("\n") ;
 }
 
-public static void report_passed () {
+public static void report_passed (Vala.List<Symbol> symbols, bool flat=false) {
 	passed_count ++ ;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET)) ;
+	if( display_symbols ) { 
+		print ("\n") ;
+		if( flat )
+		{
+		  foreach (var symbol in symbols)
+				print ("%s - %s", symbol.fully_qualified_name, symbol.symbol_type.to_string ()) ;
+		}
+		else
+		{
+		  foreach (var symbol in symbols)
+				Utils.print_node (symbol, 2);
+		}
 	// assert (true) ;
+	}
 	print ("\n") ;
 }
+
+const bool display_symbols = true ;
 
 const string[] betters = {
 	"You can do #WHITE#better#RESET#, #NAME#.",
@@ -70,6 +102,12 @@ const string[] betters = {
 	"Let's try a more #WHITE#failure-less#RESET# approach",
 	"Does your #WHITE#mama know#RESET#?",	
 	"Somewhere a French guy is #WHITE#fixing hen#RESET#...",	
+	"#YELLOW#Shine#RESET# on you buggy #WHITE#diamond#RESET#.",
+	"A  beautiful surprise awaits on the other side.",
+	"What we've got here is failure to #WHITE#communicate#RESET#.",
+	"I guess there is still #WHITE#one or two things#RESET# to iron out.",
+	"Test #YELLOW#united#RESET# we stand, #WHITE#almost#RESET#.",
+
 } ;
 
 const string[] victorys =  {
@@ -85,37 +123,36 @@ const string[] victorys =  {
 	"#WHITE##success#RESET#",
 } ;
 
-public static string get_string (string [] strings) {
-	var i = Math.lround ((strings.length-1) * Random.next_double ()) ;
-	var result = strings[i] ;
+public static string replace (string str)
+{
+	var result = str ; 
 	result = result.replace ("#NAME#", Environment.get_user_name ()) ;
 	result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
 	result = result.replace ("#RESET#", ANSI_COLOR_RESET );
 	result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
 	result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
 	result = result.replace ("#MAGENTA#", BOLD_COLOR_MAGENTA) ;	
+	result = result.replace ("#YELLOW#", ANSI_COLOR_YELLOW) ;		
 	return result ; 
 }
+
+public static string get_string (string [] strings) {
+	var i = Math.lround ((strings.length-1) * Random.next_double ()) ;
+	var result = strings[i] ;
+	result = replace (result) ;
+	return result ; 
+}
+
 
 public static void print_all () {
 	foreach( var str in betters) {
 		var result = str ; 
-		result = result.replace ("#NAME#", Environment.get_user_name ()) ;
-		result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
-		result = result.replace ("#RESET#", ANSI_COLOR_RESET );
-		result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
-		result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
-		result = result.replace ("#MAGENTA", BOLD_COLOR_MAGENTA) ;	
+		result = replace (result) ;
 		print ("%s\n", result ) ; 
 	}
 	foreach( var str in victorys) {
 		var result = str ; 
-		result = result.replace ("#NAME#", Environment.get_user_name ()) ;
-		result = result.replace ("#REAL_NAME#", Environment.get_real_name ()) ;
-		result = result.replace ("#RESET#", ANSI_COLOR_RESET );
-		result = result.replace ("#WHITE#", ANSI_COLOR_WHITE) ;
-		result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
-		result = result.replace ("#MAGENTA", BOLD_COLOR_MAGENTA) ;	
+		result = replace (result) ;
 		print ("%s\n", result ) ; 
 	}
 }
@@ -150,7 +187,7 @@ public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType typ
 	if ( symbols.size == expected_count) {
 		var actual_type = symbols.@get (0).symbol_type ;
 		if( actual_type == type) {
-			report_passed () ;
+			report_passed (symbols) ;
 			return ;
 		}
 		else
@@ -167,12 +204,12 @@ public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType typ
 
 public static void assert_symbol_type_and_name ( Vala.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type ) 
 {
-	report_passed () ;
+	report_passed (symbols, true) ;
 }
 
 public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
 	if ( symbols.size == expected_count) {
-		report_passed () ;
+		report_passed (symbols) ;
 		return ;
 	}
 

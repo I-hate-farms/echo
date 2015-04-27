@@ -110,7 +110,7 @@ namespace Echo
 		public int source_last_line { get ; set ; }
 		public Vala.List<DataType>? parameters { get ; set ; }
 		
-		public unowned Vala.List<Symbol>? symbols ; 
+		public Vala.List<Symbol>? symbols ; 
 
 		public string fully_qualified_name {
 			owned get {
@@ -124,8 +124,10 @@ namespace Echo
 
 		public SourceReference declaration {
 			owned get {
+				var file_name = source_file_name == null ? "unknown" : source_file_name;
+
 				if( _declaration == null)
-					_declaration = new SourceReference (source_file_name, source_line, source_column, source_last_line);
+					_declaration = new SourceReference (file_name, source_line, source_column, source_last_line);
 				return _declaration;
 			}
 		}
@@ -140,8 +142,8 @@ namespace Echo
 		Vala.CodeContext context;
 		Vala.SourceFile current_file;
 		Symbol current;
-		HashTable<string, Symbol> trees = new HashTable<string, Symbol> (str_hash, str_equal);
-		HashTable<string, Vala.List<Symbol>> lists = new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
+		Gee.HashMap<string, Symbol> trees = new Gee.HashMap<string, Symbol> () ; // (str_hash, str_equal);
+		Gee.HashMap<string, Vala.List<Symbol>> lists = new Gee.HashMap<string, Vala.List<Symbol>>  () ; //(str_hash, str_equal);
 
 		public CodeTree (Vala.CodeContext context)
 		{
@@ -150,6 +152,7 @@ namespace Echo
 
 		public void update_code_tree (Vala.SourceFile src)
 		{
+			message ("update_code_tree (%s)", src.filename);
 			var symbols = new Vala.ArrayList<Symbol> () ;
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
@@ -177,12 +180,24 @@ namespace Echo
 		public Symbol? find_root_symbol (string file_full_path) {
 			var result = trees[file_full_path] ;
 			if (result == null)
-				message ("NNNNNNNNNNNNNUUUUUUUUUUUUL");
+				message ("find_root_symbol: NULL for '%s'", file_full_path);
 			return result ;
 		}
 
 		public Vala.List<Symbol>? find_symbols (string file_full_path) {
-			return lists[file_full_path] ;
+			//return lists[file_full_path] ;
+			
+			Vala.List<Symbol> result = null ; 
+			foreach (var entry in lists.entries) 
+			{
+				if( entry.key == file_full_path) {
+					result = entry.value ;
+					break ;
+				}
+			}
+			if (result == null)
+				message ("find_symbols: NULL for '%s'", file_full_path);
+			return result ;
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)

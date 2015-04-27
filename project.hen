@@ -24,6 +24,7 @@ library (
     PACKAGES
         libvala-0.28
         gio-2.0
+        gee-0.8
 )
 
 #console_application (
