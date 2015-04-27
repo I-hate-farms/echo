@@ -25,6 +25,49 @@ namespace Echo.Utils
 			print_node (child, indent + 1);
 	}
 	
+		public static Vala.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)
+	{
+		var ctx = context;
+		if (ctx == null) {
+			ctx = new Vala.CodeContext();
+		}
+
+		ctx.vapi_directories = vapi_dirs;
+		var package_path = ctx.get_vapi_path (pkg);
+		if (package_path == null) {
+			return null;
+		}
+		
+		var results = new Vala.ArrayList<string> ();
+		
+		var deps_filename = Path.build_filename (Path.get_dirname (package_path), "%s.deps".printf (pkg));
+		if (FileUtils.test (deps_filename, FileTest.EXISTS)) {
+			try {
+				string deps_content;
+				ulong deps_len;
+				FileUtils.get_contents (deps_filename, out deps_content, out deps_len);
+				foreach (string dep in deps_content.split ("\n")) {
+					dep.strip ();
+					if (dep != "") {
+						var deps = get_package_paths (dep, ctx, vapi_dirs);
+						if (deps == null) {
+							warning ("%s, dependency of %s, not found in specified Vala API directories".printf (dep, pkg));
+						} else {
+							foreach (string dep_package in deps) {
+								results.add (dep_package);
+							}
+						}
+					}
+				}
+			} catch (FileError e) {
+				warning ("Unable to read dependency file: %s".printf (e.message));
+			}
+		}
+		
+		results.add (package_path);
+		return results;
+	}
+
 	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given
 	 * symbol has no parameters.

@@ -91,6 +91,10 @@ namespace Echo
 		public bool is_nullable { get ; set ; }
 		public bool is_out  { get ; set ; }
 		public bool is_ref  { get ; set ; }
+
+		// TODO
+		public Vala.List<DataType>? generic_types { get ; set ; }
+
 	}
 
 	public class Symbol
