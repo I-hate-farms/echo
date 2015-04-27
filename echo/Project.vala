@@ -12,6 +12,7 @@ namespace Echo
 		Vala.CodeContext context;
 		Vala.Parser parser;
 		Locator locator;
+		Completor completor;
 		CodeTree code_tree;
 		Cancellable cancellable;
 
@@ -46,6 +47,7 @@ namespace Echo
 			code_tree = new CodeTree ();
 
 			cancellable = new Cancellable ();
+			completor = new Completor (this) ;
 		}
 
 		public void add_external_package (string package) {
@@ -169,6 +171,11 @@ namespace Echo
 				return result ; 
 		} 
 
+		public CompletionReport complete_input (string file_full_path, int line, int column) 
+		{
+			return completor.complete (file_full_path, line, column) ;
+		}
+
 		public void complete (string filename, int line, int column) throws CompleterError
 		{
 			var name = File.new_for_commandline_arg (filename).get_path ();
@@ -189,7 +196,7 @@ namespace Echo
 					print ("f: %s\n", info.fetch (2));*/
 
 					var root = code_tree.get_code_tree (src);
-					print_node (root);
+					Utils.print_node (root);
 
 					return;
 					print ("LINE: %s\n", line_str);
@@ -202,18 +209,6 @@ namespace Echo
 					break;
 				}
 			}
-		}
-
-		public static void print_node (Symbol symbol, int indent = 0)
-		{
-			var s = "";
-			for (var i = 0; i < indent; i++)
-				s += "  ";
-
-			print ("SYM: %s%s - %s\n", s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
-
-			foreach (var child in symbol.children)
-				print_node (child, indent + 1);
 		}
 
 		/**

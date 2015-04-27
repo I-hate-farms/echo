@@ -1,5 +1,11 @@
 ## Introduction
-Code manipulation libraby for vala: useful for getting symbols from vala files, getting completion and getting barked at.
+Code manipulation library for vala: getting barked at will be a pleasure
+
+## Features 
+  - returns a complete `code tree` from vala's `AST`
+  - handles packages
+  - provide completion 
+  - full set of [unit tests](tests)
 
 ## How to build 
 ```

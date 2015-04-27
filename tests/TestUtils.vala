@@ -46,7 +46,7 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
 	printline_error (message) ;
   printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
   foreach (var symbol in symbols)
-		Project.print_node (symbol, 2);
+		Utils.print_node (symbol, 2);
 	// print ("\n") ;
 }
 

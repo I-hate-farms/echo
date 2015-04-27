@@ -2,9 +2,9 @@
 namespace Echo.Utils
 {
 
- /**
-  * Report an error to the console for debugging purpose
-  */
+	/**
+ 	* Report an error to the console for debugging purpose
+  	*/
 	public static void report_error (string origin, string message) {
 		critical ("echo:: %s: %s", origin, message);
 	}
@@ -12,6 +12,19 @@ namespace Echo.Utils
 	public static void report_debug (string origin, string message) {
 		debug ("echo:: %s: %s", origin, message);
 	}
+
+	public static void print_node (Symbol symbol, int indent = 0)
+	{
+		var s = "";
+		for (var i = 0; i < indent; i++)
+			s += "  ";
+
+		print ("SYM: %s%s - %s\n", s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
+
+		foreach (var child in symbol.children)
+			print_node (child, indent + 1);
+	}
+	
 	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given
 	 * symbol has no parameters.
