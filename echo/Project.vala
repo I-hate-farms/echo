@@ -110,7 +110,7 @@ namespace Echo
 		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
 			Symbol current = null ;
 			
-			foreach (var symbol in get_symbols_for_file (file_full_path)) { 
+			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
 				if (symbol.source_line > line) break; 
 				current = symbol; 
 			}
@@ -121,43 +121,51 @@ namespace Echo
 		/** 
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
-		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType type) {
-			var result = new Vala.ArrayList<Symbol>();
-			// TODO 
-			return result;
+		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
+			var result = code_tree.find_symbols (file_full_path)  ;
+			if( result == null)
+				return new Vala.ArrayList<Symbol>();
+			return result ; 
 		}
 
-		/** 
-		 * Returns all the symbols that are overridable (methods) for a class. 
-		 * This method returns also the overridable symbols from the the parent classes 
-		 * if applicable. 
-		 * Note: it would be nice not to include the symbols that clazz already overrides 
-		 **/ 
-		public Vala.List<Symbol> get_overridable_symbols (Symbol clazz) {
-			var result = new Vala.ArrayList<Symbol>();
-			// TODO
-			return result;
+		private Vala.SourceFile? find_source (string file_full_path) 
+		{
+			Vala.SourceFile source = null;
+			foreach (var source_file in context.get_source_files ())
+			{
+				if( source_file.filename == file_full_path) {
+					return source_file ; 
+				}
+			}
+			return null ;
 		}
-
-		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
+		
+		public Vala.List<Symbol> get_symbols_for_file (string file_full_path) {
+					var result = new Vala.ArrayList<Symbol>();
 				// FIXME PERF use a hashmap!
-				Vala.SourceFile source = null;
+				/*Vala.SourceFile source = null;
 				foreach (var source_file in context.get_source_files ())
 				{
-					if( source_file.filename == full_path) {
+					if( source_file.filename == file_full_path) {
 						source = source_file ; 
 						break;
 					}
-				} 
+				}*/
 
-				var result = new Vala.ArrayList<Symbol>();
+				/*var source = code_tree.find_root_symbol (file_full_path)  ;
+
+			
 				if( source == null ) {
-					Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(full_path));
 				}
 				else
-				{
-					var symbol = code_tree.get_code_tree (source);
-					if (symbol != null)
+				{*/
+					// var symbol = code_tree.find_root_symbol (file_full_path)  ;
+					var symbol = code_tree.get_code_tree (find_source (file_full_path)) ;
+					if (symbol == null) 
+					{
+						Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(file_full_path));
+					}
+					else
 					{
 
 						if( symbol.symbol_type != SymbolType.FILE) 
@@ -167,7 +175,7 @@ namespace Echo
 							foreach (var child in symbol.children )
 								result.add (child);
 							}
-				}
+				//}
 				return result ; 
 		} 
 
@@ -175,6 +183,13 @@ namespace Echo
 		{
 			return completor.complete (file_full_path, line, column) ;
 		}
+
+		public Vala.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
+			var result = new Vala.ArrayList<Symbol>();
+			// TODO 
+			return result;
+		}
+
 
 		public void complete (string filename, int line, int column) throws CompleterError
 		{

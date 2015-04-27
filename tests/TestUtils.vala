@@ -58,37 +58,6 @@ public static void report_passed () {
 	print ("\n") ;
 }
 
-public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
-	var expected_count = 1 ; 
-	if ( symbols.size == expected_count) {
-		var actual_type = symbols.@get (0).symbol_type ;
-		if( actual_type == type) {
-			report_passed () ;
-			return ;
-		}
-		else
-		{
-			report_error (symbols, "Found symbols or type '%s' instead of expected '%s'".printf (actual_type.to_string (), type.to_string ())) ;
-		}
-		return ;
-	}
-
-	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
-	// We don't want the program to segfault
-	// assert (false) ;
-}
-
-public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
-	if ( symbols.size == expected_count) {
-		report_passed () ;
-		return ;
-	}
-
-	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
-	// We don't want the program to segfault
-	// assert (false) ;
-}
-
 const string[] betters = {
 	"You can do #WHITE#better#RESET#, #NAME#.",
 	"Your linker is bit #WHITE#miffed#RESET#, but your compiler believes in you (Harvey Dent).",
@@ -172,4 +141,42 @@ public static void print_report () {
 	{
 		print_victory () ;
 	}
+}
+
+
+
+public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
+	var expected_count = 1 ; 
+	if ( symbols.size == expected_count) {
+		var actual_type = symbols.@get (0).symbol_type ;
+		if( actual_type == type) {
+			report_passed () ;
+			return ;
+		}
+		else
+		{
+			report_error (symbols, "Found symbols or type '%s' instead of expected '%s'".printf (actual_type.to_string (), type.to_string ())) ;
+		}
+		return ;
+	}
+
+	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
+	// We don't want the program to segfault
+	// assert (false) ;
+}
+
+public static void assert_symbol_type_and_name ( Vala.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type ) 
+{
+	report_passed () ;
+}
+
+public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
+	if ( symbols.size == expected_count) {
+		report_passed () ;
+		return ;
+	}
+
+	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count)) ;
+	// We don't want the program to segfault
+	// assert (false) ;
 }

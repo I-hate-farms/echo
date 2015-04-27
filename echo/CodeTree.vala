@@ -110,6 +110,8 @@ namespace Echo
 		public int source_column { get ; set ; }
 		public int source_last_line { get ; set ; }
 		public Vala.List<DataType>? parameters { get ; set ; }
+		
+		public unowned Vala.List<Symbol>? symbols ; 
 
 		public string fully_qualified_name {
 			owned get {
@@ -138,18 +140,23 @@ namespace Echo
 	{
 		Symbol current;
 
-		HashTable<string,Symbol> trees = new HashTable<string,Symbol> (str_hash, str_equal);
+		HashTable<string, Symbol> trees = new HashTable<string, Symbol> (str_hash, str_equal);
+		HashTable<string, Vala.List<Symbol>> lists = new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
 
 		public void update_code_tree (Vala.SourceFile src)
 		{
+			var symbols = new Vala.ArrayList<Symbol> () ;
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
+			root.symbols = symbols ;
+			symbols.add (root) ;
 
 			current = root;
 			src.accept_children (this);
 
 			trees[src.filename] = root;
+			lists[src.filename] = root.symbols;
 		}
 
 		public Symbol? get_code_tree (Vala.SourceFile src)
@@ -159,6 +166,17 @@ namespace Echo
 				update_code_tree (src);
 
 			return trees[src.filename];
+		}
+
+		public Symbol? find_root_symbol (string file_full_path) {
+			var result = trees[file_full_path] ;
+			if (result == null)
+				message ("NNNNNNNNNNNNNUUUUUUUUUUUUL");
+			return result ;
+		}
+
+		public Vala.List<Symbol>? find_symbols (string file_full_path) {
+			return lists[file_full_path] ;
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
@@ -177,7 +195,9 @@ namespace Echo
 			s.name = Utils.symbol_to_name (symbol);
 			s.parent = current;
 			s.parameters = Utils.extract_parameters (symbol);
+			s.symbols = current.symbols ;
 
+			current.symbols.add (s) ;
 			var prev = current;
 			current = s;
 
