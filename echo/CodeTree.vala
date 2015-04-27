@@ -14,8 +14,7 @@ namespace Echo
 		STRUCT = 1 << 8,
 		PROPERTY = 1 << 9,
 		FIELD = 1 << 10,
-		SIGNAL  = 1 << 11,
-    FUNCTION  = 1 << 12 ;
+		SIGNAL  = 1 << 11;
 
 		public string to_string () {
 			switch(this) {
@@ -31,6 +30,8 @@ namespace Echo
 					return "Destructor" ; 
 				case INTERFACE: 
 					return "Interface" ; 
+				case ENUM: 
+					return "Interface" ; 
 				case METHOD: 
 					return "Method" ; 
 				case STRUCT: 
@@ -41,10 +42,8 @@ namespace Echo
 					return "Field" ; 
 				case SIGNAL: 
 					return "Signal" ; 
-				case FUNCTION: 
-					return "Function" ; 					
-        default:
-          assert_not_reached ();
+				default:
+					assert_not_reached ();
 			}
 		}
 
@@ -136,9 +135,16 @@ namespace Echo
 
 	public class CodeTree : Vala.CodeVisitor
 	{
-		Symbol current;
+		Vala.CodeContext context;
+		Vala.SourceFile current_file;
 
+		Symbol current;
 		HashTable<string,Symbol> trees = new HashTable<string,Symbol> (str_hash, str_equal);
+
+		public CodeTree (Vala.CodeContext context)
+		{
+			this.context = context;
+		}
 
 		public void update_code_tree (Vala.SourceFile src)
 		{
@@ -146,8 +152,9 @@ namespace Echo
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
 
+			current_file = src;
 			current = root;
-			src.accept_children (this);
+			context.accept (this);
 
 			trees[src.filename] = root;
 		}
@@ -163,8 +170,20 @@ namespace Echo
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
 		{
-			if (symbol.hides)
+			if (symbol.external || symbol.external_package)
 				return;
+
+			// if we are at a root namespace, we just visit it and check if it makes sense
+			// to stay
+			var is_root_namespace = symbol is Vala.Namespace && symbol.name == null;
+			if (symbol.source_reference == null || is_root_namespace) {
+				symbol.accept_children (this);
+				return;
+			}
+
+			if (symbol.source_reference.file != current_file) {
+				return;
+			}
 
 			var s = new Symbol ();
 			s.symbol_type = symbol_type;

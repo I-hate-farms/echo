@@ -4,6 +4,17 @@
 using GLib;
 
 namespace MyApp {
+
+	public void some_func ()
+	{
+	}
+
+	namespace Abc
+	{
+		public void some_func_other ()
+		{
+		}
+	}
 	
 	public class HelloVala: GLib.Object {
 
