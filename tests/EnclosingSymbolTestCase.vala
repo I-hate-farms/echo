@@ -1,4 +1,4 @@
-using Echo ; 
+using Echo;
 
 class EnclosingSymbolTestCase : Gee.TestCase {
  
@@ -31,3 +31,4 @@ class EnclosingSymbolTestCase : Gee.TestCase {
    public override void tear_down () {
    }
 }
+

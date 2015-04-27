@@ -63,8 +63,10 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
 	printline_error ("ERROR") ;
 	printline_error (message) ;
   printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
-  foreach (var symbol in symbols)
+	foreach (var symbol in symbols) {
+		print ("Debug Tree:\n");
 		Utils.print_node (symbol, 2);
+	}
 	// print ("\n") ;
 }
 

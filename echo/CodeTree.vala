@@ -110,7 +110,7 @@ namespace Echo
 		public int source_last_line { get ; set ; }
 		public Vala.List<DataType>? parameters { get ; set ; }
 		
-		public Vala.List<Symbol>? symbols ; 
+		public Vala.List<Symbol>? symbols;
 
 		public string fully_qualified_name {
 			owned get {
@@ -155,12 +155,12 @@ namespace Echo
 		public void update_code_tree (Vala.SourceFile src)
 		{
 			//message ("update_code_tree (%s)", src.filename);
-			var symbols = new Vala.ArrayList<Symbol> () ;
+			var symbols = new Vala.ArrayList<Symbol> ();
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
-			root.symbols = symbols ;
-			symbols.add (root) ;
+			root.symbols = symbols;
+			symbols.add (root);
 
 			current_file = src;
 			current = root;
@@ -179,27 +179,20 @@ namespace Echo
 			return trees[src.filename];
 		}
 
-		public Symbol? find_root_symbol (string file_full_path) {
-			var result = trees[file_full_path] ;
+		public Symbol? find_root_symbol (Vala.SourceFile src) {
+			var result = get_code_tree (src);
 			if (result == null)
-				message ("find_root_symbol: NULL for '%s'", file_full_path);
-			return result ;
+				message ("find_root_symbol: NULL for '%s'", src.filename);
+
+			return result;
 		}
 
-		public Vala.List<Symbol>? find_symbols (string file_full_path) {
-			return lists[file_full_path] ;
-			
-			/*Vala.List<Symbol> result = null ; 
-			foreach (var entry in lists.entries) 
-			{
-				if( entry.key == file_full_path) {
-					result = entry.value ;
-					break ;
-				}
-			}
-			if (result == null)
-				message ("find_symbols: NULL for '%s'", file_full_path);
-			return result ;*/
+		public Vala.List<Symbol>? find_symbols (Vala.SourceFile src) {
+			var list = lists[src.filename];
+			if (list == null)
+				update_code_tree (src);
+
+			return lists[src.filename] ;
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
@@ -231,9 +224,9 @@ namespace Echo
 			s.name = Utils.symbol_to_name (symbol);
 			s.parent = current;
 			s.parameters = Utils.extract_parameters (symbol);
-			s.symbols = current.symbols ;
+			s.symbols = current.symbols;
 
-			current.symbols.add (s) ;
+			current.symbols.add (s);
 			var prev = current;
 			current = s;
 
