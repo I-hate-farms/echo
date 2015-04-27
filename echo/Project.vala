@@ -9,12 +9,19 @@ namespace Echo
 
 	public class Project : Object
 	{
+		const int UPDATE_IDLE_DELAY = 2000;
+
 		Vala.CodeContext context;
 		Vala.Parser parser;
 		Locator locator;
 		Completor completor;
 		CodeTree code_tree;
 		Cancellable cancellable;
+
+		Gee.HashMap<string,Vala.SourceFile> files =
+			new Gee.HashMap<string,Vala.SourceFile> ();
+
+		uint scheduled_update_id;
 
 		static Regex member_access;
 		static Regex member_access_split;
@@ -54,36 +61,17 @@ namespace Echo
 			context.add_external_package (package);
 		}
 
-		public void add_file (string file)
+		public void add_file (string full_path, string? content = null)
 		{
-			context.add_source_filename (file);
+			var file = new Vala.SourceFile (context, Vala.SourceFileType.SOURCE,
+					full_path, content);
+			files[full_path] = file;
+			clear_file (file);
+			context.add_source_file (file);
 		}
 
 		public void update_sync ()
 		{
-			// TODO wrap in thread
-
-			lock (context) {
-				Vala.CodeContext.push (context);
-
-				foreach (var src in context.get_source_files ()) {
-
-					if (src.get_nodes ().size > 0)
-						continue;
-
-					parser.visit_source_file (src);
-				}
-
-				context.check ();
-
-				Vala.CodeContext.pop ();
-			}
-		}
-
-		public async void update ()
-		{
-			// TODO wrap in thread
-
 			lock (context) {
 				Vala.CodeContext.push (context);
 
@@ -103,6 +91,79 @@ namespace Echo
 			}
 		}
 
+		public async void update ()
+		{
+			if (scheduled_update_id != 0) {
+				scheduled_update_id = 0;
+				Source.remove (scheduled_update_id);
+			}
+
+			new Thread<void*> (null, () => {
+				update_sync ();
+
+				Idle.add (() => {
+					update.callback ();
+					return false;
+				});
+				return null;
+			});
+
+			yield;
+		}
+
+		public void update_file_contents (string full_filepath, string content, bool schedule_update = true)
+		{
+			var file = files[full_filepath];
+			assert (file != null);
+
+			file.content = content;
+			clear_file (file);
+
+			if (!schedule_update)
+				return;
+
+			if (scheduled_update_id != 0)
+				Source.remove (scheduled_update_id);
+
+			scheduled_update_id = Timeout.add (UPDATE_IDLE_DELAY, () => {
+				scheduled_update_id = Idle.add (() => {
+					scheduled_update_id = 0;
+
+					update.begin ();
+					return false;
+				});
+				return false;
+			});
+		}
+
+		/**
+		 * Remove all parsed nodes from a given source file
+		 */
+		void clear_file (Vala.SourceFile file)
+		{
+			// copied from anjuta
+			var nodes = new Vala.ArrayList<Vala.CodeNode> ();
+			foreach (var node in file.get_nodes()) {
+				nodes.add(node);
+			}
+
+			foreach (var node in nodes) {
+				file.remove_node (node);
+				if (node is Vala.Symbol) {
+					var sym = (Vala.Symbol) node;
+					if (sym.owner != null)
+						/* we need to remove it from the scope*/
+						sym.owner.remove (sym.name);
+					if (context.entry_point == sym)
+						context.entry_point = null;
+				}
+			}
+
+			file.current_using_directives = new Vala.ArrayList<Vala.UsingDirective>();
+			var ns_ref = new Vala.UsingDirective (new Vala.UnresolvedSymbol (null, "GLib"));
+			file.add_using_directive (ns_ref);
+			context.root.add_using_directive (ns_ref);
+		}
 
 		/** 
 		 * Returns the enclosing symbol at the specific position of the file.
@@ -140,36 +201,23 @@ namespace Echo
 		}
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
-				// FIXME PERF use a hashmap!
-				Vala.SourceFile source = null;
-				foreach (var source_file in context.get_source_files ())
-				{
-					if( source_file.filename == full_path) {
-						source = source_file ; 
-						break;
-					}
-				} 
+			var source = files[full_path];
+			assert (source != null);
 
-				var result = new Vala.ArrayList<Symbol>();
-				if( source == null ) {
-					Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(full_path));
+			var result = new Vala.ArrayList<Symbol>();
+			var symbol = code_tree.get_code_tree (source);
+			if (symbol != null) {
+				if (symbol.symbol_type != SymbolType.FILE)
+					result.add (symbol);
+				else {
+					// We skip the first level that is FILE
+					foreach (var child in symbol.children)
+						result.add (child);
 				}
-				else
-				{
-					var symbol = code_tree.get_code_tree (source);
-					if (symbol != null)
-					{
+			}
 
-						if( symbol.symbol_type != SymbolType.FILE) 
-							result.add (symbol);
-					  else 
-						  // We skip the first level that is FILE
-							foreach (var child in symbol.children )
-								result.add (child);
-							}
-				}
-				return result ; 
-		} 
+			return result;
+		}
 
 		public CompletionReport complete_input (string file_full_path, int line, int column) 
 		{
