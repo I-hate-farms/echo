@@ -171,7 +171,7 @@ namespace Echo
 		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
 			Symbol current = null ;
 			
-			foreach (var symbol in get_symbols_for_file (file_full_path)) { 
+			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
 				if (symbol.source_line > line) break; 
 				current = symbol; 
 			}
@@ -182,22 +182,11 @@ namespace Echo
 		/** 
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
-		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType type) {
-			var result = new Vala.ArrayList<Symbol>();
-			// TODO 
-			return result;
-		}
-
-		/** 
-		 * Returns all the symbols that are overridable (methods) for a class. 
-		 * This method returns also the overridable symbols from the the parent classes 
-		 * if applicable. 
-		 * Note: it would be nice not to include the symbols that clazz already overrides 
-		 **/ 
-		public Vala.List<Symbol> get_overridable_symbols (Symbol clazz) {
-			var result = new Vala.ArrayList<Symbol>();
-			// TODO
-			return result;
+		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
+			var result = code_tree.find_symbols (file_full_path)  ;
+			if( result == null)
+				return new Vala.ArrayList<Symbol>();
+			return result ; 
 		}
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
@@ -223,6 +212,13 @@ namespace Echo
 		{
 			return completor.complete (file_full_path, line, column) ;
 		}
+
+		public Vala.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
+			var result = new Vala.ArrayList<Symbol>();
+			// TODO 
+			return result;
+		}
+
 
 		public void complete (string filename, int line, int column) throws CompleterError
 		{
