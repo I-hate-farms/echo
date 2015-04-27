@@ -44,7 +44,7 @@ namespace Echo
 			parser.parse (context);
 
 			locator = new Locator ();
-			code_tree = new CodeTree ();
+			code_tree = new CodeTree (context);
 
 			cancellable = new Cancellable ();
 			completor = new Completor (this) ;

@@ -8,19 +8,19 @@ void main (string[] args)
 	project.add_external_package ("clutter-gtk-1.0");
 	project.add_external_package ("granite");
 
-	project.add_file ("./test.vala");
-	project.add_file ("./tests/main.vala");
+	// project.add_file ("./test.vala");
+	project.add_file ("./tests/files/main_namespace.vala");
 
 	project.update.begin ();
 	try {
-		project.complete ("./test.vala", 20, 10);
+		project.complete ("./tests/files/main_namespace.vala", 20, 10);
 	} catch (Error e) {
 		warning (e.message);
 	}
   stdout.printf ( "FINDING SYMBOLS\n");
   // Needs a fullpath
-  print_symbol_for_file (project, "./test.vala");
-  print_symbol_for_file (project, "./tests/main.vala");
+  // print_symbol_for_file (project, "./test.vala");
+  // print_symbol_for_file (project, "./tests/main.vala");
 }
 
 void print_symbol_for_file (Project project, string file_path) {
