@@ -199,6 +199,7 @@ namespace Echo
 			}
 
 			if (symbol.source_reference.file != current_file) {
+				print ("VISITED %s\n", Utils.symbol_to_string (symbol));
 				return;
 			}
 

@@ -220,39 +220,35 @@ namespace Echo
 		}
 
 
-		public void complete (string filename, int line, int column) throws CompleterError
+		public void complete (string file_full_path, int line, int column)
+			throws CompleterError
 		{
-			var name = File.new_for_commandline_arg (filename).get_path ();
+			var src = files[file_full_path];
+			assert (src != null);
 
-			foreach (var src in context.get_source_files ()) {
-				if (src.filename == name) {
-					var line_str = src.get_source_line (line).strip ();
+			var line_str = src.get_source_line (line).strip ();
 
-					/*MatchInfo info;
-					if (!member_access.match (line_str, 0, out info))
-						throw new CompleterError.NO_ACCESOR ("Line is not an accesor");
-					if (info.fetch (0).length < 2)
-						throw new CompleterError.NAME_TOO_SHORT ("Accessor name not long enough");
+			/*MatchInfo info;
+			if (!member_access.match (line_str, 0, out info))
+				throw new CompleterError.NO_ACCESOR ("Line is not an accesor");
+			if (info.fetch (0).length < 2)
+				throw new CompleterError.NAME_TOO_SHORT ("Accessor name not long enough");
 
-					var names = member_access_split.split (info.fetch (1));
-					foreach (var n in names)
-						print ("n: %s\n", n);
-					print ("f: %s\n", info.fetch (2));*/
+			var names = member_access_split.split (info.fetch (1));
+			foreach (var n in names)
+				print ("n: %s\n", n);
+			print ("f: %s\n", info.fetch (2));*/
 
-					var root = code_tree.get_code_tree (src);
-					Utils.print_node (root);
+			var root = code_tree.get_code_tree (src);
+			Utils.print_node (root);
 
-					return;
-					print ("LINE: %s\n", line_str);
+			return;
+			print ("LINE: %s\n", line_str);
 
-					var block = locator.find_closest_block (src, line, column);
-					print ("CLOSEST: %s %s %s\n", block.name, block.to_string (), block.type_name);
-					for (var sym = (Vala.Symbol) block; sym != null; sym = sym.parent_symbol)
-						symbol_lookup_inherited (sym);
-
-					break;
-				}
-			}
+			var block = locator.find_closest_block (src, line, column);
+			print ("CLOSEST: %s %s %s\n", block.name, block.to_string (), block.type_name);
+			for (var sym = (Vala.Symbol) block; sym != null; sym = sym.parent_symbol)
+				symbol_lookup_inherited (sym);
 		}
 
 		/**
