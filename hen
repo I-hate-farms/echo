@@ -312,6 +312,8 @@ do_internal_release () {
   zip -q -r ../dist/hen-latest.zip .
   cd ..
   cp ${DEST_FOLDER}/Hen-VERSION.txt ./dist/
+  cp ${DEST_FOLDER}/Hen-CHANGELOG.txt ./CHANGELOG.md
+
   echo -e "${white}Release ready${NC}."
 }
 

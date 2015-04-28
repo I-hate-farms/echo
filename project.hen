@@ -29,19 +29,34 @@ library (
         gee-0.8
 )
 
-#console_application (
-#    NAME
-#        echo-testing
-#    LICENSE
-#        "Apache 2.0"
-#    VERSION
-#        "0.1"
-#    TITLE
-#        "Echo Testing"
-#    SOURCE_PATH
-#        src
-#    PACKAGES
-#        gtk+-3.0
-#        echo
-#)
+console_application (
+    NAME
+        echo-testing
+    LICENSE
+        "Apache 2.0"
+    VERSION
+        "0.1"
+    TITLE
+        "Echo testing, testing, testing..."
+    SOURCE_PATH
+        src
+    PACKAGES
+        echo
+)
 
+console_application (
+    NAME
+        echo-tests
+    LICENSE
+        "Apache 2.0"
+    VERSION
+        "0.1"
+    TITLE
+        "Unit tests for echo"
+    SOURCE_PATH
+        tests/src
+    C_OPTIONS
+        -lm 
+    PACKAGES
+        echo
+)
