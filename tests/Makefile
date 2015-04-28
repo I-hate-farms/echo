@@ -13,7 +13,8 @@ test-suite: ../echo/Project.vala ../echo/CodeTree.vala ../echo/Completion.vala .
 			TestUtils.vala \
 			\
 			SymbolListingTestCase.vala \
-			EnclosingSymbolTestCase.vala 
+			EnclosingSymbolTestCase.vala \
+			SymbolPositionTestCase.vala 
 
 test: test-suite 
 		./test-suite

@@ -245,6 +245,23 @@ namespace Echo
 			return result;
 		}
 
+		public Vala.Symbol get_symbol_at_position (string file_full_path, int line, int column)
+		{
+			var src = files[file_full_path];
+			assert (src != null);
+
+			var block = locator.find_closest_block (src, line, column);
+			print ("%s\n", Utils.symbol_to_string (block));
+
+			var table = block.scope.get_symbol_table ();
+			print ("FROM: %s <%s>\n", block.name, block.type_name);
+			if (table != null) {
+				foreach (var key in table.get_keys ()) {
+					print ("\t%s\n", Utils.symbol_to_string (table[key]));
+				}
+			}
+			return block;
+		}
 
 		public void complete (string file_full_path, int line, int column)
 			throws CompleterError
@@ -277,12 +294,37 @@ namespace Echo
 				symbol_lookup_inherited (sym);
 		}
 
+		enum MatchType
+		{
+			NONE,
+			PREFIX,
+			INSENSITIVE,
+			EXACT
+		}
+
+		bool name_matches (string name, string match, MatchType match_type)
+		{
+			switch (match_type) {
+				case MatchType.NONE:
+					return true;
+				case MatchType.PREFIX:
+					return name.has_prefix (match);
+				case MatchType.INSENSITIVE:
+					return name.down () == match.down ();
+				case MatchType.EXACT:
+					return name == match;
+				default:
+					assert_not_reached ();
+			}
+		}
+
 		/**
 		 * Finds all members of the given symbol
 		 *
 		 * @param symbol The symbol to find members for
 		 */
-		void symbol_lookup_inherited (Vala.Symbol? symbol)
+		void symbol_lookup_inherited (Vala.Symbol? symbol,
+				string? searched = null, MatchType match_type = MatchType.NONE)
 		{
 			if (symbol == null)
 				return;
@@ -291,28 +333,29 @@ namespace Echo
 			print ("FROM: %s <%s>\n", symbol.name, symbol.type_name);
 			if (table != null) {
 				foreach (var key in table.get_keys ()) {
-					print ("\t%s\n", Utils.symbol_to_string (table[key]));
+					if (name_matches (table[key].name, searched, match_type))
+						print ("\t%s\n", Utils.symbol_to_string (table[key]));
 				}
 			}
 
 			if (symbol is Vala.Method) {
-				symbol_lookup_inherited (((Vala.Method) symbol).return_type.data_type);
+				symbol_lookup_inherited (((Vala.Method) symbol).return_type.data_type, searched, match_type);
 			} else if (symbol is Vala.Class) {
 				foreach (var type in ((Vala.Class) symbol).get_base_types ())
-					symbol_lookup_inherited (type.data_type);
+					symbol_lookup_inherited (type.data_type, searched, match_type);
 			} else if (symbol is Vala.Struct) {
 				symbol_lookup_inherited (((Vala.Struct) symbol).base_type.data_type);
 			} else if (symbol is Vala.Interface) {
 				foreach (var type in ((Vala.Interface) symbol).get_prerequisites ())
-					symbol_lookup_inherited (type.data_type);
+					symbol_lookup_inherited (type.data_type, searched, match_type);
 			} else if (symbol is Vala.LocalVariable) {
-				symbol_lookup_inherited (((Vala.LocalVariable) symbol).variable_type.data_type);
+				symbol_lookup_inherited (((Vala.LocalVariable) symbol).variable_type.data_type, searched, match_type);
 			} else if (symbol is Vala.Field) {
-				symbol_lookup_inherited (((Vala.Field) symbol).variable_type.data_type);
+				symbol_lookup_inherited (((Vala.Field) symbol).variable_type.data_type, searched, match_type);
 			} else if (symbol is Vala.Property) {
-				symbol_lookup_inherited (((Vala.Property) symbol).property_type.data_type);
+				symbol_lookup_inherited (((Vala.Property) symbol).property_type.data_type, searched, match_type);
 			} else if (symbol is Vala.Parameter) {
-				symbol_lookup_inherited (((Vala.Parameter) symbol).variable_type.data_type);
+				symbol_lookup_inherited (((Vala.Parameter) symbol).variable_type.data_type, searched, match_type);
 			}
 		}
 	}

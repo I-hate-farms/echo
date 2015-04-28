@@ -15,19 +15,25 @@ static int error_count = 0 ;
 static int passed_count = 0 ; 
 const bool display_symbols = false ;
 
-public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
+public static Project setup_project_for_file (string file_full_path)
+{
 		var project = new Project ();
 		// Sample libs
 		project.add_external_package ("glib-2.0");
 		project.add_external_package ("gobject-2.0");
 		project.add_external_package ("clutter-gtk-1.0");
 
-		var full_path = File.new_for_path (file_full_path).get_path ();
-		project.add_file (full_path);
+		project.add_file (file_full_path);
 
 		project.update_sync ();
 
-		return project.get_symbols_for_file (full_path);
+		return project;
+}
+
+public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
+		var project = setup_project_for_file (file_full_path);
+
+		return project.get_symbols_for_file (file_full_path);
 }
 
 public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path) {
