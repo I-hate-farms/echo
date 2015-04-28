@@ -8,7 +8,7 @@ library (
     NAME
         echo
     AUTHOR
-        "Echo Developers"
+        "Echo Developers <us@someplace.com>"
     HOMEPAGE
         "https://github.com/I-hate-farms/echo"
     LICENSE
