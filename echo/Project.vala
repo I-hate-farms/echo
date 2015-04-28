@@ -191,8 +191,8 @@ namespace Echo
 
 		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
 			var source = files[full_path];
-			assert (source != null);
-
+			// assert (source != null);
+			Utils.report_debug ("Can't find source for '%s'", full_path) ;
 			var result = new Vala.ArrayList<Symbol>();
 			var symbol = code_tree.get_code_tree (source);
 			if (symbol != null) {

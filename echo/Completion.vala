@@ -7,6 +7,22 @@ namespace Echo
 
 		}
 
+		/**
+		 * Complete code. 
+		    <blah>
+		 * Main cases
+		 *   . after a '.': displays the methods for classes, values for enums, 
+		 *     sub namespaces
+		 *   . after a 'is': display types
+		 *   . after a 'new': displays types
+		 *   . after an 'override': displays overridable methods
+		 *   . fallback: what does it do?
+		 * Nice to have :   . 
+		 *   . complete keywords
+		 *   . after 'using' to find namespace
+		 *   . delegates signatures?
+		 *   . support for generics if not included 
+		 */
 		public CompletionReport complete (string file_full_path, int line, int column) {
 			return new CompletionReport () ;
 		}
@@ -122,6 +138,10 @@ namespace Echo
 */
 
 	}
+
+  /**
+   * Returns the completion results and parsing errors
+   **/
 
 	public class CompletionReport {
 

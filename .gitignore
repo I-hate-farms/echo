@@ -1,3 +1,4 @@
 echo-test
 .hen
 tests/test-suite
+test-suite

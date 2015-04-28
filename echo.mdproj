@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ItemType>ValaProject</ItemType>
+    <ProjectGuid>{E29E4C56-75FA-4308-B00D-C1421C4C9651}</ProjectGuid>
+    <Packages>
+      <Packages>
+        <ProjectPackage file="glib-2.0.pc" name="glib-2.0" IsProject="False" />
+        <ProjectPackage file="gobject-2.0.pc" name="gobject-2.0" IsProject="False" />
+        <ProjectPackage file="libvala-0.28.pc" name="libvala-0.28" IsProject="False" />
+        <ProjectPackage file="gee-0.8.pc" name="gee-0.8" IsProject="False" />
+        <ProjectPackage file="gio-2.0.pc" name="gio-2.0" IsProject="False" />
+      </Packages>
+    </Packages>
+    <compiler>
+      <compiler />
+    </compiler>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug</OutputPath>
+    <Output>
+      <Output output="echo" />
+    </Output>
+    <Build>
+      <Build target="SharedLibrary" />
+    </Build>
+    <CodeGeneration>
+      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="0" ExtraCompilerArguments="" DefineSymbols="DEBUG" EnableMultithreading="False" ctype="ValaCompilationParameters" />
+    </CodeGeneration>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release</OutputPath>
+    <Output>
+      <Output output="echo" />
+    </Output>
+    <Build>
+      <Build target="SharedLibrary" />
+    </Build>
+    <CodeGeneration>
+      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="3" ExtraCompilerArguments="--target-glib=2.32 -X -w " DefineSymbols="" EnableMultithreading="False" ctype="ValaCompilationParameters" />
+    </CodeGeneration>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="echo\CodeTree.vala" />
+    <Compile Include="echo\Completion.vala" />
+    <Compile Include="echo\Locator.vala" />
+    <Compile Include="echo\Project.vala" />
+    <Compile Include="echo\Utils.vala" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="TODO.md" />
+  </ItemGroup>
+</Project>
