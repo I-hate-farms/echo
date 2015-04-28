@@ -159,11 +159,11 @@ public static void print_all () {
 }
 
 public static void print_better () {
-	print ( "\n %s\n\n", get_string (betters) ) ;
+	print ( "\n -> %s\n\n", get_string (betters) ) ;
 }
 
 public static void print_victory () {
-	print ( "\n %s\n\n", get_string (victorys) ) ;
+	print ( "\n -> %s\n\n", get_string (victorys) ) ;
 }
 
 
