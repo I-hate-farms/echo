@@ -7,9 +7,9 @@ namespace Echo
 
 		}
 
-		/**
+		/*
 		 * Complete code. 
-		    <blah>
+		 * <blah>
 		 * Main cases
 		 *   . after a '.': displays the methods for classes, values for enums, 
 		 *     sub namespaces
@@ -24,7 +24,7 @@ namespace Echo
 		 *   . support for generics if not included 
 		 */
 		public CompletionReport complete (string file_full_path, int line, int column) {
-			return new CompletionReport () ;
+			return new CompletionReport ();
 		}
 
 			/*switch (completionChar)

@@ -291,8 +291,13 @@ do_valadoc () {
       echo ""
       echo -e "${white}Building valadoc...${NC}"
       echo "----------"
+      generate_cmakefile
       cd ${BUILD_FOLDER}
-      make valadoc
+      if [ ! -z "$PARAM" ]; then
+          make valadoc_${PARAM}
+      else
+        make valadoc
+      fi
       cd ..
       restore_cmakefile
 }
@@ -329,7 +334,7 @@ do_internal_release () {
   zip -q -r ../dist/hen-latest.zip .
   cd ..
   cp ${DEST_FOLDER}/Hen-VERSION.txt ./dist/
-  cp ${DEST_FOLDER}/Hen-CHANGELOG.txt ./CHANGELOG.md
+  cp ${DEST_FOLDER}/Hen-CHANGELOG.md ./CHANGELOG.md
 
   echo -e "${white}Release ready${NC}."
 }

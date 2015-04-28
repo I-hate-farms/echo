@@ -54,7 +54,7 @@ namespace Echo
 			code_tree = new CodeTree (context);
 
 			cancellable = new Cancellable ();
-			completor = new Completor (this) ;
+			completor = new Completor (this);
 		}
 
 		public void add_external_package (string package) {
@@ -114,8 +114,12 @@ namespace Echo
 		public void update_file_contents (string full_filepath, string content, bool schedule_update = true)
 		{
 			var file = files[full_filepath];
-			assert (file != null);
+			// assert (file != null);
 
+			if (file != null) {
+				Utils.report_error ("Can't find source for '%s'", full_filepath);
+				return;
+			}
 			file.content = content;
 			clear_file (file);
 
@@ -169,7 +173,7 @@ namespace Echo
 		 * Returns the enclosing symbol at the specific position of the file.
 		 **/ 
 		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
-			Symbol current = null ;
+			Symbol current = null;
 			
 			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
 				if (symbol.source_line > line) break; 
@@ -183,17 +187,23 @@ namespace Echo
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
 		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
-			var src = files[file_full_path];
-			assert (src != null);
+			var source = files[file_full_path];
 
-			return code_tree.find_symbols (src);
+			if (source != null) {
+				Utils.report_error ("Can't find source for '%s'", file_full_path);
+				return new Vala.ArrayList<Symbol>();;
+			}
+			return code_tree.find_symbols (source);
 		}
 
-		public Vala.List<Symbol> get_symbols_for_file (string full_path) {
-			var source = files[full_path];
-			// assert (source != null);
-			Utils.report_debug ("Can't find source for '%s'", full_path) ;
+		public Vala.List<Symbol> get_symbols_for_file (string file_full_path) {
+			var source = files[file_full_path];
 			var result = new Vala.ArrayList<Symbol>();
+
+			if (source != null) {
+				Utils.report_error ("Can't find source for '%s'", file_full_path);
+				return result;
+			}
 			var symbol = code_tree.get_code_tree (source);
 			if (symbol != null) {
 				if (symbol.symbol_type != SymbolType.FILE)
@@ -207,15 +217,15 @@ namespace Echo
 			return result;
 
 		}
-				/*var source = code_tree.find_root_symbol (file_full_path)  ;
+				/*var source = code_tree.find_root_symbol (file_full_path) ;
 
 			
 				if( source == null ) {
 				}
 				else
 				{*/
-					//var symbol = code_tree.find_root_symbol (file_full_path)  ;
-/*					var symbol = code_tree.get_code_tree (find_source (file_full_path)) ;
+					//var symbol = code_tree.find_root_symbol (file_full_path) ;
+/*					var symbol = code_tree.get_code_tree (find_source (file_full_path));
 					if (symbol == null) 
 					{
 						Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(file_full_path));
@@ -236,7 +246,7 @@ namespace Echo
 */
 		public CompletionReport complete_input (string file_full_path, int line, int column) 
 		{
-			return completor.complete (file_full_path, line, column) ;
+			return completor.complete (file_full_path, line, column);
 		}
 
 		public Vala.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {

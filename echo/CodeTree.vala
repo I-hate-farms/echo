@@ -197,7 +197,7 @@ namespace Echo
 			if (list == null)
 				update_code_tree (src);
 
-			return lists[src.filename] ;
+			return lists[src.filename];
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
