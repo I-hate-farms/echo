@@ -1,4 +1,4 @@
-using Echo ; 
+using Echo;
 
 class FullEchoProjectTestCase : Gee.TestCase {
  
@@ -16,7 +16,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
    public void test_simple_main () {
 
     var project = new Project ("echo");
-    project.target_glib232 = true ; 
+    // project.target_glib232 = true;
     // Sample libs
     project.add_external_package ("glib-2.0");
     project.add_external_package ("gobject-2.0");
@@ -40,9 +40,9 @@ class FullEchoProjectTestCase : Gee.TestCase {
     project.update_sync ();
     foreach (var path in files) {
       print ("Code for %s\n", path );
-      print ("----------\n") ; 
+      print ("----------\n");
       var result = project.get_symbols_for_file (path);
-      Utils.print_symbols (result) ;    
+      Utils.print_symbols (result);
     }
     // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
    }

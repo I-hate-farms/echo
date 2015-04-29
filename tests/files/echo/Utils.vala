@@ -29,7 +29,7 @@ namespace Echo.Utils
 	public static void print_symbols (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
 	{
 		foreach (var symbol in symbols)
-			Utils.print_symbol (symbol, 2);	
+			Utils.print_symbol (symbol, 2);
 	}
 
 	public static Vala.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)

@@ -1,7 +1,7 @@
 using Echo;
 
 const string COLOR_RED           = "\x1b[31m";
-const string BOLD_COLOR_RED      = "\033[1m\033[31m" ;
+const string BOLD_COLOR_RED      = "\033[1m\033[31m";
 const string BOLD_COLOR_MAGENTA  = "\033[1m\033[35m";
 
 const string ANSI_COLOR_YELLOW = "\x1B[33m";
@@ -9,10 +9,10 @@ const string ANSI_COLOR_YELLOW = "\x1B[33m";
 const string ANSI_COLOR_GREEN = "\x1b[32m";
 const string ANSI_COLOR_WHITE = "\033[1m\033[37m";
 const string ANSI_COLOR_RESET = "\x1b[0m";
-const string ANSI_COLOR_RED = BOLD_COLOR_RED ; 
+const string ANSI_COLOR_RED = BOLD_COLOR_RED;
 
-static int error_count = 0 ; 
-static int passed_count = 0 ; 
+static int error_count = 0;
+static int passed_count = 0;
 const bool display_symbols = false;
 
 public static Project setup_project_for_file (string project_name, string file_full_path,
@@ -48,15 +48,15 @@ public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path)
 }
 
 public static void printline_error (string message) {
-	print ("%s%s%s\n", ANSI_COLOR_RED, message, ANSI_COLOR_RESET) ; 
+	print ("%s%s%s\n", ANSI_COLOR_RED, message, ANSI_COLOR_RESET);
 }
 
 public static void print_message (string message) {
-	print (message) ; 
+	print (message);
 }
 
 public static void printline_message (string message) {
-	print (message + "\n") ; 
+	print (message + "\n");
 }
 
 public static void report_error (Vala.List<Symbol> symbols,  string message) {
@@ -124,35 +124,35 @@ const string[] victorys =  {
 
 public static string replace (string str)
 {
-	var result = str ; 
+	var result = str;
 	result = result.replace ("#NAME#", Environment.get_user_name ());
 	result = result.replace ("#REAL_NAME#", Environment.get_real_name ());
 	result = result.replace ("#RESET#", ANSI_COLOR_RESET );
 	result = result.replace ("#WHITE#", ANSI_COLOR_WHITE);
-	result = result.replace ("#RED#", BOLD_COLOR_RED) ;	
-	result = result.replace ("#MAGENTA#", BOLD_COLOR_MAGENTA) ;	
-	result = result.replace ("#YELLOW#", ANSI_COLOR_YELLOW) ;		
-	return result ; 
+	result = result.replace ("#RED#", BOLD_COLOR_RED);
+	result = result.replace ("#MAGENTA#", BOLD_COLOR_MAGENTA);
+	result = result.replace ("#YELLOW#", ANSI_COLOR_YELLOW);
+	return result;
 }
 
 public static string get_string (string [] strings) {
 	var i = Math.lround ((strings.length-1) * Random.next_double ());
 	var result = strings[i];
 	result = replace (result);
-	return result ; 
+	return result;
 }
 
 
 public static void print_all () {
 	foreach( var str in betters) {
-		var result = str ; 
+		var result = str;
 		result = replace (result);
-		print ("%s\n", result ) ; 
+		print ("%s\n", result );
 	}
 	foreach( var str in victorys) {
-		var result = str ; 
+		var result = str;
 		result = replace (result);
-		print ("%s\n", result ) ; 
+		print ("%s\n", result );
 	}
 }
 
@@ -171,7 +171,7 @@ public static void print_report () {
 	if( error_count > 0) 
 	{
 		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET);
-		print_better () ; 
+		print_better ();
 	} 
 	else
 	{
@@ -182,7 +182,7 @@ public static void print_report () {
 
 
 public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
-	var expected_count = 1 ; 
+	var expected_count = 1;
 	if ( symbols.size == expected_count) {
 		var actual_type = symbols.@get (0).symbol_type;
 		if( actual_type == type) {

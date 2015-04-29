@@ -1,4 +1,4 @@
-using Echo ; 
+using Echo;
 
 class SymbolListingTestCase : Gee.TestCase {
  

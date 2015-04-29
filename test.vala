@@ -28,7 +28,7 @@ public class FreeShapeShadowEffect : Clutter.OffscreenEffect
 	public override void paint (Clutter.EffectPaintFlags flags)
 	{
 		print ("flags: %s\n", flags == Clutter.EffectPaintFlags.ACTOR_DIRTY ? "actor dirty" : "not dirty");
-		base.paint (flags);	
+		base.paint (flags);
 	}
 
 	public override void set_actor (Clutter.Actor? actor)

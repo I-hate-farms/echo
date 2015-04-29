@@ -4,7 +4,7 @@ namespace MyApp {
 	
 	public class HelloVala: Object {
 
-		string string1 = "Hello" ; 
+		string string1 = "Hello";
 
 		public string prop1 { get ; set ; }
 		

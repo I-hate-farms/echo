@@ -9,6 +9,6 @@ public static int main(string[] args) {
   TestSuite.get_root().add_suite(new FullEchoProjectTestCase ().get_suite());
 
   var result = Test.run ();
-  print_report () ; 
-  return result ; 
+  print_report ();
+  return result;
 }
