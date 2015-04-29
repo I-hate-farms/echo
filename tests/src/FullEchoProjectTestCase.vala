@@ -46,14 +46,6 @@ class FullEchoProjectTestCase : Gee.TestCase {
     }
     // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
    }
- 
-  public void test_main_namespace () {
-    assert_symbol_type (get_root_symbols ("./files/main_namespace.vala"), SymbolType.NAMESPACE);
-   }
-
-  public void test_main_function () {
-    assert_symbol_type (get_root_symbols ("./files/main_function.vala"), SymbolType.METHOD);
-   }
 
    public override void tear_down () {
    }

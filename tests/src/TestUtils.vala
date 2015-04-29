@@ -77,8 +77,10 @@ public static void report_passed (Vala.List<Symbol> symbols, bool flat=false) {
 		print ("\n");
 		if( flat )
 		{
-		  foreach (var symbol in symbols)
+		  /*foreach (var symbol in symbols)
 				print ("%s - %s", symbol.fully_qualified_name, symbol.symbol_type.to_string ());
+			*/
+			Utils.print_symbols (symbols, 2);
 		}
 		else
 		{

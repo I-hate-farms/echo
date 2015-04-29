@@ -133,7 +133,7 @@ namespace Echo
 		}
 
 		public string to_string () {
-			return "%s: %s".printf(fully_qualified_name, symbol_type.to_string ());
+			return "%s - %s - %d:%d".printf(fully_qualified_name, symbol_type.to_string (), source_line, source_column);
 		}
 	}
 

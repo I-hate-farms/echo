@@ -20,7 +20,7 @@ namespace Echo.Utils
 		for (var i = 0; i < indent; i++)
 			s += "  ";
 
-		print ("%s%s%s - %s\n", prefix, s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
+		print ("%s%s%s\n", prefix, s, symbol.to_string ());
 
 		foreach (var child in symbol.children)
 			print_symbol (child, indent + 1);

@@ -135,7 +135,7 @@ namespace Echo
 				Source.remove (scheduled_update_id);
 			}
 
-			new Thread<void*> (null, () => {
+			/*new Thread<void*> (null, () => {
 				update_sync ();
 
 				Idle.add (() => {
@@ -143,7 +143,7 @@ namespace Echo
 					return false;
 				});
 				return null;
-			});
+			});*/
 
 			yield;
 		}
