@@ -39,7 +39,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
     project.update_sync ();
     foreach (var path in files) {
       var result = project.get_symbols_for_file (path);
-      Utils.print_symbols (result) ;
+      Utils.print_symbols (result) ;    
     }
     // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
    }

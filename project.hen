@@ -31,7 +31,7 @@ library (
 
 console_application (
     NAME
-        echo-testing
+        sample
     LICENSE
         "Apache 2.0"
     VERSION
@@ -44,9 +44,10 @@ console_application (
         echo
 )
 
+# Hen bug: rename to 'tests' and see the build crashs
 console_application (
     NAME
-        echo-tests
+        test
     LICENSE
         "Apache 2.0"
     VERSION

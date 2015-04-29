@@ -16,15 +16,15 @@ class SymbolListingTestCase : Gee.TestCase {
    }
  
    public void test_simple_main () {
-     assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
+     assert_symbol_type (get_root_symbols ("./tests/files/main.vala"), SymbolType.CLASS);
    }
  
   public void test_main_namespace () {
-    assert_symbol_type (get_root_symbols ("./files/main_namespace.vala"), SymbolType.NAMESPACE);
+    assert_symbol_type (get_root_symbols ("./tests/files/main_namespace.vala"), SymbolType.NAMESPACE);
    }
 
   public void test_main_function () {
-    assert_symbol_type (get_root_symbols ("./files/main_function.vala"), SymbolType.METHOD);
+    assert_symbol_type (get_root_symbols ("./tests/files/main_function.vala"), SymbolType.METHOD);
    }
 
    public override void tear_down () {
