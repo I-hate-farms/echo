@@ -153,7 +153,7 @@ namespace Echo
 			var file = files[full_filepath];
 			// assert (file != null);
 
-			if (file != null) {
+			if (file == null) {
 				Utils.report_error ( "update_file_contents", "Exiting: can't find source for '%s'".printf (full_filepath));
 				return;
 			}
@@ -226,7 +226,7 @@ namespace Echo
 		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
 			var source = files[file_full_path];
 
-			if (source != null) {
+			if (source == null) {
 				Utils.report_error ("get_all_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
 				return new Vala.ArrayList<Symbol>();;
 			}
@@ -237,7 +237,7 @@ namespace Echo
 			var source = files[file_full_path];
 			var result = new Vala.ArrayList<Symbol>();
 
-			if (source != null) {
+			if (source == null) {
 				Utils.report_error ("get_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
 				return result;
 			}
