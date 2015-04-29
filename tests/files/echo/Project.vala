@@ -50,7 +50,7 @@ namespace Echo
 			context = new Vala.CodeContext ();
 			original_target_glib_major = context.target_glib_major ; 
 			original_target_glib_minor = context.target_glib_minor ; 
-			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32) ;
+			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32);
 
 			context.profile = Vala.Profile.GOBJECT;
 			context.report = new Reporter ();
@@ -105,8 +105,8 @@ namespace Echo
 
 		public void update_sync ()
 		{
-			var monitor = new Monitor () ;
-			monitor.start () ;
+			var monitor = new Monitor ();
+			monitor.start ();
 			lock (context) {
 				Vala.CodeContext.push (context);
 
@@ -124,8 +124,8 @@ namespace Echo
 
 				Vala.CodeContext.pop ();
 			}
-			monitor.stop () ;
-			Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) ) ;
+			monitor.stop ();
+			Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) );
 		}
 
 		public async void update ()
@@ -254,14 +254,14 @@ namespace Echo
 			return result;
 
 		}
-				/*var source = code_tree.find_root_symbol (file_full_path) ;
+				/*var source = code_tree.find_root_symbol (file_full_path);
 
 			
 				if( source == null ) {
 				}
 				else
 				{*/
-					//var symbol = code_tree.find_root_symbol (file_full_path) ;
+					//var symbol = code_tree.find_root_symbol (file_full_path);
 /*					var symbol = code_tree.get_code_tree (find_source (file_full_path));
 					if (symbol == null) 
 					{

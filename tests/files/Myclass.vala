@@ -22,6 +22,6 @@ namespace MyApp {
 		
 		public string get_message ()
 		{
-			return "Hello" ;
+			return "Hello";
 		}	
 	}

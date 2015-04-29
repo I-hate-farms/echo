@@ -16,6 +16,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
    public void test_simple_main () {
 
     var project = new Project ("echo");
+    project.target_glib232 = true ; 
     // Sample libs
     project.add_external_package ("glib-2.0");
     project.add_external_package ("gobject-2.0");
@@ -25,20 +26,20 @@ class FullEchoProjectTestCase : Gee.TestCase {
 
     var full_path = File.new_for_path ("./tests/files/echo");
 
-    var files = new Gee.ArrayList<string>() ;
+    var files = new Gee.ArrayList<string>();
 
     var enumerator = full_path.enumerate_children (FileAttribute.STANDARD_NAME, 0);
     FileInfo file_info;
     while ((file_info = enumerator.next_file ()) != null) {
-        var path = full_path.get_path () + "/" + file_info.get_name () ;
+        var path = full_path.get_path () + "/" + file_info.get_name ();
         project.add_file (path);
-        files.add (path) ;
+        files.add (path);
     }
     
 
     project.update_sync ();
     foreach (var path in files) {
-      print ("Code for %s\n", path ) ;
+      print ("Code for %s\n", path );
       print ("----------\n") ; 
       var result = project.get_symbols_for_file (path);
       Utils.print_symbols (result) ;    
