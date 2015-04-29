@@ -38,6 +38,8 @@ class FullEchoProjectTestCase : Gee.TestCase {
 
     project.update_sync ();
     foreach (var path in files) {
+      print ("Code for %s\n", path ) ;
+      print ("----------\n") ; 
       var result = project.get_symbols_for_file (path);
       Utils.print_symbols (result) ;    
     }
