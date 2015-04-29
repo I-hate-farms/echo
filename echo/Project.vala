@@ -18,7 +18,7 @@ namespace Echo
 		ReportCollector report_collector;
 		CodeTree code_tree;
 		Cancellable cancellable;
-		string name ; 
+		string name;
 
 		Gee.HashMap<string,Vala.SourceFile> files =
 			new Gee.HashMap<string,Vala.SourceFile> ();
@@ -39,15 +39,18 @@ namespace Echo
 			}
 		}
 		
-		private int original_target_glib_major ; 
-		private int original_target_glib_minor ; 
+		private int original_target_glib_major;
+		private int original_target_glib_minor;
 
 		construct
 		{
 			context = new Vala.CodeContext ();
-			original_target_glib_major = context.target_glib_major ; 
-			original_target_glib_minor = context.target_glib_minor ; 
-			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32) ;
+			original_target_glib_major = context.target_glib_major;
+			original_target_glib_minor = context.target_glib_minor;
+			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32);
+					
+			context.target_glib_major = 2;
+			context.target_glib_minor = 32;
 
 			report_collector = new ReportCollector ();
 
@@ -66,25 +69,25 @@ namespace Echo
 
 		public Project (string name) 
 		{
-			this.name = name ; 
+			this.name = name;
 		}
 
-		private bool _target_glib232 = false; 
+		private bool _target_glib232 = false;
 		
 		public bool target_glib232  { 
 			get {
-				return _target_glib232 ;  
+				return _target_glib232;
 			}
 			set {
-				_target_glib232 = value ; 
-				if( value) {
-					context.target_glib_major = 2 ; 
-					context.target_glib_major = 32 ; 
+				_target_glib232 = value;
+				if (value) {
+					context.target_glib_major = 2;
+					context.target_glib_minor = 32;
 				}
 				else
 				{
-					context.target_glib_major = original_target_glib_major ; 
-					context.target_glib_major = original_target_glib_minor ; 
+					context.target_glib_major = original_target_glib_major;
+					context.target_glib_minor = original_target_glib_minor;
 				}
 			}
 		}
@@ -104,8 +107,8 @@ namespace Echo
 
 		public void update_sync ()
 		{
-			var monitor = new Monitor () ;
-			monitor.start () ;
+			var monitor = new Monitor ();
+			monitor.start ();
 			lock (context) {
 				Vala.CodeContext.push (context);
 
@@ -123,8 +126,8 @@ namespace Echo
 
 				Vala.CodeContext.pop ();
 			}
-			monitor.stop () ;
-			Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) ) ;
+			monitor.stop ();
+			Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) );
 		}
 
 		public async void update ()
@@ -212,8 +215,8 @@ namespace Echo
 			Symbol current = null;
 			
 			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
-				if (symbol.source_line > line) break; 
-				current = symbol; 
+				if (symbol.source_line > line) break;
+				current = symbol;
 			}
 			
 			return current;
@@ -253,14 +256,14 @@ namespace Echo
 			return result;
 
 		}
-				/*var source = code_tree.find_root_symbol (file_full_path) ;
+				/*var source = code_tree.find_root_symbol (file_full_path);
 
 			
 				if( source == null ) {
 				}
 				else
 				{*/
-					//var symbol = code_tree.find_root_symbol (file_full_path) ;
+					//var symbol = code_tree.find_root_symbol (file_full_path);
 /*					var symbol = code_tree.get_code_tree (find_source (file_full_path));
 					if (symbol == null) 
 					{
@@ -277,7 +280,7 @@ namespace Echo
 								result.add (child);
 							}
 				//}
-				return result ; 
+				return result;
 		} 
 */	public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
 		{

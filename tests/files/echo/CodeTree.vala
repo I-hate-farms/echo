@@ -19,29 +19,29 @@ namespace Echo
 		public string to_string () {
 			switch(this) {
 				case FILE: 
-					return "File" ; 
+					return "File";
 				case NAMESPACE: 
-					return "Namespace" ; 
+					return "Namespace";
 				case CLASS: 
-					return "Class" ; 
+					return "Class";
 				case CONSTRUCTOR: 
-					return "Constructor" ; 
+					return "Constructor";
 				case DESTRUCTOR: 
-					return "Destructor" ; 
+					return "Destructor";
 				case INTERFACE: 
-					return "Interface" ; 
+					return "Interface";
 				case ENUM: 
-					return "Enum" ; 
+					return "Enum";
 				case METHOD: 
-					return "Method" ; 
+					return "Method";
 				case STRUCT: 
-					return "Struct" ; 
+					return "Struct";
 				case PROPERTY: 
-					return "Property" ; 
+					return "Property";
 				case FIELD: 
-					return "Field" ; 
+					return "Field";
 				case SIGNAL: 
-					return "Signal" ; 
+					return "Signal";
 				default:
 					assert_not_reached ();
 			}
@@ -67,8 +67,8 @@ namespace Echo
 		public int last_line { get ; set ; }
 		
 		public SourceReference (string file_full_path, int line, int column, int last_line) {
-			this.file_full_path = file_full_path ; 
-			this.line = line ; 
+			this.file_full_path = file_full_path;
+			this.line = line;
 			this.column = column;
 			this.last_line=last_line;
 		}
@@ -120,7 +120,7 @@ namespace Echo
 			}
 		}
 
-		private SourceReference _declaration = null ; 
+		private SourceReference _declaration = null;
 
 		public SourceReference declaration {
 			owned get {
