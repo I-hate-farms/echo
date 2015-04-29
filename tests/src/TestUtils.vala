@@ -16,7 +16,7 @@ static int passed_count = 0 ;
 const bool display_symbols = false ;
 
 public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
-		var project = new Project ();
+		var project = new Project ("test-root");
 		// Sample libs
 		project.add_external_package ("glib-2.0");
 		project.add_external_package ("gobject-2.0");
@@ -31,7 +31,7 @@ public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
 }
 
 public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path) {
-		var project = new Project ();
+		var project = new Project ("test-all-symbols");
 		// Sample libs
 		project.add_external_package ("glib-2.0");
 		project.add_external_package ("gobject-2.0");
@@ -63,10 +63,7 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
 	printline_error ("ERROR") ;
 	printline_error (message) ;
   printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET)) ;
-	foreach (var symbol in symbols) {
-		print ("Debug Tree:\n");
-		Utils.print_node (symbol, 2);
-	}
+	Utils.print_symbols (symbols, 2) ;
 	// print ("\n") ;
 }
 
@@ -83,8 +80,7 @@ public static void report_passed (Vala.List<Symbol> symbols, bool flat=false) {
 		}
 		else
 		{
-		  foreach (var symbol in symbols)
-				Utils.print_node (symbol, 2);
+			Utils.print_symbols (symbols, 2) ;
 		}
 	// assert (true) ;
 	}

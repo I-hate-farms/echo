@@ -4,7 +4,7 @@ void main (string[] args)
 {
 	var loop = new MainLoop ();
 
-	var project = new Project ();
+	var project = new Project ("testing");
 	project.add_external_package ("glib-2.0");
 	project.add_external_package ("gobject-2.0");
 	project.add_external_package ("clutter-gtk-1.0");
