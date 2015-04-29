@@ -15,6 +15,7 @@ namespace Echo
 		Vala.Parser parser;
 		Locator locator;
 		Completor completor;
+		ReportCollector report_collector;
 		CodeTree code_tree;
 		Cancellable cancellable;
 		string name ; 
@@ -41,10 +42,6 @@ namespace Echo
 		private int original_target_glib_major ; 
 		private int original_target_glib_minor ; 
 
-		class Reporter : Vala.Report
-		{
-		}
-
 		construct
 		{
 			context = new Vala.CodeContext ();
@@ -52,8 +49,10 @@ namespace Echo
 			original_target_glib_minor = context.target_glib_minor ; 
 			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32) ;
 
+			report_collector = new ReportCollector ();
+
 			context.profile = Vala.Profile.GOBJECT;
-			context.report = new Reporter ();
+			context.report = report_collector;
 
 			parser = new Vala.Parser ();
 			parser.parse (context);

@@ -22,6 +22,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
     project.add_external_package ("libvala-0.28");
     project.add_external_package ("gio-2.0");
     project.add_external_package ("gee-0.8");
+    project.target_glib232 = true;
 
     var full_path = File.new_for_path ("./tests/files/echo");
 

@@ -20,6 +20,7 @@ public static Project setup_project_for_file (string project_name, string file_f
 {
 		var project = new Project (project_name);
 		// Sample libs
+		project.target_glib232 = true;
 		project.add_external_package ("glib-2.0");
 		project.add_external_package ("gobject-2.0");
 		project.add_external_package ("clutter-gtk-1.0");
