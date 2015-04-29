@@ -257,33 +257,8 @@ namespace Echo
 			return result;
 
 		}
-				/*var source = code_tree.find_root_symbol (file_full_path);
 
-			
-				if( source == null ) {
-				}
-				else
-				{*/
-					//var symbol = code_tree.find_root_symbol (file_full_path);
-/*					var symbol = code_tree.get_code_tree (find_source (file_full_path));
-					if (symbol == null) 
-					{
-						Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(file_full_path));
-					}
-					else
-					{
-
-						if( symbol.symbol_type != SymbolType.FILE) 
-							result.add (symbol);
-					  else 
-						  // We skip the first level that is FILE
-							foreach (var child in symbol.children )
-								result.add (child);
-							}
-				//}
-				return result;
-		} 
-*/	public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
+		public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
 		{
 			return completor.complete (file_full_path, line, column);
 		}

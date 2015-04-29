@@ -64,9 +64,10 @@ public static void report_error (Vala.List<Symbol> symbols,  string message) {
 	
 	printline_error ("ERROR");
 	printline_error (message);
-  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET));
-	Utils.print_symbols (symbols, 2);
-	// print ("\n");
+	if( symbols.size > 0 ) {
+	  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET));
+		Utils.print_symbols (symbols, 2);
+	}
 }
 
 public static void report_passed (Vala.List<Symbol> symbols, bool flat=false) {
@@ -215,6 +216,17 @@ public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_
 	}
 
 	report_error (symbols, "Found '%d' symbols instead of expected '%d'".printf (symbols.size, expected_count));
+	// We don't want the program to segfault
+	// assert (false);
+}
+
+public static void assert_symbol_count_not (Vala.List<Symbol> symbols, int unexpected_count) {
+	if ( symbols.size != unexpected_count) {
+		report_passed (symbols);
+		return;
+	}
+
+	report_error (symbols, "Found '%d' symbols while it was forbidden".printf (symbols.size));
 	// We don't want the program to segfault
 	// assert (false);
 }

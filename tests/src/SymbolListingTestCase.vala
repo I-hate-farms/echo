@@ -27,6 +27,14 @@ class SymbolListingTestCase : Gee.TestCase {
     assert_symbol_type (get_root_symbols ("./tests/files/main_function.vala"), SymbolType.METHOD);
    }
 
+  public void test_error_domain () {
+    assert_symbol_type (get_root_symbols ("./tests/files/main_error_domain.vala"), SymbolType.METHOD);
+   }
+
+  public void test_error_constant () {
+    assert_symbol_type (get_root_symbols ("./tests/files/main_error_constant.vala"), SymbolType.METHOD);
+   }
+
    public override void tear_down () {
    }
 }

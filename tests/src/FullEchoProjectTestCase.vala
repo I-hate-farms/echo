@@ -42,7 +42,8 @@ class FullEchoProjectTestCase : Gee.TestCase {
       print ("Code for %s\n", path );
       print ("----------\n");
       var result = project.get_symbols_for_file (path);
-      Utils.print_symbols (result);
+      // Utils.print_symbols (result);
+      assert_symbol_count_not (result, 0 ) ;
     }
     // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
    }
