@@ -21,10 +21,8 @@ Code manipulation library for vala: getting barked at will be a pleasure
 The unit tests are defined in the folder `tests`
 
 ```
-cd tests
-make test
+./hen run test
 ```
-or run `tests/test-suite` directly 
 
 Expected output : 
 ```

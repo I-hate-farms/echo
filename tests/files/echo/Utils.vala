@@ -241,8 +241,6 @@ namespace Echo.Utils
 			}
 
 			return "signal %s %s(%s)".printf (s.return_type.to_string (), symbol.name, p);
-		} else if (symbol is Vala.Block) {
-			return "Block at line %i".printf (symbol.source_reference.begin.line);
 		}
 
 		return "::::::: missing: %s <%s>".printf (symbol.name, symbol.type_name);

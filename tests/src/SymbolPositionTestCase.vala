@@ -19,9 +19,11 @@ class SymbolPositionTestCase : Gee.TestCase
 
 	public void test_symbol_position ()
 	{
-		var project = setup_project_for_file ("./files/position_test.vala");
+		string project_file_path;
+		var project = setup_project_for_file ("test-symbol-position",
+				"./tests/files/position_test.vala", out project_file_path);
 
-		project.get_symbol_at_position ("./files/position_test.vala", 9, 10);
+		project.get_symbol_at_position (project_file_path, 9, 10);
 	}
 }
 

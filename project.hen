@@ -8,7 +8,7 @@ library (
     NAME
         echo
     AUTHOR
-        "Echo Developers"
+        "Echo Developers <us@someplace.com>"
     HOMEPAGE
         "https://github.com/I-hate-farms/echo"
     LICENSE
@@ -29,19 +29,35 @@ library (
         gee-0.8
 )
 
-#console_application (
-#    NAME
-#        echo-testing
-#    LICENSE
-#        "Apache 2.0"
-#    VERSION
-#        "0.1"
-#    TITLE
-#        "Echo Testing"
-#    SOURCE_PATH
-#        src
-#    PACKAGES
-#        gtk+-3.0
-#        echo
-#)
+console_application (
+    NAME
+        sample
+    LICENSE
+        "Apache 2.0"
+    VERSION
+        "0.1"
+    TITLE
+        "Echo testing, testing, testing..."
+    SOURCE_PATH
+        src
+    PACKAGES
+        echo
+)
 
+# Hen bug: rename to 'tests' and see the build crashs
+console_application (
+    NAME
+        test
+    LICENSE
+        "Apache 2.0"
+    VERSION
+        "0.1"
+    TITLE
+        "Unit tests for echo"
+    SOURCE_PATH
+        tests/src
+    C_OPTIONS
+        -lm 
+    PACKAGES
+        echo
+)
