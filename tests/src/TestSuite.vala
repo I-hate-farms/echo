@@ -10,8 +10,8 @@ public static int main(string[] args) {
   // Ivy.Stacktrace.register_handlers ();
   
   // add any of your test cases here
-  //add_tests (new SymbolListingTestCase ());
-  add_tests (new EnclosingSymbolTestCase ());
+  add_tests (new SymbolListingTestCase ());
+  //add_tests (new EnclosingSymbolTestCase ());
   //add_tests (new SymbolPositionTestCase ());
   //add_tests (new FullEchoProjectTestCase ());
   //add_tests (new ExtraSymbolsTestCase ());

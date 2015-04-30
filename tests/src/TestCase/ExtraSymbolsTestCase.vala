@@ -16,11 +16,11 @@ namespace Echo.Tests {
      }
 
     public void test_error_domain () {
-      assert_symbol_type (get_root_symbols ("./tests/files/main_error_domain.vala"), SymbolType.METHOD);
+      assert_symbol_type (get_root_symbols ("./tests/files/main_error_domain.vala"), SymbolType.ERRORDOMAIN);
      }
 
     public void test_constant () {
-      assert_symbol_type (get_root_symbols ("./tests/files/main_constant.vala"), SymbolType.METHOD);
+      assert_symbol_type (get_root_symbols ("./tests/files/main_constant.vala"), SymbolType.CONSTANT);
      }
 
      public override void tear_down () {

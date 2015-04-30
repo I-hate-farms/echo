@@ -10,6 +10,8 @@ namespace Echo.Tests {
       add_file_test ("test_simple_main", "(main.vala)", test_simple_main);
       add_file_test ("test_main_namespace", "(main_namespace.vala)", test_main_namespace);
       add_file_test ("test_main_function", "(main_function.vala)", test_main_function);
+      add_file_test ("test_complete_class", "(MyClass.vala)", test_complete_class);
+      add_file_test ("test_singleton", "(Singleton.vala)", test_singleton);
      }
 
      public override void set_up () {
@@ -46,12 +48,35 @@ namespace Echo.Tests {
       assert_symbols_equals (get_root_symbols ("./tests/files/main_function.vala"), expected);
      }
 
-    public void test_error_domain () {
-      assert_symbol_type (get_root_symbols ("./tests/files/main_error_domain.vala"), SymbolType.ERRORDOMAIN);
-     }
+    public void test_complete_class () {
+       var expected = """
+          SYM:     MyApp - Namespace - 3:1
+          SYM:       MyApp.MyClass - Class - 5:2
+          SYM:         MyApp.MyClass.string1 - Field - 9:3
+          SYM:         MyApp.MyClass._prop1 - Field - 11:3
+          SYM:         MyApp.MyClass..new - Constructor - 20:3
+          SYM:         MyApp.MyClass.get_message - Method - 25:3
+          SYM:         MyApp.MyClass.prop1 - Property - 11:3
+          SYM:         MyApp.MyClass.on_event - Signal - 7:3
+          SYM:         MyApp.MyClass.construct - Constructor - 16:3
+          SYM:         MyApp.MyClass.construct - Constructor - 13:3
+      """;
+      var symbols = get_root_symbols ("./tests/files/MyClass.vala");
+      //Utils.print_symbols (symbols);
+      assert_symbols_equals (symbols, expected);
+    }
 
-    public void test_error_constant () {
-      assert_symbol_type (get_root_symbols ("./tests/files/main_error_constant.vala"), SymbolType.CONSTANT);
+    public void test_singleton () {
+       var expected = """
+          SYM:     SampleLibrary - Namespace - 1:1
+          SYM:       SampleLibrary.MySingle - Class - 5:2
+          SYM:         SampleLibrary.MySingle._instance - Field - 6:6
+          SYM:         SampleLibrary.MySingle.instance - Method - 8:6
+          SYM:         SampleLibrary.MySingle..new - Constructor - 12:3
+      """;
+      var symbols = get_root_symbols ("./tests/files/Singleton.vala");
+      //Utils.print_symbols (symbols);
+      assert_symbols_equals (symbols, expected);
      }
 
      public override void tear_down () {
