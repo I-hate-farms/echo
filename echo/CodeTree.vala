@@ -98,7 +98,7 @@ namespace Echo
 		public bool is_ref  { get ; set ; }
 
 		// TODO
-		public Vala.List<DataType>? generic_types { get ; set ; }
+		public Gee.List<DataType>? generic_types { get ; set ; }
 
 	}
 
@@ -109,14 +109,14 @@ namespace Echo
 		public string verbose_name { get ; set ; }
 		public string name { get ; set ; }
 		public Symbol? parent { get ; set ; }
-		public Vala.List<Symbol> children { get ; set ; default = new Vala.ArrayList<Symbol> () ; }
+		public Gee.List<Symbol> children { get ; set ; default = new Gee.ArrayList<Symbol> () ; }
 		public string source_file_name { get ; set ; }
 		public int source_line { get ; set ; }
 		public int source_column { get ; set ; }
 		public int source_last_line { get ; set ; }
-		public Vala.List<DataType>? parameters { get ; set ; }
+		public Gee.List<DataType>? parameters { get ; set ; }
 		
-		public Vala.List<Symbol>? symbols;
+		public Gee.List<Symbol>? symbols;
 
 		public string fully_qualified_name {
 			owned get {
@@ -152,11 +152,11 @@ namespace Echo
 
 		HashTable<string, Symbol> trees =
 				new HashTable<string, Symbol> (str_hash, str_equal);
-		HashTable<string, Vala.List<Symbol>> lists =
-				new HashTable<string, Vala.List<Symbol>> (str_hash, str_equal);
+		HashTable<string, Gee.List<Symbol>> lists =
+				new HashTable<string, Gee.List<Symbol>> (str_hash, str_equal);
 
 		Vala.SourceFile current_file;
-		Vala.List<Symbol> current_symbol_list;
+		Gee.List<Symbol> current_symbol_list;
 		Symbol current;
 
 		public CodeTree (Vala.CodeContext context)
@@ -167,22 +167,34 @@ namespace Echo
 		public void update_code_tree (Vala.SourceFile src)
 		{
 			//message ("update_code_tree (%s)", src.filename);
-			var symbols = new Vala.ArrayList<Symbol> ();
+			var symbols = new Gee.ArrayList<Symbol> ();
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
 			root.symbols = symbols;
 			symbols.add (root);
 
-			current_symbol_list = new Vala.ArrayList<Symbol> ();
+			current_symbol_list = new Gee.ArrayList<Symbol> ();
 
 			current_file = src;
 			current = root;
 			context.accept (this);
-
+			// FIXME : slow. Instead of this 
+			// use a SortedList (like this one: https://github.com/axiak/shotwell/blob/master/src/SortedList.vala)
+			// and redo the .net bindings...
+			sort_symbols (root.symbols) ;
+			sort_symbols (current_symbol_list) ;
 			trees[src.filename] = root;
 			lists[src.filename] = current_symbol_list;
 		}
+
+		private void sort_symbols (Gee.List<Symbol> symbols) {
+			symbols.sort((a,b) => {
+			    return a.source_line - b.source_line ;
+			});
+			/*foreach (var sym in symbols)
+				sort_symbols (sym.symbols) ;*/
+		} 
 
 		public Symbol? get_code_tree (Vala.SourceFile src)
 		{
@@ -201,7 +213,7 @@ namespace Echo
 			return result;
 		}
 
-		public Vala.List<Symbol>? find_symbols (Vala.SourceFile src) {
+		public Gee.List<Symbol>? find_symbols (Vala.SourceFile src) {
 			var list = lists[src.filename];
 			if (list == null)
 				update_code_tree (src);

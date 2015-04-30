@@ -60,4 +60,5 @@ console_application (
         -lm 
     PACKAGES
         echo
+        ivy
 )

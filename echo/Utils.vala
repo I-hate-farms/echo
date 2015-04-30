@@ -10,7 +10,7 @@ namespace Echo.Utils
 	}
 
 	public static void report_debug (string origin, string message) {
-		debug ("echo:: %s: %s", origin, message);
+		info ("echo:: %s: %s", origin, message);
 	}
 
 	// Use prefix = "SYM: " to get the old display
@@ -30,7 +30,7 @@ namespace Echo.Utils
 			print_symbol (child, indent + 1);
 	}
 	
-	public static void print_symbols (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
+	public static void print_symbols (Gee.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
 	{
 		foreach (var symbol in symbols)
 			Utils.print_symbol (symbol, 2, prefix);
@@ -46,7 +46,7 @@ namespace Echo.Utils
 		return result;
 	}
 
-	public static string to_string (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	public static string to_string (Gee.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
 	{
 		var builder = new StringBuilder ();
 		foreach (var symbol in symbols)
@@ -71,7 +71,7 @@ namespace Echo.Utils
 			build_string (builder, child, indent + 1, prefix, hide_line);
 	}
 
-	public static Vala.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)
+	public static Gee.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)
 	{
 		var ctx = context;
 		if (ctx == null) {
@@ -84,7 +84,7 @@ namespace Echo.Utils
 			return null;
 		}
 		
-		var results = new Vala.ArrayList<string> ();
+		var results = new Gee.ArrayList<string> ();
 		
 		var deps_filename = Path.build_filename (Path.get_dirname (package_path), "%s.deps".printf (pkg));
 		if (FileUtils.test (deps_filename, FileTest.EXISTS)) {
@@ -121,18 +121,21 @@ namespace Echo.Utils
 	 * @param symbol The symbol for which to return a parameter list
 	 * @return       A list of parameters or %null
 	 */
-	public Vala.List<DataType>? extract_parameters (Vala.Symbol symbol)
+	public Gee.List<DataType>? extract_parameters (Vala.Symbol symbol)
 	{
-		Vala.List<Vala.Parameter>? parameters = null;
+		Gee.List<Vala.Parameter>? parameters = new Gee.ArrayList<DataType> ();
 
-		if (symbol is Vala.Method)
-			parameters = ((Vala.Method) symbol).get_parameters ();
+		if (symbol is Vala.Method) {
+			foreach (var p in ((Vala.Method) symbol).get_parameters ())
+				parameters.add (p) ;
+		}
 		else if (symbol is Vala.Signal)
-			parameters = ((Vala.Signal) symbol).get_parameters ();
+			foreach (var p in ((Vala.Signal) symbol).get_parameters ())
+					parameters.add (p) ;
 		else
 			return null;
 
-		var list = new Vala.ArrayList<DataType> ();
+		var list = new Gee.ArrayList<DataType> ();
 
 		foreach (var param in parameters) {
 			var data = new DataType ();

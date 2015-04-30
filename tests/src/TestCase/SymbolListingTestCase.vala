@@ -12,6 +12,7 @@ namespace Echo.Tests {
       add_file_test ("test_main_function", "(main_function.vala)", test_main_function);
       add_file_test ("test_complete_class", "(MyClass.vala)", test_complete_class);
       add_file_test ("test_singleton", "(Singleton.vala)", test_singleton);
+      add_file_test ("test_sorted_output", "(EnclosingSymbol.vala)", test_sorted_output);
      }
 
      public override void set_up () {
@@ -47,6 +48,21 @@ namespace Echo.Tests {
          """;
       assert_symbols_equals (get_root_symbols ("./tests/files/main_function.vala"), expected);
      }
+
+    public void test_sorted_output () {
+       var expected = """
+          SYM:     PublicClass - Class - 1:1
+          SYM:       PublicClass.str - Field - 3:2
+          SYM:       PublicClass..new - Constructor - 10:2
+          SYM:       PublicClass.construct - Constructor - 5:2
+          SYM:     sandbox - Namespace - 15:1
+          SYM:       sandbox.main_in_sandbox - Method - 16:3
+          SYM:     main2 - Method - 25:1
+      """;
+      var symbols = get_root_symbols ("./tests/files/EnclosingSymbol.vala");
+      //Utils.print_symbols (symbols);
+      assert_symbols_equals (symbols, expected);
+    }
 
     public void test_complete_class () {
        var expected = """

@@ -27,7 +27,7 @@ public static void printline_message (string message) {
 	print (message + "\n");
 }
 
-public static void report_error (Vala.List<Symbol> symbols, string message, bool symbols_already_displayed = false ) {
+public static void report_error (Gee.List<Symbol> symbols, string message, bool symbols_already_displayed = false ) {
 	error_count ++;
 	
 	printline_error ("ERROR");
@@ -38,7 +38,7 @@ public static void report_error (Vala.List<Symbol> symbols, string message, bool
 	}
 }
 
-public static void report_passed (Vala.List<Symbol> symbols, bool flat=false) {
+public static void report_passed (Gee.List<Symbol> symbols, bool flat=false) {
 	passed_count ++;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET));
@@ -161,7 +161,7 @@ public static void print_report () {
 }
 
 
-public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
+public static void assert_symbol_type (Gee.List<Symbol> symbols, SymbolType type) {
 	var expected_count = 1;
 	if ( symbols.size == expected_count) {
 		var actual_type = symbols.@get (0).symbol_type;
@@ -181,12 +181,12 @@ public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType typ
 	// assert (false);
 }
 
-public static void assert_symbol_type_and_name ( Vala.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type ) 
+public static void assert_symbol_type_and_name ( Gee.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type ) 
 {
 	report_passed (symbols, true);
 }
 
-public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_count) {
+public static void assert_symbol_count (Gee.List<Symbol> symbols, int expected_count) {
 	if ( symbols.size == expected_count) {
 		report_passed (symbols);
 		return;
@@ -197,7 +197,7 @@ public static void assert_symbol_count (Vala.List<Symbol> symbols, int expected_
 	// assert (false);
 }
 
-public static void assert_symbol_count_not (Vala.List<Symbol> symbols, int unexpected_count) {
+public static void assert_symbol_count_not (Gee.List<Symbol> symbols, int unexpected_count) {
 	if ( symbols.size != unexpected_count) {
 		report_passed (symbols);
 		return;
@@ -209,12 +209,12 @@ public static void assert_symbol_count_not (Vala.List<Symbol> symbols, int unexp
 }
 
 public static void assert_symbol_equals (Symbol? symbol, string expected, bool ignore_line = true) {
-	var symbols = new Vala.ArrayList<Symbol> ();
+	var symbols = new Gee.ArrayList<Symbol> ();
 	symbols.add (symbol);
 	assert_symbols_equals (symbols, expected, ignore_line);
 }
 
-public static void assert_symbols_equals (Vala.List<Symbol> symbols, string expected, bool ignore_line = true) {
+public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expected, bool ignore_line = true) {
 	var str = expected;
 	if( ignore_line) 
 	{
@@ -299,7 +299,7 @@ static void display_side_by_side_result (string diff)  {
 			if( "|" in line )
 			{
 					print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
-			} else if( ">" in line )
+			} else if( ">" in line || "<" in line)
 			{
 					print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
 			} else

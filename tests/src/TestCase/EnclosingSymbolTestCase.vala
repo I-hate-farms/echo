@@ -62,6 +62,7 @@ namespace Echo.Tests {
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 16, 28);
        assert_symbol_equals (symbol, expected);
+       //Utils.print_symbols (project.get_symbols_for_file (project_file_path)) ;
    }
 
     public void test_class_construct () {
@@ -69,7 +70,7 @@ namespace Echo.Tests {
       var expected = "";
       Symbol symbol;
        expected = """
-          SYM: PublicClass.construct - Constructor - 5:2
+          SYM: PublicClass..new - Constructor - ??
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 10, 18);
        assert_symbol_equals (symbol, expected);
@@ -80,7 +81,7 @@ namespace Echo.Tests {
       var expected = "";
       Symbol symbol;
        expected = """
-          SYM: PublicClass.str - FIELD - ??
+          SYM: PublicClass.str - Field - ??
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 3, 18);
        assert_symbol_equals (symbol, expected);
@@ -131,7 +132,7 @@ namespace Echo.Tests {
         var expected = "";
         Symbol symbol;
         expected = """
-              SYM: PublicClass.str - FIELD - ??
+              SYM: ?? - ?? - ??
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 62, 4);
         assert_symbol_equals (symbol, expected);

@@ -186,7 +186,7 @@ namespace Echo
 		void clear_file (Vala.SourceFile file)
 		{
 			// copied from anjuta
-			var nodes = new Vala.ArrayList<Vala.CodeNode> ();
+			var nodes = new Gee.ArrayList<Vala.CodeNode> ();
 			foreach (var node in file.get_nodes()) {
 				nodes.add(node);
 			}
@@ -226,19 +226,19 @@ namespace Echo
 		/** 
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
 		 **/ 
-		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
+		public Gee.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
 			var source = files[file_full_path];
 
 			if (source == null) {
 				Utils.report_error ("get_all_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
-				return new Vala.ArrayList<Symbol>();;
+				return new Gee.ArrayList<Symbol>();;
 			}
 			return code_tree.find_symbols (source);
 		}
 
-		public Vala.List<Symbol> get_symbols_for_file (string file_full_path) {
+		public Gee.List<Symbol> get_symbols_for_file (string file_full_path) {
 			var source = files[file_full_path];
-			var result = new Vala.ArrayList<Symbol>();
+			var result = new Gee.ArrayList<Symbol>();
 
 			if (source == null) {
 				Utils.report_error ("get_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
@@ -263,8 +263,8 @@ namespace Echo
 			return completor.complete (file_full_path, line, column);
 		}
 
-		public Vala.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
-			var result = new Vala.ArrayList<Symbol>();
+		public Gee.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
+			var result = new Gee.ArrayList<Symbol>();
 			// TODO 
 			return result;
 		}
