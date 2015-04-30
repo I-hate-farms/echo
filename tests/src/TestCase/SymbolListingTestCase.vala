@@ -22,7 +22,7 @@ namespace Echo.Tests {
             SYM:       HelloVala.main - Method - 8:2
             SYM:       HelloVala..new - Constructor - 6:1
         """;
-        assert_symbol_equals (get_root_symbols ("./tests/files/main.vala"), expected);
+        assert_symbols_equals (get_root_symbols ("./tests/files/main.vala"), expected);
      }
    
     public void test_main_namespace () {
@@ -36,14 +36,14 @@ namespace Echo.Tests {
             SYM:       MyApp.some_func - Method - 8:2
         """;
       //assert_symbol_type (get_root_symbols ("./tests/files/main_namespace.vala"), SymbolType.NAMESPACE);
-      assert_symbol_equals (get_root_symbols ("./tests/files/main_namespace.vala"), expected);
+      assert_symbols_equals (get_root_symbols ("./tests/files/main_namespace.vala"), expected);
      }
 
     public void test_main_function () {
        var expected = """
              SYM:     main - Method - 2:2
          """;
-      assert_symbol_equals (get_root_symbols ("./tests/files/main_function.vala"), expected);
+      assert_symbols_equals (get_root_symbols ("./tests/files/main_function.vala"), expected);
      }
 
     public void test_error_domain () {

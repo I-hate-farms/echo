@@ -14,8 +14,12 @@ namespace Echo.Utils
 	}
 
 	// Use prefix = "SYM: " to get the old display
-	public static void print_symbol (Symbol symbol, int indent = 0, string prefix =  "SYM: " )
+	public static void print_symbol (Symbol? symbol, int indent = 0, string prefix =  "SYM: " )
 	{
+		if( symbol == null ) {
+			print ("<NULL>");
+			return;
+		}
 		var s = "";
 		for (var i = 0; i < indent; i++)
 			s += "  ";
@@ -32,8 +36,10 @@ namespace Echo.Utils
 			Utils.print_symbol (symbol, 2, prefix);
 	}
 
-	public static string to_string_single (Symbol symbol, int indent = 0, string prefix =  "SYM: " )
+	public static string to_string_single (Symbol? symbol, int indent = 0, string prefix =  "SYM: " )
 	{
+		if( symbol == null )
+			return "<NULL>";
 		var builder = new StringBuilder ();
 		build_string (builder, symbol, indent, prefix);
 		var result = builder.str;
@@ -49,8 +55,12 @@ namespace Echo.Utils
 		return result;
 	}
 
-	public static void build_string (StringBuilder builder, Symbol symbol, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	public static void build_string (StringBuilder builder, Symbol? symbol, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
 	{
+		if( symbol == null ) {
+			builder.append ("<NULL>");
+			return;
+		}
 		var s = "";
 		for (var i = 0; i < indent; i++)
 			s += "  ";

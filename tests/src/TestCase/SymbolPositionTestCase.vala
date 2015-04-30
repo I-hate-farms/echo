@@ -5,7 +5,7 @@ namespace Echo.Tests {
 	{
 		public SymbolPositionTestCase ()
 		{
-			base ("SymbolListingTestCase");
+			base ("SymbolPositionTestCase");
 
 			add_file_test ("test_symbol_position", "(main.vala)", test_symbol_position);
 		}

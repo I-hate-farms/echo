@@ -27,7 +27,7 @@ public static void printline_message (string message) {
 	print (message + "\n");
 }
 
-public static void report_error (Vala.List<Symbol> symbols, string message, bool symbols_already_displayed =true ) {
+public static void report_error (Vala.List<Symbol> symbols, string message, bool symbols_already_displayed = false ) {
 	error_count ++;
 	
 	printline_error ("ERROR");
@@ -146,11 +146,13 @@ public static void print_report () {
 	if( error_count > 0) 
 	{
 		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET);
+		print ("  - Total : %d\n", error_count + passed_count );
 		print (SEP);
 		print_better ();
 	} 
 	else
 	{
+		print ("  - Total : %d\n", error_count + passed_count );
 		print (SEP);
 		print_victory ();
 	}
@@ -206,7 +208,13 @@ public static void assert_symbol_count_not (Vala.List<Symbol> symbols, int unexp
 	// assert (false);
 }
 
-public static void assert_symbol_equals (Vala.List<Symbol> symbols, string expected, bool ignore_line = true) {
+public static void assert_symbol_equals (Symbol? symbol, string expected, bool ignore_line = true) {
+	var symbols = new Vala.ArrayList<Symbol> ();
+	symbols.add (symbol);
+	assert_symbols_equals (symbols, expected, ignore_line);
+}
+
+public static void assert_symbols_equals (Vala.List<Symbol> symbols, string expected, bool ignore_line = true) {
 	var str = expected;
 	if( ignore_line) 
 	{
@@ -274,7 +282,7 @@ public static void assert_symbol_equals (Vala.List<Symbol> symbols, string expec
 							out ls_stdout,
 							out ls_stderr,
 							out ls_status);
-			report_error (symbols, "The expected symbols differ from the actual");
+			report_error (symbols, "The expected symbols differ from the actual", true);
 
 			// display_unified_result (ls_stdout);
 			display_side_by_side_result (ls_stdout);
