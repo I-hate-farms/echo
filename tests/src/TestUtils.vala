@@ -13,39 +13,7 @@ const string ANSI_COLOR_RED = BOLD_COLOR_RED;
 
 static int error_count = 0;
 static int passed_count = 0;
-const bool display_symbols = false;
 
-public static Project setup_project_for_file (string project_name, string file_full_path,
-		out string project_file_path)
-{
-		var project = new Project (project_name);
-		// Sample libs
-		project.add_external_package ("glib-2.0");
-		project.add_external_package ("gobject-2.0");
-		project.add_external_package ("clutter-gtk-1.0");
-
-		var file = File.new_for_path (file_full_path);
-		project_file_path = file.get_path ();
-		project.add_file (project_file_path);
-
-		project.update_sync ();
-
-		return project;
-}
-
-public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
-		string project_file_path;
-		var project = setup_project_for_file ("test-root", file_full_path, out project_file_path);
-
-		return project.get_symbols_for_file (project_file_path);
-}
-
-public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path) {
-		string project_file_path;
-		var project = setup_project_for_file ("test-all-symbols", file_full_path, out project_file_path);
-
-		return project.get_all_symbols_for_file (project_file_path);
-}
 
 public static void printline_error (string message) {
 	print ("%s%s%s\n", ANSI_COLOR_RED, message, ANSI_COLOR_RESET);
@@ -59,12 +27,12 @@ public static void printline_message (string message) {
 	print (message + "\n");
 }
 
-public static void report_error (Vala.List<Symbol> symbols,  string message) {
+public static void report_error (Vala.List<Symbol> symbols, string message, bool symbols_already_displayed =true ) {
 	error_count ++;
 	
 	printline_error ("ERROR");
 	printline_error (message);
-	if( symbols.size > 0 ) {
+	if( symbols.size > 0 && ! symbols_already_displayed) {
 	  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET));
 		Utils.print_symbols (symbols, 2);
 	}
@@ -160,28 +128,35 @@ public static void print_all () {
 }
 
 public static void print_better () {
-	print ( "\n -> %s\n\n", get_string (betters) );
+	print ( " -> %s\n", get_string (betters) );
 }
 
 public static void print_victory () {
-	print ( "\n -> %s\n\n", get_string (victorys) );
+	print ( " -> %s\n", get_string (victorys) );
 }
 
 
 public static void print_report () { 
-	print ("\nResults\n------\n");
+	const string SEP = "---------------------------------------------------------------\n";
+	print ("\n");
+	print (SEP);
+	print (" Results\n");
+	print (SEP);
 	print ("  - Passed: %s%d%s\n", ANSI_COLOR_WHITE, passed_count, ANSI_COLOR_RESET);
 	if( error_count > 0) 
 	{
 		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET);
+		print (SEP);
 		print_better ();
 	} 
 	else
 	{
+		print (SEP);
 		print_victory ();
 	}
+	print (SEP);
+	print ("\n");
 }
-
 
 
 public static void assert_symbol_type (Vala.List<Symbol> symbols, SymbolType type) {
@@ -229,4 +204,121 @@ public static void assert_symbol_count_not (Vala.List<Symbol> symbols, int unexp
 	report_error (symbols, "Found '%d' symbols while it was forbidden".printf (symbols.size));
 	// We don't want the program to segfault
 	// assert (false);
+}
+
+public static void assert_symbol_equals (Vala.List<Symbol> symbols, string expected, bool ignore_line = true) {
+	var str = expected;
+	if( ignore_line) 
+	{
+			var builder = new StringBuilder ();
+			var strings = expected.split ("\n");
+			int start_pos = -1;
+			foreach (var line in strings) {
+					// Strip the 
+					// message ("line : %s", line);
+					if( start_pos == -1) {
+						var index = line.index_of ("SYM:");
+						if( index >= 0 )
+						{
+							var new_line = line.substring (index +4);
+							new_line = new_line.strip ();
+							start_pos = line.index_of (new_line);
+							// message ("START_POS: %d" , start_pos);
+							line = new_line;
+						}
+					}
+					else
+					{
+						if (line.length > start_pos) 
+							line = line.substring (start_pos);
+					}
+					if( ignore_line) 
+					{
+						var index = line.last_index_of ("-");
+						if( index >= 0 ) {
+							line = line.substring (0, index-1);
+						}
+					}
+					if( line.strip () != "") {
+						builder.append (line);
+						builder.append ("\n");
+					}
+			}
+			str = builder.str;
+
+	}
+	var actual = Utils.to_string (symbols, 0, "", ignore_line);
+	if (actual == str )
+	{
+			report_passed (symbols);
+	}
+	else
+	{
+
+			
+			FileUtils.set_contents ("/tmp/expected", str);
+			FileUtils.set_contents ("/tmp/actual", actual);
+
+			// string[] spawn_args = {"diff", "-u", "/tmp/expected", "/tmp/actual"};
+			string[] spawn_args = {"diff", "--side-by-side", "/tmp/expected", "/tmp/actual"};
+			string[] spawn_env = Environ.get ();
+			string ls_stdout;
+			string ls_stderr;
+			int ls_status;
+
+			Process.spawn_sync ("/",
+							spawn_args,
+							spawn_env,
+							SpawnFlags.SEARCH_PATH,
+							null,
+							out ls_stdout,
+							out ls_stderr,
+							out ls_status);
+			report_error (symbols, "The expected symbols differ from the actual");
+
+			// display_unified_result (ls_stdout);
+			display_side_by_side_result (ls_stdout);
+
+
+	}
+}
+
+static void display_side_by_side_result (string diff)  {
+	  print ("   EXPECTED                                                   |   ACTUAL \n");
+	  print ("--------------------------------------------------------------+----------------------------------------------\n");
+
+		foreach (var line in diff.split ("\n")) {
+			if( "|" in line )
+			{
+					print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
+			} else if( ">" in line )
+			{
+					print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
+			} else
+			{
+				print (line + "\n");
+			}
+			
+		}
+}
+
+static void display_unified_result (string diff)  {
+		var i = 0;
+		foreach (var line in diff.split ("\n")) {
+			i++;
+			if( i < 4)
+				continue;
+			if( line.has_prefix ("-"))
+			{
+					print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
+			}
+			else if( line.has_prefix ("+"))
+			{
+					print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
+			} else
+			{
+				print (line + "\n");
+			}
+			
+		}
 }

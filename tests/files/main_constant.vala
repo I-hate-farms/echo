@@ -1,1 +1,1 @@
-const string CONSTANT = "Bingo" ; 
+const string CONSTANT = "Bingo";

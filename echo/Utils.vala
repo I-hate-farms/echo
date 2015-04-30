@@ -29,7 +29,36 @@ namespace Echo.Utils
 	public static void print_symbols (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
 	{
 		foreach (var symbol in symbols)
-			Utils.print_symbol (symbol, 2);
+			Utils.print_symbol (symbol, 2, prefix);
+	}
+
+	public static string to_string_single (Symbol symbol, int indent = 0, string prefix =  "SYM: " )
+	{
+		var builder = new StringBuilder ();
+		build_string (builder, symbol, indent, prefix);
+		var result = builder.str;
+		return result;
+	}
+
+	public static string to_string (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	{
+		var builder = new StringBuilder ();
+		foreach (var symbol in symbols)
+			build_string (builder, symbol, indent, prefix, hide_line);
+		var result = builder.str;
+		return result;
+	}
+
+	public static void build_string (StringBuilder builder, Symbol symbol, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	{
+		var s = "";
+		for (var i = 0; i < indent; i++)
+			s += "  ";
+
+		builder.append ("%s%s%s\n".printf (prefix, s, symbol.to_string (hide_line)));
+
+		foreach (var child in symbol.children)
+			build_string (builder, child, indent + 1, prefix, hide_line);
 	}
 
 	public static Vala.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)

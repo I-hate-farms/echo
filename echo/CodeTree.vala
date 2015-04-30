@@ -138,8 +138,11 @@ namespace Echo
 			}
 		}
 
-		public string to_string () {
-			return "%s - %s - %d:%d".printf(fully_qualified_name, symbol_type.to_string (), source_line, source_column);
+		public string to_string (bool hide_line=false) {
+			if (hide_line)
+				return "%s - %s".printf(fully_qualified_name, symbol_type.to_string ());
+			else
+				return "%s - %s - %d:%d".printf(fully_qualified_name, symbol_type.to_string (), source_line, source_column);
 		}
 	}
 
