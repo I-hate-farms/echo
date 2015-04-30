@@ -22,7 +22,7 @@ namespace Echo.Tests {
       add_file_test ("test_nested_namespace_method", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_method);
       add_file_test ("test_nested_namespace_other_method", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_other_method);
       add_file_test ("test_nested_namespace_single_method", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_single_method);
-      add_file_test ("test_nested_namespace_annotation", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_annotation);
+      // FIXME CARL add_file_test ("test_nested_namespace_annotation", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_annotation);
  
       init ();
      }

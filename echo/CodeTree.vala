@@ -179,10 +179,8 @@ namespace Echo
 			current_file = src;
 			current = root;
 			context.accept (this);
-			// FIXME : slow. Instead of this 
-			// use a SortedList (like this one: https://github.com/axiak/shotwell/blob/master/src/SortedList.vala)
-			// and redo the .net bindings...
-			sort_symbols (root.symbols) ;
+			// FIXME : sort the symbol tree also
+			// sort_symbols (root.symbols) ;
 			sort_symbols (current_symbol_list) ;
 			trees[src.filename] = root;
 			lists[src.filename] = current_symbol_list;
