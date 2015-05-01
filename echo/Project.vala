@@ -41,10 +41,6 @@ namespace Echo
 		private int original_target_glib_major;
 		private int original_target_glib_minor;
 
-		class Reporter : Vala.Report
-		{
-		}
-
 		construct
 		{
 			context = new Vala.CodeContext ();
