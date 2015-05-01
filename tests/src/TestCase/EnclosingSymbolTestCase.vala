@@ -8,7 +8,7 @@ namespace Echo.Tests {
 
     Project project_namespace;
     string file_path;
-    
+
     public EnclosingSymbolTestCase () {
       base ("EnclosingSymbolTestCase");
       // add test methods
@@ -23,7 +23,7 @@ namespace Echo.Tests {
       add_file_test ("test_nested_namespace_other_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_other_method);
       add_file_test ("test_nested_namespace_single_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_single_method);
       // FIXME CARL add_file_test ("test_nested_namespace_annotation", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_annotation);
- 
+
       init ();
      }
 
@@ -36,10 +36,10 @@ namespace Echo.Tests {
         project_namespace = setup_project_for_file ("test-symbol-position",
               "./tests/files/EnclosingSymbolNestedNamespace.vala", out file_path);
     }
-    
+
     public override void set_up () {
     }
-   
+
     public void test_main () {
 
       var expected = "";
@@ -58,7 +58,7 @@ namespace Echo.Tests {
       Symbol symbol;
 
        expected = """
-          SYM: sandbox.main_in_sandbox - Method - ??       
+          SYM: sandbox.main_in_sandbox - Method - 16:3
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 16, 28);
        assert_symbol_equals (symbol, expected);
@@ -70,18 +70,18 @@ namespace Echo.Tests {
       var expected = "";
       Symbol symbol;
        expected = """
-          SYM: PublicClass..new - Constructor - ??
+          SYM: PublicClass.PublicClass - Constructor - 10:2
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 10, 18);
        assert_symbol_equals (symbol, expected);
      }
-   
+
     public void test_class_field () {
 
       var expected = "";
       Symbol symbol;
        expected = """
-          SYM: PublicClass.str - Field - ??
+          SYM: PublicClass.str - Field - 3:2
        """;
        symbol = project.get_enclosing_symbol_at_position (project_file_path, 3, 18);
        assert_symbol_equals (symbol, expected);
@@ -90,9 +90,9 @@ namespace Echo.Tests {
     public void test_nested_namespace () {
         var expected = "";
         Symbol symbol;
-        
+
         expected = """
-              SYM: A.B.ValaCompletion.get_name - Method - ??
+              SYM: A.B.ValaCompletion.get_name - Method - 7:5
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 7, 23);
         assert_symbol_equals (symbol, expected);
@@ -102,7 +102,7 @@ namespace Echo.Tests {
         var expected = "";
         Symbol symbol;
         expected = """
-              SYM: A.B.ValaCompletion.Provider.populate - Method - ??
+              SYM: A.B.ValaCompletion.Provider.populate - Method - 22:9
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 22, 25);
         assert_symbol_equals (symbol, expected);
@@ -112,7 +112,7 @@ namespace Echo.Tests {
         var expected = "";
         Symbol symbol;
         expected = """
-              SYM: A.B.ValaCompletion.Provider.activate_proposal - Method - ??
+              SYM: A.B.ValaCompletion.Provider.activate_proposal - Method - 31:9
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 31, 3);
         assert_symbol_equals (symbol, expected);
@@ -122,7 +122,7 @@ namespace Echo.Tests {
         var expected = "";
         Symbol symbol;
         expected = """
-              SYM: peas_register_types - Method - ??
+              SYM: peas_register_types - Method - 63:1
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 63, 20);
         assert_symbol_equals (symbol, expected);
@@ -136,7 +136,7 @@ namespace Echo.Tests {
            """;
         symbol = project_namespace.get_enclosing_symbol_at_position (file_path, 62, 4);
         assert_symbol_equals (symbol, expected);
-        
+
     }
 
      public override void tear_down () {

@@ -119,7 +119,7 @@ namespace Echo
 		public int source_last_line { get ; set ; }
 		public Gee.List<DataType>? parameters { get ; set ; }
 		
-		public Gee.List<Symbol>? symbols;
+		// public Gee.List<Symbol>? symbols;
 
 		public string fully_qualified_name {
 			owned get {
@@ -170,7 +170,7 @@ namespace Echo
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
-			root.symbols = symbols;
+			// root.symbols = symbols;
 			//symbols.add (root);
 
 			//current_symbol_list = new Gee.ArrayList<Symbol> ();
@@ -184,7 +184,7 @@ namespace Echo
 			//context.accept (this);
 			context.accept (visitor);
 			// FIXME : sort the symbol tree also
-			//sort_symbols (root.symbols);
+			sort_symbols (root.children);
 			sort_symbols (visitor.current_symbol_list, true);
 			trees[src.filename] = root;
 			lists[src.filename] = visitor.current_symbol_list;
@@ -196,8 +196,9 @@ namespace Echo
 			});
 			if (!flat)
 				foreach (var sym in symbols)
-					sort_symbols (sym.symbols, flat);
+					sort_symbols (sym.children, flat);
 		} 
+
 		public Symbol? get_code_tree (Vala.SourceFile src)
 		{
 			var tree = trees[src.filename];

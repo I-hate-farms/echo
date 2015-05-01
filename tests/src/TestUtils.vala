@@ -208,53 +208,52 @@ public static void assert_symbol_count_not (Gee.List<Symbol> symbols, int unexpe
 	// assert (false);
 }
 
-public static void assert_symbol_equals (Symbol? symbol, string expected, bool ignore_line = true) {
+public static void assert_symbol_equals (Symbol? symbol, string expected, bool ignore_line = false) {
 	var symbols = new Gee.ArrayList<Symbol> ();
 	symbols.add (symbol);
 	assert_symbols_equals (symbols, expected, ignore_line);
 }
 
-public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expected, bool ignore_line = true) {
+public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expected, bool ignore_line = false) {
 	var str = expected;
-	if( ignore_line) 
-	{
-			var builder = new StringBuilder ();
-			var strings = expected.split ("\n");
-			int start_pos = -1;
-			foreach (var line in strings) {
-					// Strip the 
-					// message ("line : %s", line);
-					if( start_pos == -1) {
-						var index = line.index_of ("SYM:");
-						if( index >= 0 )
-						{
-							var new_line = line.substring (index +4);
-							new_line = new_line.strip ();
-							start_pos = line.index_of (new_line);
-							// message ("START_POS: %d" , start_pos);
-							line = new_line;
-						}
-					}
-					else
-					{
-						if (line.length > start_pos) 
-							line = line.substring (start_pos);
-					}
-					if( ignore_line) 
-					{
-						var index = line.last_index_of ("-");
-						if( index >= 0 ) {
-							line = line.substring (0, index-1);
-						}
-					}
-					if( line.strip () != "") {
-						builder.append (line);
-						builder.append ("\n");
-					}
+	var builder = new StringBuilder ();
+	var strings = expected.split ("\n");
+	int start_pos = -1;
+	foreach (var line in strings) {
+		// Strip the 
+		// message ("line : %s", line);
+		//if( line.strip() == "" )
+		//	continue;
+		if( start_pos == -1) {
+			var index = line.index_of ("SYM:");
+			if( index >= 0 )
+			{
+				var new_line = line.substring (index +4);
+				new_line = new_line.strip ();
+				start_pos = line.index_of (new_line);
+				// message ("START_POS: %d" , start_pos);
+				line = new_line;
 			}
-			str = builder.str;
-
+		}
+		else
+		{
+			if (line.length > start_pos) 
+				line = line.substring (start_pos);
+		}
+		if( ignore_line) 
+		{
+			var index = line.last_index_of ("-");
+			if( index >= 0 ) {
+				line = line.substring (0, index-1);
+			}
+		}
+		var stripped = line.strip ();
+		if( stripped != "" /*&& stripped != "\n"*/) {
+			builder.append (line);
+			builder.append ("\n");
+		}
 	}
+	str = builder.str;
 	var actual = Utils.to_string (symbols, 0, "", ignore_line);
 	if (actual == str )
 	{
@@ -262,71 +261,66 @@ public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expec
 	}
 	else
 	{
+		FileUtils.set_contents ("/tmp/expected", str);
+		FileUtils.set_contents ("/tmp/actual", actual);
 
-			
-			FileUtils.set_contents ("/tmp/expected", str);
-			FileUtils.set_contents ("/tmp/actual", actual);
+		// string[] spawn_args = {"diff", "-u", "/tmp/expected", "/tmp/actual"};
+		string[] spawn_args = {"diff", "--side-by-side", "/tmp/expected", "/tmp/actual"};
+		string[] spawn_env = Environ.get ();
+		string ls_stdout;
+		string ls_stderr;
+		int ls_status;
 
-			// string[] spawn_args = {"diff", "-u", "/tmp/expected", "/tmp/actual"};
-			string[] spawn_args = {"diff", "--side-by-side", "/tmp/expected", "/tmp/actual"};
-			string[] spawn_env = Environ.get ();
-			string ls_stdout;
-			string ls_stderr;
-			int ls_status;
+		Process.spawn_sync ("/",
+						spawn_args,
+						spawn_env,
+						SpawnFlags.SEARCH_PATH,
+						null,
+						out ls_stdout,
+						out ls_stderr,
+						out ls_status);
+		report_error (symbols, "The expected symbols differ from the actual", true);
 
-			Process.spawn_sync ("/",
-							spawn_args,
-							spawn_env,
-							SpawnFlags.SEARCH_PATH,
-							null,
-							out ls_stdout,
-							out ls_stderr,
-							out ls_status);
-			report_error (symbols, "The expected symbols differ from the actual", true);
-
-			// display_unified_result (ls_stdout);
-			display_side_by_side_result (ls_stdout);
-
-
+		// display_unified_result (ls_stdout);
+		display_side_by_side_result (ls_stdout);
 	}
 }
 
 static void display_side_by_side_result (string diff)  {
-	  print ("   EXPECTED                                                   |   ACTUAL \n");
-	  print ("--------------------------------------------------------------+----------------------------------------------\n");
+	print ("   EXPECTED                                                   |   ACTUAL \n");
+	print ("--------------------------------------------------------------+----------------------------------------------\n");
 
-		foreach (var line in diff.split ("\n")) {
-			if( "|" in line )
-			{
-					print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
-			} else if( ">" in line || "<" in line)
-			{
-					print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
-			} else
-			{
-				print (line + "\n");
-			}
-			
+	foreach (var line in diff.split ("\n")) {
+		if( "|" in line )
+		{
+				print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
+		} else if( ">" in line || "<" in line)
+		{
+				print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
+		} else
+		{
+			print (line + "\n");
 		}
+		
+	}
 }
 
 static void display_unified_result (string diff)  {
-		var i = 0;
-		foreach (var line in diff.split ("\n")) {
-			i++;
-			if( i < 4)
-				continue;
-			if( line.has_prefix ("-"))
-			{
-					print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
-			}
-			else if( line.has_prefix ("+"))
-			{
-					print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
-			} else
-			{
-				print (line + "\n");
-			}
-			
+	var i = 0;
+	foreach (var line in diff.split ("\n")) {
+		i++;
+		if( i < 4)
+			continue;
+		if( line.has_prefix ("-"))
+		{
+				print ( ANSI_COLOR_RED + line + ANSI_COLOR_RESET + "\n");
 		}
+		else if( line.has_prefix ("+"))
+		{
+				print ( ANSI_COLOR_GREEN + line + ANSI_COLOR_RESET + "\n");
+		} else
+		{
+			print (line + "\n");
+		}
+	}
 }

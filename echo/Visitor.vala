@@ -41,11 +41,11 @@ namespace Echo
 			s.name = Utils.symbol_to_name (symbol);
 			s.parent = current;
 			s.parameters = Utils.extract_parameters (symbol);
-			s.symbols = current.symbols;
+			//s.symbols = current.symbols;
 
 			current_symbol_list.add (s);
 
-			current.symbols.add (s);
+			//s.parent.symbols.add (s);
 			var prev = current;
 			current = s;
 
