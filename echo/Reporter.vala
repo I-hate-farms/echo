@@ -2,29 +2,36 @@ namespace Echo
 {
 
 		public enum ErrorType {
-			NOTE = 0, 
-			DEPRECATED,
-			WARNING,
-			ERROR
+			NOTE = 1, 
+			DEPRECATED = 1 << 1,
+			WARNING = 1 << 2,
+			ERROR = 1 << 3
 		}
 
 		public class ParsingError: Object 
 		{
-			public string message { get ; private set ; } 
+			public string message { get ; private set ; default = "" ; } 
 
-			public ErrorType error_type { get ; private set ; } 
+			// VALAC BUG: remove default value and everything blows
+			public ErrorType error_type { get ; private set ; default = ErrorType.ERROR ; } 
 
-			public int line { get ; private set ; }
+			public int line { get ; private set ; default = 0 ; }
 
-			public int column { get ; private set ; }
+			public int column { get ; private set ; default = 0 ; }
 
-			public string file_full_path { get ; private set ; } 
+			public string file_full_path { get ; private set ; default = "" ;} 
 
-			public ParsingError (ErrorType type, Vala.SourceReference? source, string message) {
+			//public ParsingError () {} 
+
+			public ParsingError (ErrorType? type, Vala.SourceReference? source, string message) {
 				this.message = message ;
-				this.error_type = type ;
-				this.line = source.begin.line ; 
-				this.column = source.begin.column ; 
+				if( type != null )
+					this.error_type = type ;
+				if (source != null )
+				{
+					this.line = source.begin.line ; 
+					this.column = source.begin.column ; 
+				}
 				this.file_full_path = source.file.filename ;
 			}
 
@@ -44,11 +51,11 @@ namespace Echo
 			 */
 
 			public void clear_errors (string file_full_path) {
-				int i = 0 ;
-				foreach (var error in error_list) {
+				for (int i= error_list.size -1; i >= 0 ; i--) {
+					var error = error_list.@get (i) ;
 					if (error.file_full_path == file_full_path)
 						error_list.remove_at (i) ;
-					i++ ;
+					
 				}
 			}
 
