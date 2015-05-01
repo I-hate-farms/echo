@@ -140,13 +140,16 @@ namespace Echo.Utils
 		foreach (var param in parameters) {
 			var data = new DataType ();
 			var type = param.variable_type;
-			data.name = symbol.name;
+			data.name = param.name;
 
 			if (type == null)
 				continue;
 
 			data.type_name = type.to_string ();
-			process_type_name (data);
+			// type.to_string messes the type names 
+			//   . string[] is shown as string[][] 
+			//   . List<Symbol> as List<Symbol><>
+			data.type_name = process_type_name (data);
 			list.add (data);
 		}
 
@@ -160,8 +163,9 @@ namespace Echo.Utils
 	 *
 	 * @param data The DataType to analyze and assign attribtes for
 	 */
-	private void process_type_name (DataType data)
+	private string process_type_name (DataType data)
 	{
+		var sb = new StringBuilder ();
 		var type_name = data.type_name;
 		// skip_level == 0 --> add char, skip_level > 0
 		// --> skip until closed par (,[,<,{ causes a skip until ),],>,}
@@ -189,8 +193,11 @@ namespace Echo.Utils
 			} else if (ch == '<') {
 				data.is_generic = true;
 				skip_level++;
-			}
+			} else
+				sb.append_unichar (ch);
+
 		}
+		return sb.str ; 
 	}
 
 	/**
@@ -204,7 +211,9 @@ namespace Echo.Utils
 	{
 		if (symbol is Vala.Constructor)
 			return "construct";
-
+		// Replace .new for constructor by the class name
+		if (symbol.name == ".new" && symbol.parent_symbol != null )
+			return symbol.parent_symbol.name;
 		return symbol.name;
 	}
 
