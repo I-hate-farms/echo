@@ -10,7 +10,7 @@ namespace Echo.Utils
 	}
 
 	public static void report_debug (string origin, string message) {
-		info ("echo:: %s: %s", origin, message);
+		print ("echo:: %s: %s\n", origin, message);
 	}
 
 	// Use prefix = "SYM: " to get the old display
@@ -127,11 +127,11 @@ namespace Echo.Utils
 
 		if (symbol is Vala.Method) {
 			foreach (var p in ((Vala.Method) symbol).get_parameters ())
-				parameters.add (p) ;
+				parameters.add (p);
 		}
 		else if (symbol is Vala.Signal)
 			foreach (var p in ((Vala.Signal) symbol).get_parameters ())
-					parameters.add (p) ;
+					parameters.add (p);
 		else
 			return null;
 

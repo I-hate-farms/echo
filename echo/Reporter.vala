@@ -24,19 +24,19 @@ namespace Echo
 			//public ParsingError () {} 
 
 			public ParsingError (ErrorType? type, Vala.SourceReference? source, string message) {
-				this.message = message ;
+				this.message = message;
 				if( type != null )
-					this.error_type = type ;
+					this.error_type = type;
 				if (source != null )
 				{
-					this.line = source.begin.line ; 
-					this.column = source.begin.column ; 
+					this.line = source.begin.line;
+					this.column = source.begin.column;
 				}
-				this.file_full_path = source.file.filename ;
+				this.file_full_path = source.file.filename;
 			}
 
 			public string to_string () {
-				return "%s:%d:%d: %s".printf (file_full_path, line, column, message) ;
+				return "%s:%d:%d: %s".printf (file_full_path, line, column, message);
 			}
 		
 		}
@@ -44,7 +44,7 @@ namespace Echo
 		public class Reporter : Vala.Report
 		{
 
-			public Gee.ArrayList<ParsingError> error_list = new Gee.ArrayList<ParsingError> () ; 
+			public Gee.ArrayList<ParsingError> error_list = new Gee.ArrayList<ParsingError> ();
 
 			/**
 			 * Remove all the errors for the file `file_full_path`
@@ -52,27 +52,27 @@ namespace Echo
 
 			public void clear_errors (string file_full_path) {
 				for (int i= error_list.size -1; i >= 0 ; i--) {
-					var error = error_list.@get (i) ;
+					var error = error_list.@get (i);
 					if (error.file_full_path == file_full_path)
-						error_list.remove_at (i) ;
+						error_list.remove_at (i);
 					
 				}
 			}
 
 			public override void note (Vala.SourceReference? source, string message) {
-					error_list.add (new ParsingError( ErrorType.NOTE, source, message)) ;
+					error_list.add (new ParsingError( ErrorType.NOTE, source, message));
 			}
 
 			public override void depr (Vala.SourceReference? source, string message) {
-					error_list.add (new ParsingError( ErrorType.DEPRECATED, source, message)) ;
+					error_list.add (new ParsingError( ErrorType.DEPRECATED, source, message));
 			}
 			
 			public override void warn (Vala.SourceReference? source, string message) {
-					error_list.add (new ParsingError( ErrorType.WARNING, source, message)) ;
+					error_list.add (new ParsingError( ErrorType.WARNING, source, message));
 			}
 			
 			public override void err (Vala.SourceReference? source, string message) {
-					error_list.add (new ParsingError( ErrorType.ERROR, source, message)) ;
+					error_list.add (new ParsingError( ErrorType.ERROR, source, message));
 			}
 
 		}

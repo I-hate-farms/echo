@@ -177,26 +177,26 @@ namespace Echo
 
 			//current_file = src;
 			//current = root;
-			var visitor = new Visitor (root, src) ;
-			var reporter = (Reporter) context.report ; 
-			reporter.clear_errors (src.filename) ;
+			var visitor = new Visitor (root, src);
+			var reporter = (Reporter) context.report;
+			reporter.clear_errors (src.filename);
 
 			//context.accept (this);
 			context.accept (visitor);
 			// FIXME : sort the symbol tree also
-			//sort_symbols (root.symbols) ;
-			sort_symbols (visitor.current_symbol_list, true) ;
+			//sort_symbols (root.symbols);
+			sort_symbols (visitor.current_symbol_list, true);
 			trees[src.filename] = root;
 			lists[src.filename] = visitor.current_symbol_list;
 		}
 
 		private void sort_symbols (Gee.List<Symbol> symbols, bool flat = false) {
 			symbols.sort((a,b) => {
-			    return a.source_line - b.source_line ;
+			    return a.source_line - b.source_line;
 			});
 			if (!flat)
 				foreach (var sym in symbols)
-					sort_symbols (sym.symbols, flat) ;
+					sort_symbols (sym.symbols, flat);
 		} 
 		public Symbol? get_code_tree (Vala.SourceFile src)
 		{

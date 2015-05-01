@@ -1,1 +1,1 @@
-delegate void my_func ( string parameter) ;
+delegate void my_func ( string parameter);

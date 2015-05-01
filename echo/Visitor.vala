@@ -8,8 +8,8 @@ namespace Echo
 		Symbol current;
 
 		public class Visitor (Symbol current, Vala.SourceFile current_file) {
-			this.current = current ; 
-			this.current_file = current_file ;
+			this.current = current;
+			this.current_file = current_file;
 		}
 
 		void check_location (Vala.Symbol symbol, SymbolType symbol_type)
