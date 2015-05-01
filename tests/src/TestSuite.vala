@@ -16,6 +16,7 @@ public static int main(string[] args) {
   // Hey could you have a look at the next one?
   add_tests (new FullEchoProjectTestCase ());
   // add_tests (new ExtraSymbolsTestCase ());
+  // add_tests (new TargetGlibTestCase ()) ;
   
   var result = Test.run ();
   print_report ();
