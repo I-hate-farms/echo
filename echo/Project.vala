@@ -17,6 +17,7 @@ namespace Echo
 		Completor completor;
 		CodeTree code_tree;
 		Cancellable cancellable;
+		Reporter reporter ; 
 		string name;
 
 		Gee.HashMap<string,Vala.SourceFile> files =
@@ -51,8 +52,9 @@ namespace Echo
 			context.target_glib_major = 2;
 			context.target_glib_minor = 32;
 
+			reporter = new Reporter () ;
 			context.profile = Vala.Profile.GOBJECT;
-			context.report = new Reporter ();
+			context.report = reporter ;
 
 			parser = new Vala.Parser ();
 			parser.parse (context);
@@ -68,6 +70,12 @@ namespace Echo
 		{
 			this.name = name;
 		}
+
+		public Gee.List<ParsingError> parsing_errors {
+			get {
+				return reporter.error_list ; 
+			}
+		} 
 
 		private bool _target_glib232 = false;
 		

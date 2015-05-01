@@ -16,7 +16,8 @@ namespace Echo
 		FIELD = 1 << 10,
 		SIGNAL  = 1 << 11,
 		ERRORDOMAIN  = 1 << 12,
-		CONSTANT  = 1 << 13;
+		CONSTANT  = 1 << 13,
+		DELEGATE = 1 << 14;
 
 		public string to_string () {
 			switch(this) {
@@ -47,7 +48,9 @@ namespace Echo
 				case CONSTANT: 
 					return "Constant";
 				case ERRORDOMAIN: 
-					return "ErrrorDomain";
+					return "ErrorDomain";
+				case DELEGATE: 
+					return "Delegate";
 				default:
 					assert_not_reached ();
 			}
@@ -168,30 +171,33 @@ namespace Echo
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
 			root.symbols = symbols;
-			symbols.add (root);
+			//symbols.add (root);
 
 			//current_symbol_list = new Gee.ArrayList<Symbol> ();
 
 			//current_file = src;
 			//current = root;
 			var visitor = new Visitor (root, src) ;
+			var reporter = (Reporter) context.report ; 
+			reporter.clear_errors (src.filename) ;
+
 			//context.accept (this);
 			context.accept (visitor);
 			// FIXME : sort the symbol tree also
-			// sort_symbols (root.symbols) ;
-			sort_symbols (visitor.current_symbol_list) ;
+			//sort_symbols (root.symbols) ;
+			sort_symbols (visitor.current_symbol_list, true) ;
 			trees[src.filename] = root;
 			lists[src.filename] = visitor.current_symbol_list;
 		}
 
-		private void sort_symbols (Gee.List<Symbol> symbols) {
+		private void sort_symbols (Gee.List<Symbol> symbols, bool flat = false) {
 			symbols.sort((a,b) => {
 			    return a.source_line - b.source_line ;
 			});
-			/*foreach (var sym in symbols)
-				sort_symbols (sym.symbols) ;*/
+			if (!flat)
+				foreach (var sym in symbols)
+					sort_symbols (sym.symbols, flat) ;
 		} 
-
 		public Symbol? get_code_tree (Vala.SourceFile src)
 		{
 			var tree = trees[src.filename];

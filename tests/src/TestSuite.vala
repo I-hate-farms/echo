@@ -15,7 +15,7 @@ public static int main(string[] args) {
   //add_tests (new SymbolPositionTestCase ());
   // Hey could you have a look at the next one?
   add_tests (new FullEchoProjectTestCase ());
-  //add_tests (new ExtraSymbolsTestCase ());
+  // add_tests (new ExtraSymbolsTestCase ());
   
   var result = Test.run ();
   print_report ();
