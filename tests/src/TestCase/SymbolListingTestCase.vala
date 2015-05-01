@@ -7,12 +7,12 @@ namespace Echo.Tests {
       base ("SymbolListingTestCase");
       // add test methods
 
-      add_file_test ("test_simple_main", "(main.vala)", test_simple_main);
-      add_file_test ("test_main_namespace", "(main_namespace.vala)", test_main_namespace);
-      add_file_test ("test_main_function", "(main_function.vala)", test_main_function);
-      add_file_test ("test_complete_class", "(MyClass.vala)", test_complete_class);
-      add_file_test ("test_singleton", "(Singleton.vala)", test_singleton);
-      add_file_test ("test_sorted_output", "(EnclosingSymbol.vala)", test_sorted_output);
+      add_file_test ("test_simple_main", "main.vala", test_simple_main);
+      add_file_test ("test_main_namespace", "main_namespace.vala", test_main_namespace);
+      add_file_test ("test_main_function", "main_function.vala", test_main_function);
+      add_file_test ("test_complete_class", "MyClass.vala", test_complete_class);
+      add_file_test ("test_singleton", "Singleton.vala", test_singleton);
+      add_file_test ("test_sorted_output", "EnclosingSymbol.vala", test_sorted_output);
      }
 
      public override void set_up () {

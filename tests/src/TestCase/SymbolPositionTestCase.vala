@@ -7,7 +7,7 @@ namespace Echo.Tests {
 		{
 			base ("SymbolPositionTestCase");
 
-			add_file_test ("test_symbol_position", "(main.vala)", test_symbol_position);
+			add_file_test ("test_symbol_position", "main.vala", test_symbol_position);
 		}
 
 		public override void set_up ()

@@ -7,9 +7,9 @@ namespace Echo.Tests {
       base ("TargetGlibTestCase");
       // add test methods
 
-      add_file_test ("test_targeting_new_glib", "(ThreadTargetGlib.vala)", test_targeting_new_glib);
-      add_file_test ("test_targeting_old_glib", "(ThreadTargetOldGlib.vala)", test_targeting_old_glib);
-      add_file_test ("test_failing", "(ThreadTargetGlib.vala)", test_failing);
+      add_file_test ("test_targeting_new_glib", "ThreadTargetGlib.vala", test_targeting_new_glib);
+      add_file_test ("test_targeting_old_glib", "ThreadTargetOldGlib.vala", test_targeting_old_glib);
+      add_file_test ("test_failing", "ThreadTargetGlib.vala", test_failing);
      }
 
      public override void set_up () {
