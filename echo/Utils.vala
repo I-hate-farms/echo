@@ -197,7 +197,7 @@ namespace Echo.Utils
 				sb.append_unichar (ch);
 
 		}
-		return sb.str ; 
+		return sb.str;
 	}
 
 	/**

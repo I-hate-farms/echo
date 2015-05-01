@@ -17,7 +17,7 @@ public static int main(string[] args) {
   add_tests (new FullEchoProjectTestCase ());
   // add_tests (new ExtraSymbolsTestCase ());
   // add_tests (new TargetGlibTestCase ());
-  // add_tests (new ParameterTestCase()) ;
+  // add_tests (new ParameterTestCase());
   
   var result = Test.run ();
   print_report ();

@@ -11,5 +11,5 @@
 	}
 
 	public static Gee.List<string> main (Gee.List<Gee.List> args) {
-		return new Gee.ArrayList<string>() ;
+		return new Gee.ArrayList<string>();
 	}
