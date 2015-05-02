@@ -28,7 +28,7 @@
       <Build target="SharedLibrary" />
     </Build>
     <CodeGeneration>
-      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="0" ExtraCompilerArguments="" DefineSymbols="DEBUG" EnableMultithreading="False" ctype="ValaCompilationParameters" />
+      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="0" ExtraCompilerArguments="" DefineSymbols="DEBUG" EnableMultithreading="False" TargetGlib232="True" GettextId="" LinkMathsLib="False" ctype="ValaCompilationParameters" />
     </CodeGeneration>
     <SourceDirectory>.</SourceDirectory>
   </PropertyGroup>
@@ -41,7 +41,7 @@
       <Build target="SharedLibrary" />
     </Build>
     <CodeGeneration>
-      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="3" ExtraCompilerArguments="--target-glib=2.32 -X -w " DefineSymbols="" EnableMultithreading="False" ctype="ValaCompilationParameters" />
+      <CodeGeneration WarningLevel="Normal" WarningsAsErrors="False" OptimizationLevel="3" ExtraCompilerArguments="--target-glib=2.32 -X -w " DefineSymbols="" EnableMultithreading="False" TargetGlib232="True" GettextId="" LinkMathsLib="False" ctype="ValaCompilationParameters" />
     </CodeGeneration>
     <SourceDirectory>.</SourceDirectory>
   </PropertyGroup>
@@ -51,6 +51,10 @@
     <Compile Include="echo\Locator.vala" />
     <Compile Include="echo\Project.vala" />
     <Compile Include="echo\Utils.vala" />
+    <Compile Include="echo\Monitor.vala" />
+    <Compile Include="echo\Reporter.vala" />
+    <Compile Include="echo\Symbol.vala" />
+    <Compile Include="echo\Visitor.vala" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

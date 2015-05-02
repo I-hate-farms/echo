@@ -3,7 +3,7 @@ using Echo.Tests;
 
 // Always displays symbols to the console
 
-const bool display_symbols = false;
+const bool display_symbols = true;
 
 public static int main(string[] args) {
   Test.init (ref args);

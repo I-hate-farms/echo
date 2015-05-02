@@ -10,6 +10,9 @@ namespace Echo.Tests {
 			add_file_test ("test_member_completion", "completion_member_test.vala", test_member_completion);
 			add_file_test ("test_override_completion", "completion_override_test.vala", test_override_completion);
 			add_file_test ("test_type_completion", "completion_override_test.vala", test_type_completion);
+			add_file_test ("test_classes_completion", "completion_classes_test.vala", test_classes_completion);
+
+
 		}
 
 		public override void set_up ()
@@ -57,6 +60,18 @@ namespace Echo.Tests {
 
 			results = project.complete (project_file_path, 14, 18);
 			assert_symbols_contains (results, new string [] {"Timeout", "TraverseType"});
+			assert_symbols_doesnt_contain (results, new string [] {"List"});
+
+		}
+
+		public void test_classes_completion ()
+		{
+			string project_file_path;
+			var project = setup_project_for_file ("test-type-completion",
+					"./tests/files/completion_classes_test.vala", out project_file_path);
+
+			var results = project.complete (project_file_path, 32, 15);
+			assert_symbols_contains (results, new string [] {"name", "compute_name", "first_name", "compute_first_name"});
 			assert_symbols_doesnt_contain (results, new string [] {"List"});
 
 		}
