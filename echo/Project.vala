@@ -25,20 +25,6 @@ namespace Echo
 
 		uint scheduled_update_id;
 
-		static Regex member_access;
-		static Regex member_access_split;
-
-		static construct
-		{
-			// stolen from anjuta
-			try {
-				member_access = new Regex("""((?:\w+(?:\s*\([^()]*\))?\.)*)(\w*)$""");
-				member_access_split = new Regex ("""(\s*\([^()]*\))?\.""");
-			} catch (Error e) {
-				warning (e.message);
-			}
-		}
-		
 		private int original_target_glib_major;
 		private int original_target_glib_minor;
 
@@ -259,12 +245,6 @@ namespace Echo
 				}
 			}
 			return result;
-
-		}
-
-		public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
-		{
-			return completor.complete (file_full_path, line, column);
 		}
 
 		public Gee.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
@@ -291,100 +271,16 @@ namespace Echo
 			return block;
 		}
 
-		public void complete (string file_full_path, int line, int column)
+		public Gee.List<string> complete (string file_full_path, int line, int column)
 			throws CompleterError
 		{
-			var src = files[file_full_path];
-			assert (src != null);
-
-			var line_str = src.get_source_line (line).strip ();
-
-			/*MatchInfo info;
-			if (!member_access.match (line_str, 0, out info))
-				throw new CompleterError.NO_ACCESOR ("Line is not an accesor");
-			if (info.fetch (0).length < 2)
-				throw new CompleterError.NAME_TOO_SHORT ("Accessor name not long enough");
-
-			var names = member_access_split.split (info.fetch (1));
-			foreach (var n in names)
-				print ("n: %s\n", n);
-			print ("f: %s\n", info.fetch (2));*/
-
-			var root = code_tree.get_code_tree (src);
-			Utils.print_symbol (root);
-
-			return;
-			print ("LINE: %s\n", line_str);
-
-			var block = locator.find_closest_block (src, line, column);
-			print ("CLOSEST: %s %s %s\n", block.name, block.to_string (), block.type_name);
-			for (var sym = (Vala.Symbol) block; sym != null; sym = sym.parent_symbol)
-				symbol_lookup_inherited (sym);
-		}
-
-		enum MatchType
-		{
-			NONE,
-			PREFIX,
-			INSENSITIVE,
-			EXACT
-		}
-
-		bool name_matches (string name, string match, MatchType match_type)
-		{
-			switch (match_type) {
-				case MatchType.NONE:
-					return true;
-				case MatchType.PREFIX:
-					return name.has_prefix (match);
-				case MatchType.INSENSITIVE:
-					return name.down () == match.down ();
-				case MatchType.EXACT:
-					return name == match;
-				default:
-					assert_not_reached ();
-			}
-		}
-
-		/**
-		 * Finds all members of the given symbol
-		 *
-		 * @param symbol The symbol to find members for
-		 */
-		void symbol_lookup_inherited (Vala.Symbol? symbol,
-				string? searched = null, MatchType match_type = MatchType.NONE)
-		{
-			if (symbol == null)
-				return;
-
-			var table = symbol.scope.get_symbol_table ();
-			print ("FROM: %s <%s>\n", symbol.name, symbol.type_name);
-			if (table != null) {
-				foreach (var key in table.get_keys ()) {
-					if (name_matches (table[key].name, searched, match_type))
-						print ("\t%s\n", Utils.symbol_to_string (table[key]));
-				}
+			var source = files[file_full_path];
+			if (source == null) {
+				Utils.report_error ("complete", "Exiting: can't find source for '%s'".printf (file_full_path));
+				return new Gee.LinkedList<string> ();
 			}
 
-			if (symbol is Vala.Method) {
-				symbol_lookup_inherited (((Vala.Method) symbol).return_type.data_type, searched, match_type);
-			} else if (symbol is Vala.Class) {
-				foreach (var type in ((Vala.Class) symbol).get_base_types ())
-					symbol_lookup_inherited (type.data_type, searched, match_type);
-			} else if (symbol is Vala.Struct) {
-				symbol_lookup_inherited (((Vala.Struct) symbol).base_type.data_type);
-			} else if (symbol is Vala.Interface) {
-				foreach (var type in ((Vala.Interface) symbol).get_prerequisites ())
-					symbol_lookup_inherited (type.data_type, searched, match_type);
-			} else if (symbol is Vala.LocalVariable) {
-				symbol_lookup_inherited (((Vala.LocalVariable) symbol).variable_type.data_type, searched, match_type);
-			} else if (symbol is Vala.Field) {
-				symbol_lookup_inherited (((Vala.Field) symbol).variable_type.data_type, searched, match_type);
-			} else if (symbol is Vala.Property) {
-				symbol_lookup_inherited (((Vala.Property) symbol).property_type.data_type, searched, match_type);
-			} else if (symbol is Vala.Parameter) {
-				symbol_lookup_inherited (((Vala.Parameter) symbol).variable_type.data_type, searched, match_type);
-			}
+			return completor.complete (source, locator, line, column);
 		}
 	}
 }

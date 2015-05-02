@@ -18,6 +18,7 @@ public static int main(string[] args) {
   // add_tests (new ExtraSymbolsTestCase ());
   // add_tests (new TargetGlibTestCase ());
   // add_tests (new ParameterTestCase());
+  add_tests (new CompletionTestCase ());
 
   var result = Test.run ();
   print_report ();

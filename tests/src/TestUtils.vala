@@ -59,22 +59,23 @@ public static void printline_message (string message) {
 	print (message + "\n");
 }
 
-public static void report_error (Gee.List<Symbol> symbols, string message, bool symbols_already_displayed = false ) {
+public static void report_error (Gee.List<Symbol>? symbols, string message, bool symbols_already_displayed = false ) {
 	error_count ++;
 	
 	printline_error ("ERROR");
 	printline_error (message);
-	if( symbols.size > 0 && ! symbols_already_displayed) {
+
+	if( symbols != null && symbols.size > 0 && ! symbols_already_displayed) {
 	  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET));
 		Utils.print_symbols (symbols, 2);
 	}
 }
 
-public static void report_passed (Gee.List<Symbol> symbols, bool flat=false) {
+public static void report_passed (Gee.List<Symbol>? symbols, bool flat=false) {
 	passed_count ++;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET));
-	if( display_symbols ) { 
+	if( symbols != null && display_symbols ) { 
 		print ("\n");
 		if( flat )
 		{
