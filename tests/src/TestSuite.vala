@@ -12,7 +12,7 @@ public static int main(string[] args) {
   // add any of your test cases here
   add_tests (new SymbolListingTestCase ());
   add_tests (new EnclosingSymbolTestCase ());
-  //add_tests (new SymbolPositionTestCase ());
+  add_tests (new SymbolPositionTestCase ());
   // Hey could you have a look at the next one?
   add_tests (new FullEchoProjectTestCase ());
   // add_tests (new ExtraSymbolsTestCase ());
