@@ -15,8 +15,8 @@ namespace Echo
 		{
 			try {
 				// TODO may match at irrelevant places, check that
-				override_stmt_regex = new Regex ("override [^\\s]+ ?(" + VARIABLE + "*)");
-				match_type_regex = new Regex ("(?:is (" + VARIABLE + "))|(?:new (" + VARIABLE + "))");
+				override_stmt_regex = new Regex ("override [^\\s]+ (" + VARIABLE + "*)");
+				match_type_regex = new Regex ("(?:(?:is|as) (" + VARIABLE + "*))|(?:new (" + VARIABLE + "*))");
 
 				// copied from anjuta
 				member_access_regex = new Regex ("""((?:\w+(?:\s*\([^()]*\))?\.)*)(\w*)$""");
@@ -27,6 +27,24 @@ namespace Echo
 		}
 
 		public Completor (Project project) {
+		}
+
+		string prepare_line (string line, int column)
+		{
+			var leading_tabs = 0;
+			for (var i = 0; i < line.length; i++) {
+				if (line[i] == ' ')
+					continue;
+				else if (line[i] == '\t')
+					leading_tabs++;
+				else
+					break;
+			}
+
+			// vala counts tabs as 4 chars, so we have to subtract the 3 chars that
+			// are on top when we cut
+			var end = column - leading_tabs * 3;
+			return (end >= line.length ? line : line.substring (0, end)).chug ();
 		}
 
 		/*
@@ -46,7 +64,7 @@ namespace Echo
 		 *   . support for generics if not included 
 		 */
 		public Gee.List<string> complete (Vala.SourceFile src, Locator locator, int line, int column) {
-			var line_str = src.get_source_line (line).strip ();
+			var line_str = prepare_line (src.get_source_line (line), column);
 
 			MatchInfo match_info;
 			SearchType search_type = SearchType.ACCESSIBLE_SYMBOLS;
@@ -58,7 +76,12 @@ namespace Echo
 				searched = match_info.fetch (1);
 			} else if (match_type_regex.match (line_str, 0, out match_info)) {
 				search_type = SearchType.TYPES;
-				searched = match_info.fetch (1);
+				var new_str = match_info.fetch (1);
+				var is_str = match_info.fetch (2);
+				if (new_str != null && new_str != "")
+					searched = new_str;
+				else
+					searched = is_str == "" ? null : is_str;
 			} else if (member_access_regex.match (line_str, 0, out match_info)) {
 				search_type = SearchType.MEMBER;
 				inner = construct_member_access (member_access_split_regex.split (match_info.fetch (1)));
@@ -137,9 +160,12 @@ namespace Echo
 						symbol is Vala.Interface ||
 						symbol is Vala.Namespace;
 				case SearchType.OVERRIDABLE:
-					if (!(symbol is Vala.Method))
-						return false;
-					return ((Vala.Method) symbol).is_virtual;
+					if (symbol is Vala.Method)
+						return ((Vala.Method) symbol).is_virtual;
+					if (symbol is Vala.Signal)
+						return ((Vala.Signal) symbol).is_virtual;
+
+					return false;
 				default:
 					assert_not_reached ();
 			}
