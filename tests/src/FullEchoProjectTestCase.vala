@@ -1,7 +1,7 @@
 using Echo;
 
 class FullEchoProjectTestCase : Gee.TestCase {
- 
+
   public FullEchoProjectTestCase () {
     base ("FullEchoProjectTestCase");
     // add test methods
@@ -12,7 +12,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
    public override void set_up () {
      // setup your test
    }
- 
+
    public void test_simple_main () {
 
     var project = new Project ("echo");
@@ -36,7 +36,7 @@ class FullEchoProjectTestCase : Gee.TestCase {
         project.add_file (path);
         files.add (path);
     }
-    
+
 
     project.update_sync ();
     foreach (var path in files) {
@@ -44,10 +44,11 @@ class FullEchoProjectTestCase : Gee.TestCase {
       print ("----------\n");
       var result = project.get_symbols_for_file (path);
       Utils.print_symbols (result);
+      assert_symbol_count_not (result, 0 );
     }
     // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
    }
- 
+
   public void test_main_namespace () {
     assert_symbol_type (get_root_symbols ("./files/main_namespace.vala"), SymbolType.NAMESPACE);
    }

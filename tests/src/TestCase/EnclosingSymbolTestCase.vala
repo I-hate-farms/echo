@@ -10,21 +10,21 @@ namespace Echo.Tests {
     string file_path;
 
     public EnclosingSymbolTestCase () {
-      base ("EnclosingSymbolTestCase");
-      // add test methods
+    base ("EnclosingSymbolTestCase");
+    // add test methods
 
-      add_file_test ("test_main", "EnclosingSymbol.vala", test_main);
-      add_file_test ("test_namespaced_main", "EnclosingSymbol.vala", test_namespaced_main);
-      add_file_test ("test_class_construct", "EnclosingSymbol.vala", test_class_construct);
-      add_file_test ("test_class_field", "EnclosingSymbol.vala", test_class_field);
+    add_file_test ("test_main", "EnclosingSymbol.vala", test_main);
+    add_file_test ("test_namespaced_main", "EnclosingSymbol.vala", test_namespaced_main);
+    add_file_test ("test_class_construct", "EnclosingSymbol.vala", test_class_construct);
+    add_file_test ("test_class_field", "EnclosingSymbol.vala", test_class_field);
 
-      add_file_test ("test_nested_namespace", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace);
-      add_file_test ("test_nested_namespace_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_method);
-      add_file_test ("test_nested_namespace_other_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_other_method);
-      add_file_test ("test_nested_namespace_single_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_single_method);
-      // FIXME CARL add_file_test ("test_nested_namespace_annotation", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_annotation);
+    add_file_test ("test_nested_namespace", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace);
+    add_file_test ("test_nested_namespace_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_method);
+    add_file_test ("test_nested_namespace_other_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_other_method);
+    add_file_test ("test_nested_namespace_single_method", "EnclosingSymbolNestedNamespace.vala", test_nested_namespace_single_method);
+    // FIXME CARL add_file_test ("test_nested_namespace_annotation", "(EnclosingSymbolNestedNamespace.vala)", test_nested_namespace_annotation);
 
-      init ();
+    init ();
      }
 
     private void init ( ) {

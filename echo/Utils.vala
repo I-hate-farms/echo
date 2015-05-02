@@ -29,7 +29,7 @@ namespace Echo.Utils
 		foreach (var child in symbol.children)
 			print_symbol (child, indent + 1);
 	}
-	
+
 	public static void print_symbols (Gee.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
 	{
 		foreach (var symbol in symbols)
@@ -83,9 +83,9 @@ namespace Echo.Utils
 		if (package_path == null) {
 			return null;
 		}
-		
+
 		var results = new Gee.ArrayList<string> ();
-		
+
 		var deps_filename = Path.build_filename (Path.get_dirname (package_path), "%s.deps".printf (pkg));
 		if (FileUtils.test (deps_filename, FileTest.EXISTS)) {
 			try {
@@ -109,7 +109,7 @@ namespace Echo.Utils
 				warning ("Unable to read dependency file: %s".printf (e.message));
 			}
 		}
-		
+
 		results.add (package_path);
 		return results;
 	}
@@ -131,7 +131,7 @@ namespace Echo.Utils
 		}
 		else if (symbol is Vala.Signal)
 			foreach (var p in ((Vala.Signal) symbol).get_parameters ())
-					parameters.add (p);
+				parameters.add (p);
 		else
 			return null;
 
@@ -146,10 +146,11 @@ namespace Echo.Utils
 				continue;
 
 			data.type_name = type.to_string ();
-			// type.to_string messes the type names 
-			//   . string[] is shown as string[][] 
+
+			// type.to_string messes the type names
+			//   . string[] is shown as string[][]
 			//   . List<Symbol> as List<Symbol><>
-			data.type_name = process_type_name (data);
+			data.base_type_name = process_type_name (data);
 			list.add (data);
 		}
 
