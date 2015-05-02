@@ -299,4 +299,12 @@ namespace Echo.Utils
 
 		return "::::::: missing: %s <%s>".printf (symbol.name, symbol.type_name);
 	}
+
+	public static Symbol? find_symbol (Gee.List<Symbol> symbols, string name )
+	{
+		foreach (var symbol in symbols)
+			if (symbol.name == name)
+				return symbol ;
+		return null;
+	}
 }

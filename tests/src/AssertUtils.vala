@@ -187,6 +187,7 @@ public static void assert_parameter_type_equals (Symbol? symbol, string expected
 
 }
 
+// TODO
 public static void assert_errors_count (Gee.List<ParsingError> errors, int expected_count) {
 	if( errors.size > 0 ) {
 		print ("Parsing errors\n") ;
@@ -194,4 +195,40 @@ public static void assert_errors_count (Gee.List<ParsingError> errors, int expec
 		foreach (var err in errors )
 			print (err.to_string () ) ;
 	}
+}
+
+public static void assert_symbols_contains (Gee.List<Symbol> symbols, string[] names) {
+
+	var missing_symbols = "";
+	foreach( var name in names) {
+		var symbol = Utils.find_symbol (symbols, name) ;
+		if( symbol == null)
+			missing_symbols += " '" + name + "'";
+	}
+	if( missing_symbols == "")
+	{
+		report_passed (symbols) ;
+	}
+	else
+	{
+		report_error (symbols, "The symbols doesn't contain the list of expected symbol %s".printf (missing_symbols)) ;
+	}
+}
+
+public static void assert_symbols_doesnt_contain (Gee.List<Symbol> symbols, string[] names) {
+/*
+	var missing_symbols = new Gee.ArrayList<string>() ;
+	foreach( var name in names) {
+		var symbol = Utils.find_symbol (symbols, name) ;
+		if( symbol == null)
+			missing_symbols.add (name) ;
+	}
+	if( missing_symbols.size == 0)
+	{
+		report_passed (symbols) ;
+	}
+	else
+	{
+		report_error (symbols, "The symbols doesn't contain the list of expected symbol %s", missing_symbols.joinv(", ")) ;
+	}*/
 }

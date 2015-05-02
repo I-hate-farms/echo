@@ -35,9 +35,6 @@ namespace Echo
 			original_target_glib_minor = context.target_glib_minor;
 			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32);
 
-			//context.target_glib_major = 2;
-			//context.target_glib_minor = 32;
-
 			reporter = new Reporter ();
 			context.profile = Vala.Profile.GOBJECT;
 			context.report = reporter;
@@ -118,7 +115,7 @@ namespace Echo
 				Vala.CodeContext.pop ();
 			}
 			monitor.stop ();
-			Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) );
+			//Utils.report_debug ("update_sync", "Update done for %s in %s".printf (name, monitor.to_string ()) );
 		}
 
 		public async void update ()
@@ -144,7 +141,6 @@ namespace Echo
 		public void update_file_contents (string full_filepath, string content, bool schedule_update = true)
 		{
 			var file = files[full_filepath];
-			// assert (file != null);
 
 			if (file == null) {
 				Utils.report_error ( "update_file_contents", "Exiting: can't find source for '%s'".printf (full_filepath));
@@ -223,6 +219,7 @@ namespace Echo
 				Utils.report_error ("get_all_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
 				return new Gee.ArrayList<Symbol>();;
 			}
+			// CARL TODO
 			return code_tree.find_symbols (source);
 		}
 
@@ -251,7 +248,7 @@ namespace Echo
 
 		public Gee.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
 			var result = new Gee.ArrayList<Symbol>();
-			// TODO
+			// CARL TODO
 			return result;
 		}
 
@@ -273,7 +270,8 @@ namespace Echo
 			return block;
 		}
 
-		public Gee.List<string> complete (string file_full_path, int line, int column)
+
+		public Gee.List<Symbol> complete (string file_full_path, int line, int column)
 			throws CompleterError
 		{
 			var source = files[file_full_path];

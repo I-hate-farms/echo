@@ -1,7 +1,6 @@
 namespace Echo
 {
-
-	class Completor {
+	public class Completor {
 
 		static Regex override_stmt_regex;
 		static Regex match_type_regex;
@@ -48,22 +47,22 @@ namespace Echo
 		}
 
 		/*
-		 * Complete code. 
+		 * Complete code.
 		 * <blah>
 		 * Main cases
-		 *   . after a '.': displays the methods for classes, values for enums, 
+		 *   . after a '.': displays the methods for classes, values for enums,
 		 *     sub namespaces
 		 *   . after a 'is': display types
 		 *   . after a 'new': displays types
 		 *   . after an 'override': displays overridable methods
 		 *   . fallback: what does it do?
-		 * Nice to have :   . 
+		 * Nice to have :   .
 		 *   . complete keywords
 		 *   . after 'using' to find namespace
 		 *   . delegates signatures?
-		 *   . support for generics if not included 
+		 *   . support for generics if not included
 		 */
-		public Gee.List<string> complete (Vala.SourceFile src, Locator locator, int line, int column) {
+		public Gee.List<Symbol> complete (Vala.SourceFile src, Locator locator, int line, int column) {
 			var line_str = prepare_line (src.get_source_line (line), column);
 
 			MatchInfo match_info;
@@ -97,14 +96,14 @@ namespace Echo
 			var symbols = lookup_symbol (inner, searched, block as Vala.Block, search_type,
 					smart_case_is_lower ? MatchType.PREFIX_INSENSITIVE : MatchType.PREFIX);
 
-			var result = new Gee.ArrayList<string> ();
+			var result = new Gee.ArrayList<Symbol> ();
 
 			foreach (var symbol in symbols) {
 				if (symbol is Vala.LocalVariable
 					&& symbol.source_reference.begin.line > line)
 					continue;
 
-				result.add(symbol.name);
+				result.add(new Symbol.from_vala(symbol));
 			}
 
 			return result;
@@ -401,11 +400,4 @@ namespace Echo
 
 	}
 
-  /**
-   * Returns the completion results and parsing errors
-   **/
-
-	public class CompletionReport {
-
-	}
 }
