@@ -57,7 +57,8 @@ console_application (
     SOURCE_PATH
         tests/src
     C_OPTIONS
-        -lm 
+        -lm
     PACKAGES
         echo
+        ivy
 )

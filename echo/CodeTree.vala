@@ -21,35 +21,35 @@ namespace Echo
 
 		public string to_string () {
 			switch(this) {
-				case FILE: 
+				case FILE:
 					return "File";
-				case NAMESPACE: 
+				case NAMESPACE:
 					return "Namespace";
-				case CLASS: 
+				case CLASS:
 					return "Class";
-				case CONSTRUCTOR: 
+				case CONSTRUCTOR:
 					return "Constructor";
-				case DESTRUCTOR: 
+				case DESTRUCTOR:
 					return "Destructor";
-				case INTERFACE: 
+				case INTERFACE:
 					return "Interface";
-				case ENUM: 
+				case ENUM:
 					return "Enum";
-				case METHOD: 
+				case METHOD:
 					return "Method";
-				case STRUCT: 
+				case STRUCT:
 					return "Struct";
-				case PROPERTY: 
+				case PROPERTY:
 					return "Property";
-				case FIELD: 
+				case FIELD:
 					return "Field";
-				case SIGNAL: 
+				case SIGNAL:
 					return "Signal";
-				case CONSTANT: 
+				case CONSTANT:
 					return "Constant";
-				case ERRORDOMAIN: 
+				case ERRORDOMAIN:
 					return "ErrorDomain";
-				case DELEGATE: 
+				case DELEGATE:
 					return "Delegate";
 				default:
 					assert_not_reached ();
@@ -70,11 +70,11 @@ namespace Echo
 	}
 
 	public class SourceReference {
-		public string file_full_path { get ; set ; } 
+		public string file_full_path { get ; set ; }
 		public int line { get ; set ; }
 		public int column { get ; set ; }
 		public int last_line { get ; set ; }
-		
+
 		public SourceReference (string file_full_path, int line, int column, int last_line) {
 			this.file_full_path = file_full_path;
 			this.line = line;
@@ -92,6 +92,7 @@ namespace Echo
 
 		public string name  { get ; set ; }
 		public string type_name  { get ; set ; }
+		public string base_type_name  { get ; set ; }
 
 		public bool is_array  { get ; set ; }
 		public bool is_pointer  { get ; set ; }
@@ -118,7 +119,7 @@ namespace Echo
 		public int source_column { get ; set ; }
 		public int source_last_line { get ; set ; }
 		public Gee.List<DataType>? parameters { get ; set ; }
-		
+
 		// public Gee.List<Symbol>? symbols;
 
 		public string fully_qualified_name {
@@ -197,7 +198,7 @@ namespace Echo
 			if (!flat)
 				foreach (var sym in symbols)
 					sort_symbols (sym.children, flat);
-		} 
+		}
 
 		public Symbol? get_code_tree (Vala.SourceFile src)
 		{
@@ -224,7 +225,7 @@ namespace Echo
 			return lists[src.filename];
 		}
 
-		
+
 	}
 }
 

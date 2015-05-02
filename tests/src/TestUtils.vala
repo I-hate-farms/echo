@@ -27,12 +27,12 @@ public static void printline_message (string message) {
 	print (message + "\n");
 }
 
-public static void report_error (Gee.List<Symbol> symbols, string message, bool symbols_already_displayed = false ) {
+public static void report_error (Gee.List<Symbol>? symbols, string message, bool symbols_already_displayed = false ) {
 	error_count ++;
-	
+
 	printline_error ("ERROR");
 	printline_error (message);
-	if( symbols.size > 0 && ! symbols_already_displayed) {
+	if( symbols != null && symbols.size > 0 && ! symbols_already_displayed) {
 	  printline_message ("%sSymbols found:%s".printf(ANSI_COLOR_WHITE, ANSI_COLOR_RESET));
 		Utils.print_symbols (symbols, 2);
 	}
@@ -42,7 +42,7 @@ public static void report_passed (Gee.List<Symbol> symbols, bool flat=false) {
 	passed_count ++;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET));
-	if( display_symbols ) { 
+	if( display_symbols ) {
 		print ("\n");
 		if( flat )
 		{
@@ -67,11 +67,11 @@ const string[] betters = {
   "We got a problem. - And a #WHITE#knife#RESET#.",
   "I'm hungry, please fix this.",
   "There's always next time, #NAME#",
-  "This is what you call coding, #WHITE#maggot#RESET#? I mean, #MAGENTA##NAME##RESET#!",  
-  "I won't #MAGENTA#tweet#RESET# about it if you promise to #WHITE#fix it#RESET#", 
+  "This is what you call coding, #WHITE#maggot#RESET#? I mean, #MAGENTA##NAME##RESET#!",
+  "I won't #MAGENTA#tweet#RESET# about it if you promise to #WHITE#fix it#RESET#",
 	"Let's try a more #WHITE#failure-less#RESET# approach",
-	"Does your #WHITE#mama know#RESET#?",	
-	"Somewhere a French guy is #WHITE#fixing hen#RESET#...",	
+	"Does your #WHITE#mama know#RESET#?",
+	"Somewhere a French guy is #WHITE#fixing hen#RESET#...",
 	"#YELLOW#Shine#RESET# on you buggy #WHITE#diamond#RESET#.",
 	"A  beautiful surprise awaits on the other side.",
 	"What we've got here is failure to #WHITE#communicate#RESET#.",
@@ -83,7 +83,7 @@ const string[] betters = {
 const string[] victorys =  {
 	"No error, you #MAGENTA#rock#RESET#!",
 	"#MAGENTA#Flawless victory#RESET#",
-	"#NAME# is leaving the building! I repeat #WHITE##NAME##RESET# is leaving the building!!", 
+	"#NAME# is leaving the building! I repeat #WHITE##NAME##RESET# is leaving the building!!",
 	"I can't believe my eyes, this is #WHITE#perfect#RESET#!",
 	"*#WHITE#drops the mic*#RESET#",
 	"Look #WHITE#ma#RESET#, easy!",
@@ -136,20 +136,20 @@ public static void print_victory () {
 }
 
 
-public static void print_report () { 
+public static void print_report () {
 	const string SEP = "---------------------------------------------------------------\n";
 	print ("\n");
 	print (SEP);
 	print (" Results\n");
 	print (SEP);
 	print ("  - Passed: %s%d%s\n", ANSI_COLOR_WHITE, passed_count, ANSI_COLOR_RESET);
-	if( error_count > 0) 
+	if( error_count > 0)
 	{
 		print ("  - Failed: %s%d%s\n", BOLD_COLOR_RED, error_count, ANSI_COLOR_RESET);
 		print ("  - Total : %d\n", error_count + passed_count );
 		print (SEP);
 		print_better ();
-	} 
+	}
 	else
 	{
 		print ("  - Total : %d\n", error_count + passed_count );
@@ -181,7 +181,7 @@ public static void assert_symbol_type (Gee.List<Symbol> symbols, SymbolType type
 	// assert (false);
 }
 
-public static void assert_symbol_type_and_name ( Gee.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type ) 
+public static void assert_symbol_type_and_name ( Gee.List<Symbol> symbols, string symbol_full_name, SymbolType symbol_type )
 {
 	report_passed (symbols, true);
 }
@@ -220,7 +220,7 @@ public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expec
 	var strings = expected.split ("\n");
 	int start_pos = -1;
 	foreach (var line in strings) {
-		// Strip the 
+		// Strip the
 		// message ("line : %s", line);
 		//if( line.strip() == "" )
 		//	continue;
@@ -237,10 +237,10 @@ public static void assert_symbols_equals (Gee.List<Symbol> symbols, string expec
 		}
 		else
 		{
-			if (line.length > start_pos) 
+			if (line.length > start_pos)
 				line = line.substring (start_pos);
 		}
-		if( ignore_line) 
+		if( ignore_line)
 		{
 			var index = line.last_index_of ("-");
 			if( index >= 0 ) {
@@ -301,7 +301,7 @@ static void display_side_by_side_result (string diff)  {
 		{
 			print (line + "\n");
 		}
-		
+
 	}
 }
 
@@ -323,4 +323,27 @@ static void display_unified_result (string diff)  {
 			print (line + "\n");
 		}
 	}
+}
+
+public static void assert_parameter_type_equals (Symbol? symbol, string expected_parameter_type) {
+	if ( symbol == null) {
+		report_error (null, "Symbol is NULL.") ;
+		return;
+	}
+	var symbols = new Gee.ArrayList<Symbol> () ;
+	symbols.add (symbol) ;
+	if( symbol.parameters.size == 0 )
+	{
+		report_error (symbols, "Symbol has no parameter while at least one is expected.") ;
+		return;
+	}
+	var parameter = symbol.parameters.@get (0) ;
+	if( parameter.type_name == expected_parameter_type) {
+		report_passed (symbols) ;
+		return ;
+	}
+	report_error (symbols, "Found parameter of type '%s' [base: '%s'] when '%s' was expected".printf (
+		parameter.type_name, parameter.base_type_name, expected_parameter_type));
+
+
 }
