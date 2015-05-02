@@ -3,12 +3,12 @@ using Echo;
 namespace Echo.Tests {
 	public class ParameterTestCase: EchoTestCase {
 
-		Project project ;
-		string file_path ;
+		Project project;
+		string file_path;
 
 		public ParameterTestCase () {
 			base ("ParameterTestCase");
-			init () ;
+			init ();
 			// add test methods
 
 			add_file_test ("test_simple_arrays", "test_parameters.vala", test_simple_arrays);
@@ -32,43 +32,43 @@ namespace Echo.Tests {
 		}
 
 		public void test_simple_arrays () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 3, 25) ;
-			assert_parameter_type_equals (symbol, "string[]") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 3, 25);
+			assert_parameter_type_equals (symbol, "string[]");
 		}
 
 		public void test_double_arrays () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 10, 36) ;
-			assert_parameter_type_equals (symbol, "string[][]") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 10, 36);
+			assert_parameter_type_equals (symbol, "string[][]");
 		}
 
 		public void test_nullable_list () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 14, 39) ;
-			assert_parameter_type_equals (symbol, "Gee.List<Gee.List>?") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 14, 39);
+			assert_parameter_type_equals (symbol, "Gee.List<Gee.List>?");
 		}
 
 		public void test_simple_list () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 18, 38) ;
-			assert_parameter_type_equals (symbol, "Gee.List<Gee.List>") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 18, 38);
+			assert_parameter_type_equals (symbol, "Gee.List<Gee.List>");
 		}
 
 		public void test_nullable_param () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 22, 38) ;
-			assert_parameter_type_equals (symbol, "string?") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 22, 38);
+			assert_parameter_type_equals (symbol, "string?");
 		}
 
 		public void test_simple_param () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 26, 38) ;
-			assert_parameter_type_equals (symbol, "int") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 26, 38);
+			assert_parameter_type_equals (symbol, "int");
 		}
 
 		public void test_ref_param () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 30, 38) ;
-			assert_parameter_type_equals (symbol, "int") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 30, 38);
+			assert_parameter_type_equals (symbol, "int");
 		}
 
 		public void test_out_param () {
-			var symbol = project.get_enclosing_symbol_at_position (file_path, 34, 38) ;
-			assert_parameter_type_equals (symbol, "int") ;
+			var symbol = project.get_enclosing_symbol_at_position (file_path, 34, 38);
+			assert_parameter_type_equals (symbol, "int");
 		}
 
 		public override void tear_down () {

@@ -46,7 +46,7 @@ namespace Echo.Tests {
 				// Utils.print_symbols (result);
 				assert_symbol_count_not (result, 0 );
 			}
-			assert_errors_count (project.parsing_errors, 3) ;
+			assert_errors_count (project.parsing_errors, 3);
 		  // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
 		 }
 

@@ -304,7 +304,7 @@ namespace Echo.Utils
 	{
 		foreach (var symbol in symbols)
 			if (symbol.name == name)
-				return symbol ;
+				return symbol;
 		return null;
 	}
 }

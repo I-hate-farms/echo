@@ -21,7 +21,7 @@ namespace Echo
 
 		public static SymbolType from_vala (Vala.Symbol symbol) {
 			// CARL TODO
-			return SymbolType.METHOD ;
+			return SymbolType.METHOD;
 		}
 
 		public string to_string () {
@@ -130,8 +130,8 @@ namespace Echo
 
 		public Symbol.from_vala (Vala.Symbol symbol) {
 			// CARL TODO
-			name = symbol.name ;
-			symbol_type = SymbolType.from_vala (symbol) ;
+			name = symbol.name;
+			symbol_type = SymbolType.from_vala (symbol);
 		}
 
 		public string fully_qualified_name {

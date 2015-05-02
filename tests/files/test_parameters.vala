@@ -32,6 +32,6 @@
 	}
 
 	public static Gee.List<string> main8 (out int args) {
-		args = 4 ;
+		args = 4;
 		return new Gee.ArrayList<string>();
 	}

@@ -5,7 +5,7 @@ namespace Echo
 		NOTE = 1,
 		DEPRECATED = 1 << 1,
 		WARNING = 1 << 2,
-		ERROR = 1 << 3 ;
+		ERROR = 1 << 3;
 
 		public string to_string () {
 			switch(this) {
@@ -48,7 +48,7 @@ namespace Echo
 				this.column = source.begin.column;
 				this.file_full_path = source.file.filename;
 			}
-			// print ("ADDING : %s\n", to_string ()) ;
+			// print ("ADDING : %s\n", to_string ());
 
 		}
 

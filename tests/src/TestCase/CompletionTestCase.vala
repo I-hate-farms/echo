@@ -27,10 +27,10 @@ namespace Echo.Tests {
 					"./tests/files/completion_member_test.vala", out project_file_path);
 
 			var results = project.complete (project_file_path, 5, 9);
-			assert_symbols_contains (results, new string [] {"foreach", "nth_data"}) ;
+			assert_symbols_contains (results, new string [] {"foreach", "nth_data"});
 
 			results = project.complete (project_file_path, 8, 19);
-			assert_symbols_contains (results, new string [] {"joinv", "split"}) ;
+			assert_symbols_contains (results, new string [] {"joinv", "split"});
 
 		}
 
@@ -41,7 +41,7 @@ namespace Echo.Tests {
 					"./tests/files/completion_override_test.vala", out project_file_path);
 
 			var results = project.complete (project_file_path, 17, 25);
-			assert_symbols_contains (results, new string [] {"button_release_event", "constructed"}) ;
+			assert_symbols_contains (results, new string [] {"button_release_event", "constructed"});
 
 		}
 
@@ -52,12 +52,12 @@ namespace Echo.Tests {
 					"./tests/files/completion_override_test.vala", out project_file_path);
 
 			var results = project.complete (project_file_path, 8, 23);
-			assert_symbols_contains (results, new string [] {"MyTestClass", "MainLoop"}) ;
-			assert_symbols_doesnt_contain (results, new string [] {"List"}) ;
+			assert_symbols_contains (results, new string [] {"MyTestClass", "MainLoop"});
+			assert_symbols_doesnt_contain (results, new string [] {"List"});
 
 			results = project.complete (project_file_path, 14, 18);
-			assert_symbols_contains (results, new string [] {"Timeout", "TraverseType"}) ;
-			assert_symbols_doesnt_contain (results, new string [] {"List"}) ;
+			assert_symbols_contains (results, new string [] {"Timeout", "TraverseType"});
+			assert_symbols_doesnt_contain (results, new string [] {"List"});
 
 		}
 	}

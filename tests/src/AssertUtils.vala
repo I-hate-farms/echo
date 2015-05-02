@@ -166,20 +166,20 @@ static void display_unified_result (string diff)  {
 
 public static void assert_parameter_type_equals (Symbol? symbol, string expected_parameter_type) {
 	if ( symbol == null) {
-		report_error (null, "Symbol is NULL.") ;
+		report_error (null, "Symbol is NULL.");
 		return;
 	}
-	var symbols = new Gee.ArrayList<Symbol> () ;
-	symbols.add (symbol) ;
+	var symbols = new Gee.ArrayList<Symbol> ();
+	symbols.add (symbol);
 	if( symbol.parameters.size == 0 )
 	{
-		report_error (symbols, "Symbol has no parameter while at least one is expected.") ;
+		report_error (symbols, "Symbol has no parameter while at least one is expected.");
 		return;
 	}
-	var parameter = symbol.parameters.@get (0) ;
+	var parameter = symbol.parameters.@get (0);
 	if( parameter.type_name == expected_parameter_type) {
-		report_passed (symbols) ;
-		return ;
+		report_passed (symbols);
+		return;
 	}
 	report_error (symbols, "Found parameter of type '%s' [base: '%s'] when '%s' was expected".printf (
 		parameter.type_name, parameter.base_type_name, expected_parameter_type));
@@ -190,10 +190,10 @@ public static void assert_parameter_type_equals (Symbol? symbol, string expected
 // TODO
 public static void assert_errors_count (Gee.List<ParsingError> errors, int expected_count) {
 	if( errors.size > 0 ) {
-		print ("Parsing errors\n") ;
-		print ("----------------------\n") ;
+		print ("Parsing errors\n");
+		print ("----------------------\n");
 		foreach (var err in errors )
-			print (err.to_string () ) ;
+			print (err.to_string () );
 	}
 }
 
@@ -201,33 +201,33 @@ public static void assert_symbols_contains (Gee.List<Symbol> symbols, string[] n
 
 	var missing_symbols = "";
 	foreach( var name in names) {
-		var symbol = Utils.find_symbol (symbols, name) ;
+		var symbol = Utils.find_symbol (symbols, name);
 		if( symbol == null)
 			missing_symbols += " '" + name + "'";
 	}
 	if( missing_symbols == "")
 	{
-		report_passed (symbols) ;
+		report_passed (symbols);
 	}
 	else
 	{
-		report_error (symbols, "The symbols doesn't contain the list of expected symbols %s".printf (missing_symbols)) ;
+		report_error (symbols, "The symbols doesn't contain the list of expected symbols %s".printf (missing_symbols));
 	}
 }
 
 public static void assert_symbols_doesnt_contain (Gee.List<Symbol> symbols, string[] names) {
 	var missing_symbols = "";
 	foreach( var name in names) {
-		var symbol = Utils.find_symbol (symbols, name) ;
+		var symbol = Utils.find_symbol (symbols, name);
 		if( symbol != null)
 			missing_symbols += " '" + name + "'";
 	}
 	if( missing_symbols == "")
 	{
-		report_passed (symbols) ;
+		report_passed (symbols);
 	}
 	else
 	{
-		report_error (symbols, "The symbols contain the list of unexpected symbols %s".printf (missing_symbols)) ;
+		report_error (symbols, "The symbols contain the list of unexpected symbols %s".printf (missing_symbols));
 	}
 }
