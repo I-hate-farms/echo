@@ -13,7 +13,6 @@ const string ANSI_COLOR_RED = BOLD_COLOR_RED;
 
 static int error_count = 0;
 static int passed_count = 0;
-const bool display_symbols = false;
 
 public static Project setup_project_for_file (string project_name, string file_full_path,
 		out string project_file_path)
@@ -34,14 +33,14 @@ public static Project setup_project_for_file (string project_name, string file_f
 		return project;
 }
 
-public static Vala.List<Symbol> get_root_symbols (string file_full_path) {
+public static Gee.List<Symbol> get_root_symbols (string file_full_path) {
 		string project_file_path;
 		var project = setup_project_for_file ("test-root", file_full_path, out project_file_path);
 
 		return project.get_symbols_for_file (project_file_path);
 }
 
-public static Vala.List<Symbol> get_all_symbols_for_file (string file_full_path) {
+public static Gee.List<Symbol> get_all_symbols_for_file (string file_full_path) {
 		string project_file_path;
 		var project = setup_project_for_file ("test-all-symbols", file_full_path, out project_file_path);
 

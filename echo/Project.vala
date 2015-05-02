@@ -15,7 +15,6 @@ namespace Echo
 		Vala.Parser parser;
 		Locator locator;
 		Completor completor;
-		ReportCollector report_collector;
 		CodeTree code_tree;
 		Cancellable cancellable;
 		Reporter reporter;
