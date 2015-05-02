@@ -2,7 +2,9 @@ using GLib;
 
 namespace MyApp {
 	
-	public class HelloVala: Object {
+	public class MyClass: Object {
+
+		public signal void on_event (string message);
 
 		string string1 = "Hello";
 
@@ -15,7 +17,7 @@ namespace MyApp {
 
 		}
 
-		public HelloVala () 
+		public MyClass () 
 		{
 
 		}	
@@ -25,3 +27,4 @@ namespace MyApp {
 			return "Hello";
 		}	
 	}
+}

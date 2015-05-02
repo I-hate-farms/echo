@@ -10,29 +10,68 @@ namespace Echo.Utils
 	}
 
 	public static void report_debug (string origin, string message) {
-		debug ("echo:: %s: %s", origin, message);
+		print ("echo:: %s: %s\n", origin, message);
 	}
 
 	// Use prefix = "SYM: " to get the old display
-	public static void print_symbol (Symbol symbol, int indent = 0, string prefix =  "SYM: " )
+	public static void print_symbol (Symbol? symbol, int indent = 0, string prefix =  "SYM: " )
 	{
+		if( symbol == null ) {
+			print ("<NULL>");
+			return;
+		}
 		var s = "";
 		for (var i = 0; i < indent; i++)
 			s += "  ";
 
-		print ("%s%s%s - %s\n", prefix, s, symbol.fully_qualified_name, symbol.symbol_type.to_string ());
+		print ("%s%s%s\n", prefix, s, symbol.to_string ());
 
 		foreach (var child in symbol.children)
 			print_symbol (child, indent + 1);
 	}
 	
-	public static void print_symbols (Vala.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
+	public static void print_symbols (Gee.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: " )
 	{
 		foreach (var symbol in symbols)
-			Utils.print_symbol (symbol, 2);
+			Utils.print_symbol (symbol, 2, prefix);
 	}
 
-	public static Vala.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)
+	public static string to_string_single (Symbol? symbol, int indent = 0, string prefix =  "SYM: " )
+	{
+		if( symbol == null )
+			return "<NULL>";
+		var builder = new StringBuilder ();
+		build_string (builder, symbol, indent, prefix);
+		var result = builder.str;
+		return result;
+	}
+
+	public static string to_string (Gee.List<Symbol> symbols, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	{
+		var builder = new StringBuilder ();
+		foreach (var symbol in symbols)
+			build_string (builder, symbol, indent, prefix, hide_line);
+		var result = builder.str;
+		return result;
+	}
+
+	public static void build_string (StringBuilder builder, Symbol? symbol, int indent = 0, string prefix =  "SYM: ", bool hide_line = false )
+	{
+		if( symbol == null ) {
+			builder.append ("<NULL>");
+			return;
+		}
+		var s = "";
+		for (var i = 0; i < indent; i++)
+			s += "  ";
+
+		builder.append ("%s%s%s\n".printf (prefix, s, symbol.to_string (hide_line)));
+
+		foreach (var child in symbol.children)
+			build_string (builder, child, indent + 1, prefix, hide_line);
+	}
+
+	public static Gee.List<string>? get_package_paths (string pkg, Vala.CodeContext? context = null, string[]? vapi_dirs = null)
 	{
 		var ctx = context;
 		if (ctx == null) {
@@ -45,7 +84,7 @@ namespace Echo.Utils
 			return null;
 		}
 		
-		var results = new Vala.ArrayList<string> ();
+		var results = new Gee.ArrayList<string> ();
 		
 		var deps_filename = Path.build_filename (Path.get_dirname (package_path), "%s.deps".printf (pkg));
 		if (FileUtils.test (deps_filename, FileTest.EXISTS)) {
@@ -82,29 +121,35 @@ namespace Echo.Utils
 	 * @param symbol The symbol for which to return a parameter list
 	 * @return       A list of parameters or %null
 	 */
-	public Vala.List<DataType>? extract_parameters (Vala.Symbol symbol)
+	public Gee.List<DataType>? extract_parameters (Vala.Symbol symbol)
 	{
-		Vala.List<Vala.Parameter>? parameters = null;
+		Gee.List<Vala.Parameter>? parameters = new Gee.ArrayList<DataType> ();
 
-		if (symbol is Vala.Method)
-			parameters = ((Vala.Method) symbol).get_parameters ();
+		if (symbol is Vala.Method) {
+			foreach (var p in ((Vala.Method) symbol).get_parameters ())
+				parameters.add (p);
+		}
 		else if (symbol is Vala.Signal)
-			parameters = ((Vala.Signal) symbol).get_parameters ();
+			foreach (var p in ((Vala.Signal) symbol).get_parameters ())
+					parameters.add (p);
 		else
 			return null;
 
-		var list = new Vala.ArrayList<DataType> ();
+		var list = new Gee.ArrayList<DataType> ();
 
 		foreach (var param in parameters) {
 			var data = new DataType ();
 			var type = param.variable_type;
-			data.name = symbol.name;
+			data.name = param.name;
 
 			if (type == null)
 				continue;
 
 			data.type_name = type.to_string ();
-			process_type_name (data);
+			// type.to_string messes the type names 
+			//   . string[] is shown as string[][] 
+			//   . List<Symbol> as List<Symbol><>
+			data.type_name = process_type_name (data);
 			list.add (data);
 		}
 
@@ -118,8 +163,9 @@ namespace Echo.Utils
 	 *
 	 * @param data The DataType to analyze and assign attribtes for
 	 */
-	private void process_type_name (DataType data)
+	private string process_type_name (DataType data)
 	{
+		var sb = new StringBuilder ();
 		var type_name = data.type_name;
 		// skip_level == 0 --> add char, skip_level > 0
 		// --> skip until closed par (,[,<,{ causes a skip until ),],>,}
@@ -147,8 +193,11 @@ namespace Echo.Utils
 			} else if (ch == '<') {
 				data.is_generic = true;
 				skip_level++;
-			}
+			} else
+				sb.append_unichar (ch);
+
 		}
+		return sb.str;
 	}
 
 	/**
@@ -162,7 +211,9 @@ namespace Echo.Utils
 	{
 		if (symbol is Vala.Constructor)
 			return "construct";
-
+		// Replace .new for constructor by the class name
+		if (symbol.name == ".new" && symbol.parent_symbol != null )
+			return symbol.parent_symbol.name;
 		return symbol.name;
 	}
 
