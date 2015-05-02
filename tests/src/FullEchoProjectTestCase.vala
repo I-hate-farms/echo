@@ -1,6 +1,6 @@
 using Echo;
 
-class FullEchoProjectTestCase : Gee.TestCase {
+class FullEchoProjectTestCase : EchoTestCase {
 
   public FullEchoProjectTestCase () {
     base ("FullEchoProjectTestCase");

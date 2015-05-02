@@ -24,6 +24,7 @@ namespace Echo.Tests {
 			project.add_external_package ("libvala-0.28");
 			project.add_external_package ("gio-2.0");
 			project.add_external_package ("gee-0.8");
+			project.target_glib232 = true;
 
 			var full_path = File.new_for_path ("./tests/files/echo");
 
@@ -45,6 +46,7 @@ namespace Echo.Tests {
 				// Utils.print_symbols (result);
 				assert_symbol_count_not (result, 0 );
 			}
+			assert_errors_count (project.parsing_errors, 3) ;
 		  // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
 		 }
 

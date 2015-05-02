@@ -37,7 +37,7 @@ namespace Echo
 				warning (e.message);
 			}
 		}
-		
+
 		private int original_target_glib_major;
 		private int original_target_glib_minor;
 
@@ -65,14 +65,14 @@ namespace Echo
 			completor = new Completor (this);
 		}
 
-		public Project (string name) 
+		public Project (string name)
 		{
 			this.name = name;
 		}
 
 		private bool _target_glib232 = false;
-		
-		public bool target_glib232  { 
+
+		public bool target_glib232  {
 			get {
 				return _target_glib232;
 			}
@@ -206,23 +206,23 @@ namespace Echo
 			context.root.add_using_directive (ns_ref);
 		}
 
-		/** 
+		/**
 		 * Returns the enclosing symbol at the specific position of the file.
-		 **/ 
+		 **/
 		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
 			Symbol current = null;
-			
-			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
+
+			foreach (var symbol in get_all_symbols_for_file (file_full_path)) {
 				if (symbol.source_line > line) break;
 				current = symbol;
 			}
-			
+
 			return current;
 		}
 
-		/** 
+		/**
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
-		 **/ 
+		 **/
 		public Vala.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
 			var source = files[file_full_path];
 
@@ -256,38 +256,38 @@ namespace Echo
 		}
 				/*var source = code_tree.find_root_symbol (file_full_path);
 
-			
+
 				if( source == null ) {
 				}
 				else
 				{*/
 					//var symbol = code_tree.find_root_symbol (file_full_path);
 /*					var symbol = code_tree.get_code_tree (find_source (file_full_path));
-					if (symbol == null) 
+					if (symbol == null)
 					{
 						Utils.report_debug ("Project.get_symbols_for_file", "Can't find Vala.SourceFile for file '%s'".printf(file_full_path));
 					}
 					else
 					{
 
-						if( symbol.symbol_type != SymbolType.FILE) 
+						if( symbol.symbol_type != SymbolType.FILE)
 							result.add (symbol);
-					  else 
+					  else
 						  // We skip the first level that is FILE
 							foreach (var child in symbol.children )
 								result.add (child);
 							}
 				//}
 				return result;
-		} 
-*/	public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
+		}
+*/	public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column)
 		{
 			return completor.complete (file_full_path, line, column);
 		}
 
 		public Vala.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
 			var result = new Vala.ArrayList<Symbol>();
-			// TODO 
+			// TODO
 			return result;
 		}
 

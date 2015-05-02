@@ -180,7 +180,7 @@ namespace Echo
 			//current = root;
 			var visitor = new Visitor (root, src);
 			var reporter = (Reporter) context.report;
-			reporter.clear_errors (src.filename);
+			// reporter.clear_errors (src.filename);
 
 			//context.accept (this);
 			context.accept (visitor);

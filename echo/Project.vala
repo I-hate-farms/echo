@@ -38,7 +38,7 @@ namespace Echo
 				warning (e.message);
 			}
 		}
-		
+
 		private int original_target_glib_major;
 		private int original_target_glib_minor;
 
@@ -48,9 +48,9 @@ namespace Echo
 			original_target_glib_major = context.target_glib_major;
 			original_target_glib_minor = context.target_glib_minor;
 			_target_glib232 = (original_target_glib_major==2) && (original_target_glib_minor==32);
-					
-			context.target_glib_major = 2;
-			context.target_glib_minor = 32;
+
+			//context.target_glib_major = 2;
+			//context.target_glib_minor = 32;
 
 			reporter = new Reporter ();
 			context.profile = Vala.Profile.GOBJECT;
@@ -66,7 +66,7 @@ namespace Echo
 			completor = new Completor (this);
 		}
 
-		public Project (string name) 
+		public Project (string name)
 		{
 			this.name = name;
 		}
@@ -75,11 +75,11 @@ namespace Echo
 			get {
 				return reporter.error_list;
 			}
-		} 
+		}
 
 		private bool _target_glib232 = false;
-		
-		public bool target_glib232  { 
+
+		public bool target_glib232  {
 			get {
 				return _target_glib232;
 			}
@@ -213,23 +213,23 @@ namespace Echo
 			context.root.add_using_directive (ns_ref);
 		}
 
-		/** 
+		/**
 		 * Returns the enclosing symbol at the specific position of the file.
-		 **/ 
+		 **/
 		public Symbol get_enclosing_symbol_at_position (string file_full_path, int line, int column) {
 			Symbol current = null;
-			
-			foreach (var symbol in get_all_symbols_for_file (file_full_path)) { 
+
+			foreach (var symbol in get_all_symbols_for_file (file_full_path)) {
 				if (symbol.source_line > line) break;
 				current = symbol;
 			}
-			
+
 			return current;
 		}
 
-		/** 
+		/**
 		 * Returns all the symbols (even the nested ones) for the file of type `type`.
-		 **/ 
+		 **/
 		public Gee.List<Symbol> get_all_symbols_for_file (string file_full_path, SymbolType? type=null) {
 			var source = files[file_full_path];
 
@@ -262,14 +262,14 @@ namespace Echo
 
 		}
 
-		public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column) 
+		public CompletionReport complete_input (string file_full_path, string line_text, char completion_char, int line, int column)
 		{
 			return completor.complete (file_full_path, line, column);
 		}
 
 		public Gee.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
 			var result = new Gee.ArrayList<Symbol>();
-			// TODO 
+			// TODO
 			return result;
 		}
 
