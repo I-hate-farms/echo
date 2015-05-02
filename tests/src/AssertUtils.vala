@@ -211,24 +211,23 @@ public static void assert_symbols_contains (Gee.List<Symbol> symbols, string[] n
 	}
 	else
 	{
-		report_error (symbols, "The symbols doesn't contain the list of expected symbol %s".printf (missing_symbols)) ;
+		report_error (symbols, "The symbols doesn't contain the list of expected symbols %s".printf (missing_symbols)) ;
 	}
 }
 
 public static void assert_symbols_doesnt_contain (Gee.List<Symbol> symbols, string[] names) {
-/*
-	var missing_symbols = new Gee.ArrayList<string>() ;
+	var missing_symbols = "";
 	foreach( var name in names) {
 		var symbol = Utils.find_symbol (symbols, name) ;
-		if( symbol == null)
-			missing_symbols.add (name) ;
+		if( symbol != null)
+			missing_symbols += " '" + name + "'";
 	}
-	if( missing_symbols.size == 0)
+	if( missing_symbols == "")
 	{
 		report_passed (symbols) ;
 	}
 	else
 	{
-		report_error (symbols, "The symbols doesn't contain the list of expected symbol %s", missing_symbols.joinv(", ")) ;
-	}*/
+		report_error (symbols, "The symbols contain the list of unexpected symbols %s".printf (missing_symbols)) ;
+	}
 }

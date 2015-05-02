@@ -1,7 +1,7 @@
 
 namespace Echo
 {
-	class Locator : Vala.CodeVisitor
+	public class Locator : Vala.CodeVisitor
 	{
 		Vala.Symbol? closest;
 		int current_line;
