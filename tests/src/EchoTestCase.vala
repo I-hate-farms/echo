@@ -12,6 +12,7 @@ public abstract class EchoTestCase : Gee.TestCase {
 		var project = new Project (project_name);
 		// Sample libs
 		project.add_external_package ("glib-2.0");
+		project.add_external_package ("gio-2.0");
 		project.add_external_package ("gobject-2.0");
 		project.add_external_package ("clutter-gtk-1.0");
 

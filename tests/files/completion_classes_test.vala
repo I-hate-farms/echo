@@ -30,6 +30,9 @@ public class HelloVala: GLib.Object {
 		var parent = new Parent ();
 		var child = new Child ();
 		child.
+		var file = File.new_for_uri ("/tmp") ;
+		file.
+		var enum AppInfoCreateFlags.
 		return 0;
 	}
 }
