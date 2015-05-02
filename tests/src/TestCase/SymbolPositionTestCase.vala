@@ -24,7 +24,7 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-symbol-position",
 					"./tests/files/position_test.vala", out project_file_path);
 
-			project.get_symbol_at_position (project_file_path, 9, 10);
+			project.get_symbol_at_position (project_file_path, 9, 17);
 		}
 	}
 }

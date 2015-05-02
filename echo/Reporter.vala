@@ -48,7 +48,7 @@ namespace Echo
 				this.column = source.begin.column;
 				this.file_full_path = source.file.filename;
 			}
-			print ("ADDING : %s\n", to_string ()) ;
+			// print ("ADDING : %s\n", to_string ()) ;
 
 		}
 
