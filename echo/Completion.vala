@@ -102,8 +102,8 @@ namespace Echo
 				if (symbol is Vala.LocalVariable
 					&& symbol.source_reference.begin.line > line)
 					continue;
-				var s = new Symbol.from_vala(symbol) ;
-				// s.description = DocParser.instance ().get_description (symbol.fully_qualified_name) ;
+				var s = new Symbol.from_vala(symbol);
+				// s.description = DocParser.instance ().get_description (symbol.fully_qualified_name);
 				result.add (s);
 			}
 
@@ -259,19 +259,19 @@ namespace Echo
 					matching_symbols.add_all (symbol_lookup_inherited (type.data_type, searched,
 						search_type, match_type));
 			} else if (symbol is Vala.LocalVariable) {
-				var data_type = ((Vala.LocalVariable) symbol).variable_type.data_type ;
+				var data_type = ((Vala.LocalVariable) symbol).variable_type.data_type;
 				matching_symbols.add_all (symbol_lookup_inherited (data_type,
 					searched, search_type, match_type));
 			} else if (symbol is Vala.Field) {
-				var data_type = ((Vala.Field) symbol).variable_type.data_type ;
+				var data_type = ((Vala.Field) symbol).variable_type.data_type;
 				matching_symbols.add_all (symbol_lookup_inherited (data_type,
 					searched, search_type, match_type));
 			} else if (symbol is Vala.Property) {
-				var data_type = ((Vala.Property) symbol).property_type.data_type ;
+				var data_type = ((Vala.Property) symbol).property_type.data_type;
 				matching_symbols.add_all (symbol_lookup_inherited (data_type,
 					searched, search_type, match_type));
 			} else if (symbol is Vala.Parameter) {
-				var data_type = ((Vala.Parameter) symbol).variable_type.data_type ;
+				var data_type = ((Vala.Parameter) symbol).variable_type.data_type;
 				matching_symbols.add_all (symbol_lookup_inherited (data_type,
 					searched, search_type, match_type));
 			}

@@ -19,7 +19,7 @@ namespace Echo
 		CONSTANT  = 1 << 13,
 		DELEGATE = 1 << 14,
 		PARAMETER = 1 << 15,
-		VARIABLE = 1 << 16 ;
+		VARIABLE = 1 << 16;
 
 
 		public static SymbolType from_vala (Vala.Symbol symbol) {
@@ -60,9 +60,9 @@ namespace Echo
 			if( symbol is Vala.LocalVariable)
 				return SymbolType.VARIABLE;
 
-			var name = Type.from_instance(symbol).name () ;
-			Utils.report_error ("SymbolType.from_vala", "Symbol '%s' of unknown echo type '%s'".printf(symbol.name, name)) ;
-			return SymbolType.METHOD ;
+			var name = Type.from_instance(symbol).name ();
+			Utils.report_error ("SymbolType.from_vala", "Symbol '%s' of unknown echo type '%s'".printf(symbol.name, name));
+			return SymbolType.METHOD;
 		}
 
 		public string to_string () {
@@ -180,29 +180,29 @@ namespace Echo
 			// CARL TODO
 			name = Utils.symbol_to_name (symbol);
 			symbol_type = SymbolType.from_vala (symbol);
-			parameters = Utils.extract_parameters (symbol) ;
+			parameters = Utils.extract_parameters (symbol);
 			access_type = (AccessType) symbol.access;
-			var src = symbol.source_reference ;
+			var src = symbol.source_reference;
 			if( src != null ) {
-				source_file_name = src.file.filename ;
-				source_line = src.begin.line ;
-				source_column = src.begin.column ;
+				source_file_name = src.file.filename;
+				source_line = src.begin.line;
+				source_column = src.begin.column;
 			}
 			if( symbol.parent_node != null)
 			{
-				var name = Type.from_instance(symbol.parent_node).name () ;
-				Utils.report_error ("Symbol.from_vala", "Symbol '%s' parent '%s'".printf(symbol.name, name)) ;
+				var name = Type.from_instance(symbol.parent_node).name ();
+				Utils.report_error ("Symbol.from_vala", "Symbol '%s' parent '%s'".printf(symbol.name, name));
 
 				if ( symbol.parent_node is Vala.Symbol) {
-					var parent_symbol = (Symbol) symbol.parent_node ;
-					completion_parent_name = parent_symbol.name ;
+					var parent_symbol = (Symbol) symbol.parent_node;
+					completion_parent_name = parent_symbol.name;
 				}
 			}
 			if( symbol.owner != null)
 			{
 				if ( symbol.owner.owner != null ) {
-					var parent_symbol = symbol.owner.owner ;
-					completion_parent_name = parent_symbol.name ;
+					var parent_symbol = symbol.owner.owner;
+					completion_parent_name = parent_symbol.name;
 				}
 			}
 		}
