@@ -10,7 +10,7 @@ public static int main(string[] args) {
   Ivy.Stacktrace.register_handlers ();
 
   // add any of your test cases here
-  //add_tests (new SymbolListingTestCase ());
+  // add_tests (new SymbolListingTestCase ());
   //add_tests (new EnclosingSymbolTestCase ());
   //add_tests (new SymbolPositionTestCase ());
   // Hey could you have a look at the next one?
@@ -18,8 +18,9 @@ public static int main(string[] args) {
   // add_tests (new ExtraSymbolsTestCase ());
   // add_tests (new TargetGlibTestCase ());
   // add_tests (new ParameterTestCase());
-  add_tests (new CompletionTestCase ());
-
+  //add_tests (new CompletionTestCase ());
+  add_tests (new CompletionDocumentationTestCase ());
+  //add_tests (new CrashingEchoTestCase ());
   var result = Test.run ();
   print_report ();
   return result;

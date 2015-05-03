@@ -9,6 +9,7 @@ namespace Echo
 
 	public class Project : Object
 	{
+
 		const int UPDATE_IDLE_DELAY = 2000;
 
 		Vala.CodeContext context;

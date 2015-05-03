@@ -162,6 +162,8 @@ namespace Echo
 		public AccessType access_type { get ; set ; }
 		public string verbose_name { get ; set ; }
 		public string name { get ; set ; default = "" ;}
+		public string fully_qualified_name { get ; set ; default = "" ;}
+
 		public Symbol? parent { get ; set ; }
 		// HACK
 		public string completion_parent_name { get ; set ; default = "" ;}
@@ -171,7 +173,7 @@ namespace Echo
 		public int source_column { get ; set ; }
 		public int source_last_line { get ; set ; }
 		public Gee.List<DataType>? parameters { get ; set ; }
-		public string descrtiption { get ; set ; default = "" ;}
+		public string description { get ; set ; default = "" ;}
 
 		// public Gee.List<Symbol>? symbols;
 		public Symbol () {}
@@ -205,15 +207,25 @@ namespace Echo
 					completion_parent_name = parent_symbol.name;
 				}
 			}
+			fully_qualified_name = Utils.extract_fully_qualified_name (symbol);
+			if( symbol.comment != null )
+				description = symbol.comment.content;
+				if( description != "" && description != null)
+					Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (name, description));
+			if( !(description != "" && description != null)) {
+				description = DocParser.instance ().find_comment (fully_qualified_name);
+			}
+
 		}
 
-		public string fully_qualified_name {
+		// FIXME
+		/*public string fully_qualified_name {
 			owned get {
 				return parent == null || parent.parent == null ?
 					name :
 					"%s.%s".printf (parent.fully_qualified_name, name);
 			}
-		}
+		}*/
 
 		private SourceReference _declaration = null;
 

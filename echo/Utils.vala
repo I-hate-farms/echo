@@ -115,6 +115,44 @@ namespace Echo.Utils
 	}
 
 	/**
+	 * Returns string.join for a string or GLib.FileUtils.chmod
+	 **/
+	public string extract_fully_qualified_name (Vala.Symbol symbol) {
+		var result = symbol.name;
+		if( symbol.owner != null)
+		{
+			var parent = symbol.owner.owner;
+			while (parent != null ) {
+				if( parent.name != null && parent.name != "" )
+					result = parent.name + "." + result;
+				if( parent.owner == null)
+					parent = null;
+				else
+					parent = parent.owner.owner;
+			}
+		}
+		return result;
+	}
+
+	/*public string extract_fully_qualified_name (Vala.Symbol symbol) {
+		var result = symbol.name;
+		if( symbol.parent_symbol != null)
+		{
+			var parent = symbol.parent_symbol;
+			while (parent != null ) {
+				if( parent.name != null && parent.name != "" )
+					result = parent.name + "." + result;
+				if( parent.parent_symbol == null)
+					parent = null;
+				else
+					parent = parent.parent_symbol;
+			}
+		}
+		return result;
+	}*/
+
+
+	/**
 	 * Returns a list of parameters for the given symbol, or %null if the given
 	 * symbol has no parameters.
 	 *

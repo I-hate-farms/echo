@@ -40,8 +40,15 @@ namespace Echo
 			s.verbose_name = Utils.symbol_to_string (symbol);
 			s.name = Utils.symbol_to_name (symbol);
 			s.parent = current;
+			s.fully_qualified_name = s.parent == null || s.parent.parent == null ?
+					s.name :
+					"%s.%s".printf (s.parent.fully_qualified_name, s.name);
 			s.parameters = Utils.extract_parameters (symbol);
+			if( symbol.comment != null )
+				s.description = symbol.comment.content;
 			//s.symbols = current.symbols;
+			if( s.description != "" && s.description != null)
+				Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (s.name, s.description));
 
 			current_symbol_list.add (s);
 

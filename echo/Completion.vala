@@ -28,8 +28,10 @@ namespace Echo
 		public Completor (Project project) {
 		}
 
-		string prepare_line (string line, int column)
+		string prepare_line (string? line, int column)
 		{
+			if( line == null)
+				return "";
 			var leading_tabs = 0;
 			for (var i = 0; i < line.length; i++) {
 				if (line[i] == ' ')
@@ -63,6 +65,9 @@ namespace Echo
 		 *   . support for generics if not included
 		 */
 		public Gee.List<Symbol> complete (Vala.SourceFile src, Locator locator, int line, int column) {
+			// FIXME loading the description here
+			var instance = DocParser.instance ();
+
 			var line_str = prepare_line (src.get_source_line (line), column);
 
 			MatchInfo match_info;
