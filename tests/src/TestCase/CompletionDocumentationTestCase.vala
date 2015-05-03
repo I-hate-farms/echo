@@ -22,8 +22,7 @@ namespace Echo.Tests {
 
 		void print_symbol (Symbol symbol) {
 			var description = symbol.description.substring (0, int.min (symbol.description.length, 30));
-			print ("%s  -> '%s'\n", symbol.to_string (),
-				 description);
+			//print ("%s  -> '%s'\n", symbol.to_string (), description);
 
 		}
 		public void test_glib_string ()

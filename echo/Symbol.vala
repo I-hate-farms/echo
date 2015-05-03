@@ -174,6 +174,7 @@ namespace Echo
 		public int source_last_line { get ; set ; }
 		public Gee.List<DataType>? parameters { get ; set ; }
 		public string description { get ; set ; default = "" ;}
+		public DataType? return_type { get ; set ; }
 
 		// public Gee.List<Symbol>? symbols;
 		public Symbol () {}
@@ -183,6 +184,7 @@ namespace Echo
 			name = Utils.symbol_to_name (symbol);
 			symbol_type = SymbolType.from_vala (symbol);
 			parameters = Utils.extract_parameters (symbol);
+			return_type = Utils.extract_return_type (symbol) ;
 			access_type = (AccessType) symbol.access;
 			var src = symbol.source_reference;
 			if( src != null ) {

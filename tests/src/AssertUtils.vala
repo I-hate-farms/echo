@@ -193,7 +193,7 @@ public static void assert_errors_count (Gee.List<ParsingError> errors, int expec
 		print ("Parsing errors\n");
 		print ("----------------------\n");
 		foreach (var err in errors )
-			print (err.to_string () );
+			print (err.to_string ()+"\n" );
 	}
 }
 

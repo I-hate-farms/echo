@@ -176,25 +176,53 @@ namespace Echo.Utils
 		var list = new Gee.ArrayList<DataType> ();
 
 		foreach (var param in parameters) {
-			var data = new DataType ();
-			var type = param.variable_type;
-			data.name = param.name;
-
-			if (type == null)
-				continue;
-
-			data.type_name = type.to_string ();
-
-			// type.to_string messes the type names
-			//   . string[] is shown as string[][]
-			//   . List<Symbol> as List<Symbol><>
-			data.base_type_name = process_type_name (data);
+			var data = extract_data_type (param.name, param.variable_type);
+			if (data == null)
+				continue ;
 			list.add (data);
 		}
 
 		return list;
 	}
 
+	/**
+	 * Returns the return_type of the given symbol, or %null if the given
+	 * symbol has no parameters.
+	 *
+	 * @param symbol The symbol for which to return a parameter list
+	 * @return       A list of parameters or %null
+	 */
+	public DataType? extract_return_type (Vala.Symbol symbol)
+	{
+
+		if (symbol is Vala.Method) {
+			var method =  ((Vala.Method) symbol) ;
+			return extract_data_type (symbol.name, method.return_type) ;
+		}
+		else if (symbol is Vala.Signal) {
+			var sig =  ((Vala.Signal) symbol) ;
+			return extract_data_type (symbol.name, sig.return_type) ;
+		}
+		else
+			return null;
+	}
+
+	DataType? extract_data_type ( string? name, Vala.DataType? type ) {
+		if (type == null)
+			return null ;
+		var data = new DataType ();
+		data.name = name;
+
+
+
+		data.type_name = type.to_string ();
+
+		// type.to_string messes the type names
+		//   . string[] is shown as string[][]
+		//   . List<Symbol> as List<Symbol><>
+		data.base_type_name = process_type_name (data);
+		return data ;
+	}
 	/**
 	 * copied from afrodite
 	 *

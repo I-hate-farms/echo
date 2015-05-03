@@ -11,14 +11,18 @@ public static int main(string[] args) {
 
   // add any of your test cases here
   // add_tests (new SymbolListingTestCase ());
-  //add_tests (new EnclosingSymbolTestCase ());
-  //add_tests (new SymbolPositionTestCase ());
-  // Hey could you have a look at the next one?
-  //add_tests (new FullEchoProjectTestCase ());
+  // add_tests (new EnclosingSymbolTestCase ());
+  // add_tests (new SymbolPositionTestCase ());
+  // * Hey could you have a look at the next one?
+  // add_tests (new FullEchoProjectTestCase ());
   // add_tests (new ExtraSymbolsTestCase ());
+  // * Has the closure bug
+  //  CRITICAL **: vala_method_get_closure: assertion 'self != NULL' failed
   // add_tests (new TargetGlibTestCase ());
   // add_tests (new ParameterTestCase());
-  //add_tests (new CompletionTestCase ());
+  // Has the "vala_data_type_copy" bug
+  // CRITICAL **: vala_data_type_copy: assertion 'self != NULL' failed
+  // add_tests (new CompletionTestCase ());
   add_tests (new CompletionDocumentationTestCase ());
   //add_tests (new CrashingEchoTestCase ());
   var result = Test.run ();
