@@ -44,7 +44,7 @@ namespace Echo
 					s.name :
 					"%s.%s".printf (s.parent.fully_qualified_name, s.name);
 			s.parameters = Utils.extract_parameters (symbol);
-			s.return_type = Utils.extract_return_type (symbol) ;
+			s.return_type = Utils.extract_return_type (symbol);
 
 			if( symbol.comment != null )
 				s.description = symbol.comment.content;

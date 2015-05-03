@@ -13,7 +13,7 @@ namespace Echo {
 			if( _instance == null) {
 				_instance = new DocParser ();
 				// HACK
-				var file_path = "/home/craSSSn/Documents/Projects/i-hate-farms/ide/echo/comments/" ;
+				var file_path = "/home/cran/Documents/Projects/i-hate-farms/ide/echo/comments/";
 				if( File.new_for_path (file_path).query_exists ())
 				{
 					var file_names = new string[] {"GLib-2.0.gir", "Gee-0.8.gir", "Gio-2.0.gir",

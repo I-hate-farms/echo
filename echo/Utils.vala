@@ -178,7 +178,7 @@ namespace Echo.Utils
 		foreach (var param in parameters) {
 			var data = extract_data_type (param.name, param.variable_type);
 			if (data == null)
-				continue ;
+				continue;
 			list.add (data);
 		}
 
@@ -196,12 +196,12 @@ namespace Echo.Utils
 	{
 
 		if (symbol is Vala.Method) {
-			var method =  ((Vala.Method) symbol) ;
-			return extract_data_type (symbol.name, method.return_type) ;
+			var method =  ((Vala.Method) symbol);
+			return extract_data_type (symbol.name, method.return_type);
 		}
 		else if (symbol is Vala.Signal) {
-			var sig =  ((Vala.Signal) symbol) ;
-			return extract_data_type (symbol.name, sig.return_type) ;
+			var sig =  ((Vala.Signal) symbol);
+			return extract_data_type (symbol.name, sig.return_type);
 		}
 		else
 			return null;
@@ -209,7 +209,7 @@ namespace Echo.Utils
 
 	DataType? extract_data_type ( string? name, Vala.DataType? type ) {
 		if (type == null)
-			return null ;
+			return null;
 		var data = new DataType ();
 		data.name = name;
 
@@ -221,7 +221,7 @@ namespace Echo.Utils
 		//   . string[] is shown as string[][]
 		//   . List<Symbol> as List<Symbol><>
 		data.base_type_name = process_type_name (data);
-		return data ;
+		return data;
 	}
 	/**
 	 * copied from afrodite

@@ -184,7 +184,7 @@ namespace Echo
 			name = Utils.symbol_to_name (symbol);
 			symbol_type = SymbolType.from_vala (symbol);
 			parameters = Utils.extract_parameters (symbol);
-			return_type = Utils.extract_return_type (symbol) ;
+			return_type = Utils.extract_return_type (symbol);
 			access_type = (AccessType) symbol.access;
 			var src = symbol.source_reference;
 			if( src != null ) {
