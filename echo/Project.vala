@@ -274,16 +274,16 @@ namespace Echo
 		}
 
 
-		public Gee.List<Symbol> complete (string file_full_path, int line, int column)
+		public Gee.List<Symbol> complete (string file_full_path, int line, int column, string? line_text=null)
 			throws CompleterError
 		{
 			var source = files[file_full_path];
 			if (source == null) {
 				Utils.report_error ("complete", "Exiting: can't find source for '%s'".printf (file_full_path));
-				return new Gee.LinkedList<string> ();
+				return new Gee.ArrayList<string> ();
 			}
 
-			return completor.complete (source, locator, line, column);
+			return completor.complete (source, locator, line, column, line_text);
 		}
 	}
 }

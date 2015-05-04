@@ -2,7 +2,7 @@ using Echo;
 
 void main (string[] args)
 {
-	var loop = new MainLoop ();
+	/*var loop = new MainLoop ();
 
 	var project = new Project ("testing");
 	project.add_external_package ("glib-2.0");
@@ -16,7 +16,12 @@ void main (string[] args)
 	project.update_sync ();
 	print ("UPDATE DONE\n");
 
-	// loop.quit ();
-	// loop.run ();
+		var root = project.context.root;
+
+		loop.quit ();
+	});
+
+	loop.run ();
+*/
 }
 

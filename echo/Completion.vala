@@ -64,12 +64,29 @@ namespace Echo
 		 *   . delegates signatures?
 		 *   . support for generics if not included
 		 */
-		public Gee.List<Symbol> complete (Vala.SourceFile src, Locator locator, int line, int column) {
+		 /**
+		  * Implemented :
+		  * - variable member completion after '.'
+		  * - constructor completion after 'new'
+		  * - type completion after 'is'
+		  * - list of overridable methods after 'override'
+		  * - fallback
+		  * Parameters
+ 		  * line_text : the complete uncutted line
+		  */
+		public Gee.List<Symbol> complete (Vala.SourceFile src, Locator locator, int line, int column, string? line_text=null) {
 			// FIXME loading the description here
 			var instance = DocParser.instance ();
-
-			var line_str = prepare_line (src.get_source_line (line), column);
-
+			string? line_str = line_text;
+			if( line_str == null )
+				line_str = prepare_line (src.get_source_line (line), column);
+			else
+			{
+				if( column < line_str.length)
+					line_str = line_str.substring (0, column);
+			}
+			var temp_line = prepare_line (src.get_source_line (line), column);
+			Utils.report_debug ("complete", "COMPLETING LINE: '%s' instead of '%s'".printf (line_str, temp_line));
 			MatchInfo match_info;
 			SearchType search_type = SearchType.ACCESSIBLE_SYMBOLS;
 			Vala.Expression? inner = null;
