@@ -9,22 +9,24 @@ public static int main(string[] args) {
   Test.init (ref args);
   Ivy.Stacktrace.register_handlers ();
 
-  // add any of your test cases here
+  // working ones (update as you go by)
+  // add_tests (new FullEchoProjectTestCase ());
   // add_tests (new SymbolListingTestCase ());
   // add_tests (new EnclosingSymbolTestCase ());
+  // add_tests (new CompletionDocumentationTestCase ());
+
+  // WIP
   // add_tests (new SymbolPositionTestCase ());
-  // * Hey could you have a look at the next one?
-  add_tests (new FullEchoProjectTestCase ());
-  // add_tests (new ExtraSymbolsTestCase ());
-  // * Has the closure bug
-  //  CRITICAL **: vala_method_get_closure: assertion 'self != NULL' failed
-  // add_tests (new TargetGlibTestCase ());
+
+  // failing test cases
   // add_tests (new ParameterTestCase());
-  // Has the "vala_data_type_copy" bug
-  // CRITICAL **: vala_data_type_copy: assertion 'self != NULL' failed
-  add_tests (new CompletionTestCase ());
-  add_tests (new CompletionDocumentationTestCase ());
-  //add_tests (new CrashingEchoTestCase ());
+  // add_tests (new CompletionTestCase ());
+  // add_tests (new ExtraSymbolsTestCase ());
+  // add_tests (new CrashingEchoTestCase ());
+
+  // failing assertions
+  // add_tests (new TargetGlibTestCase ());
+
   var result = Test.run ();
   print_report ();
   return result;
