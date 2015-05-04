@@ -89,7 +89,6 @@ namespace Echo
 			return lists[src.filename];
 		}
 
-
 	}
 }
 

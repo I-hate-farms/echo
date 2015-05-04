@@ -55,6 +55,7 @@
     <Compile Include="echo\Reporter.vala" />
     <Compile Include="echo\Symbol.vala" />
     <Compile Include="echo\Visitor.vala" />
+    <Compile Include="echo\DocParser.vala" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

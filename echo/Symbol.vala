@@ -172,12 +172,36 @@ namespace Echo
 		public int source_line { get ; set ; }
 		public int source_column { get ; set ; }
 		public int source_last_line { get ; set ; }
+		// FIXME should be initialized by default
 		public Gee.List<DataType>? parameters { get ; set ; }
 		public string description { get ; set ; default = "" ;}
 		public DataType? return_type { get ; set ; }
 
 		// public Gee.List<Symbol>? symbols;
 		public Symbol () {}
+
+		public Symbol.from_symbol (Symbol symbol) {
+			this.name = symbol.name;
+			this.fully_qualified_name = symbol.fully_qualified_name;
+			this.verbose_name = symbol.verbose_name;
+			this.symbol_type = symbol.symbol_type;
+			this.access_type = symbol.access_type;
+			this.completion_parent_name = symbol.completion_parent_name;
+			this.source_file_name = symbol.source_file_name;
+			this.source_line = symbol.source_line;
+			this.source_column = symbol.source_column;
+			this.source_last_line = symbol. source_last_line;
+			this.description = symbol.description;
+			this.return_type = symbol.return_type;
+			foreach (var child in symbol.children)
+				this.children.add (child);
+			if( symbol.parameters != null )
+				foreach (var child in symbol.parameters) {
+					if( this.parameters == null )
+						this.parameters = new Gee.ArrayList<DataType>();
+					this.parameters.add (child);
+				}
+		}
 
 		public Symbol.from_vala (Vala.Symbol symbol) {
 			// CARL TODO

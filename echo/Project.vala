@@ -248,6 +248,68 @@ namespace Echo
 
 		}
 
+		/**
+		 * Returns a list of merged top level symbols (mainly namespace).
+		 * This method can be used in a class explorer to give a global
+		 * hierarchical view of the project.
+		 *
+		 * IMPORTANT: please not that only the top level namespaces of each file will be
+		 * merged!
+		 * This is good enough for a first implementation
+		 */
+
+		public Gee.List<Symbol> get_symbols () {
+			var result = new Gee.ArrayList<Symbol>();
+			foreach( var file_full_path in files.keys) {
+				var source = files[file_full_path];
+
+				if (source == null) {
+					Utils.report_error ("get_symbols_for_file", "Exiting: can't find source for '%s'".printf (file_full_path));
+					return result;
+				}
+				var symbol = code_tree.get_code_tree (source);
+
+				if (symbol.symbol_type == SymbolType.FILE)
+				{
+					foreach ( var child in symbol.children)
+						merge_symbols (result, child);
+				}
+				else
+					merge_symbols (result, symbol);
+
+			}
+			return result;
+		}
+
+		private void merge_symbols (Gee.ArrayList<Symbol> symbols, Symbol symbol) {
+			var s = Utils.find_symbol (symbols, symbol.name);
+			if( s == null )
+			{
+				var to_be_inserted = symbol;
+				if (symbol.symbol_type == SymbolType.NAMESPACE)
+				{
+					// We copy the namespace we add because we might add
+					// merged children to them and we don't want to
+					// change the per file symbol collections
+					to_be_inserted = new Symbol.from_symbol (symbol);
+				}
+				symbols.add (to_be_inserted);
+			}
+			else
+			{
+				if( s.symbol_type == SymbolType.NAMESPACE && symbol.symbol_type == SymbolType.NAMESPACE)
+				{
+					foreach (var child in symbol.children)
+						s.children.add (child);
+				}
+				else
+				{
+					Utils.report_debug ("CodeTree.merge_symbols", "Try to merge %s '%s' into %s '%s".printf (
+						symbol.symbol_type.to_string (), symbol.fully_qualified_name,
+						s.symbol_type.to_string (), s.fully_qualified_name) );
+				}
+			}
+		}
 
 		public Gee.List<Symbol> get_constructors_for_class (string file_full_path, string class_name, int line, int column) {
 			var result = new Gee.ArrayList<Symbol>();

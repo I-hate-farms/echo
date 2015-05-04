@@ -10,7 +10,7 @@ public static int main(string[] args) {
   Ivy.Stacktrace.register_handlers ();
 
   // working ones (update as you go by)
-  // add_tests (new FullEchoProjectTestCase ());
+  add_tests (new FullEchoProjectTestCase ());
   // add_tests (new SymbolListingTestCase ());
   // add_tests (new EnclosingSymbolTestCase ());
   // add_tests (new CompletionDocumentationTestCase ());
