@@ -98,6 +98,8 @@ namespace Echo
 		{
 			var monitor = new Monitor ();
 			monitor.start ();
+			((Reporter) context.report).clear_all_errors ();
+
 			lock (context) {
 				Vala.CodeContext.push (context);
 

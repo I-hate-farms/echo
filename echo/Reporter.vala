@@ -70,26 +70,42 @@ namespace Echo
 		public void clear_errors (string file_full_path) {
 			for (int i= error_list.size -1; i >= 0 ; i--) {
 				var error = error_list.@get (i);
-				if (error.file_full_path == file_full_path)
+				if (error.file_full_path == file_full_path) {
 					error_list.remove_at (i);
-
+					if (error.error_type == ErrorType.ERROR)
+						errors--;
+					else if (error.error_type == ErrorType.WARNING ||
+							error.error_type == ErrorType.DEPRECATED)
+						warnings--;
+				}
 			}
 		}
 
+		public void clear_all_errors ()
+		{
+			error_list.clear ();
+
+			warnings = 0;
+			errors = 0;
+		}
+
 		public override void note (Vala.SourceReference? source, string message) {
-				error_list.add (new ParsingError( ErrorType.NOTE, source, message));
+			error_list.add (new ParsingError( ErrorType.NOTE, source, message));
 		}
 
 		public override void depr (Vala.SourceReference? source, string message) {
-				error_list.add (new ParsingError( ErrorType.DEPRECATED, source, message));
+			warnings++;
+			error_list.add (new ParsingError( ErrorType.DEPRECATED, source, message));
 		}
 
 		public override void warn (Vala.SourceReference? source, string message) {
-				error_list.add (new ParsingError( ErrorType.WARNING, source, message));
+			warnings++;
+			error_list.add (new ParsingError( ErrorType.WARNING, source, message));
 		}
 
 		public override void err (Vala.SourceReference? source, string message) {
-				error_list.add (new ParsingError( ErrorType.ERROR, source, message));
+			errors++;
+			error_list.add (new ParsingError( ErrorType.ERROR, source, message));
 		}
 
 	}

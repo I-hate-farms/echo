@@ -78,7 +78,7 @@ namespace Echo.Tests {
 		{
 			string project_file_path;
 			var project = setup_project_for_file ("test-type-completion",
-					"./tests/files/completion_classes_test.vala", out project_file_path);
+					"./tests/files/completion_classes_test2.vala", out project_file_path);
 
 			var results = project.complete (project_file_path, 39, 15);
 			assert_symbols_contains (results, new string [] {"name", "compute_name", "first_name",

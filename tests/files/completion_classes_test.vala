@@ -45,15 +45,17 @@ public class HelloVala: GLib.Object {
 }
 
 
-public Namespace.OtherChild: Child {
+namespace Namespace {
+public OtherChild: Child {
 
 	public get_middle_name (string prefix) {
 		print ( prefix + "Oscar");
 	}
 }
+}
 
 public static int main (string[] args) {
-		var child = new Namespace.OtherChild ()
+		var child = new Namespace.OtherChild ();
 		child.
 		var other = new Namespace.
 		return 0;
