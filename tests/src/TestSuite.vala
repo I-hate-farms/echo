@@ -17,15 +17,13 @@ public static int main(string[] args) {
 
   // WIP
   // add_tests (new SymbolPositionTestCase ());
+  // add_tests (new TargetGlibTestCase ());
 
   // failing test cases
   // add_tests (new ParameterTestCase());
   // add_tests (new CompletionTestCase ());
   // add_tests (new ExtraSymbolsTestCase ());
   // add_tests (new CrashingEchoTestCase ());
-
-  // failing assertions
-  // add_tests (new TargetGlibTestCase ());
 
   var result = Test.run ();
   print_report ();
