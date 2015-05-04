@@ -2,7 +2,7 @@ using Echo;
 
 void main (string[] args)
 {
-	var loop = new MainLoop ();
+	/*var loop = new MainLoop ();
 
 	var project = new Project ("testing");
 	project.add_external_package ("glib-2.0");
@@ -31,5 +31,6 @@ void main (string[] args)
 	});
 
 	loop.run ();
+*/
 }
 

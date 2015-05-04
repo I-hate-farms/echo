@@ -212,8 +212,8 @@ namespace Echo
 			fully_qualified_name = Utils.extract_fully_qualified_name (symbol);
 			if( symbol.comment != null )
 				description = symbol.comment.content;
-				if( description != "" && description != null)
-					Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (name, description));
+				//if( description != "" && description != null)
+				//	Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (name, description));
 			if( !(description != "" && description != null)) {
 				description = DocParser.instance ().find_comment (fully_qualified_name);
 			}

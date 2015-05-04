@@ -43,14 +43,13 @@ public static void report_passed (Gee.List<Symbol>? symbols, bool flat=false) {
 	passed_count ++;
 
 	print_message ("%sPASSED%s ".printf(ANSI_COLOR_GREEN, ANSI_COLOR_RESET));
-	if( symbols != null && display_symbols ) { 
+	if( symbols != null && display_symbols ) {
 		print ("\n");
 		if( flat )
 		{
-		  /*foreach (var symbol in symbols)
-				print ("%s - %s", symbol.fully_qualified_name, symbol.symbol_type.to_string ());
-			*/
-			Utils.print_symbols (symbols, 2);
+		  foreach (var symbol in symbols)
+				print ("%s\n", symbol.to_string ());
+			//Utils.print_symbols (symbols, 2);
 		}
 		else
 		{

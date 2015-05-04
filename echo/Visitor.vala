@@ -51,8 +51,8 @@ namespace Echo
 			if( symbol.comment != null )
 				s.description = symbol.comment.content;
 			//s.symbols = current.symbols;
-			if( s.description != "" && s.description != null)
-				Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (s.name, s.description));
+			//if( s.description != "" && s.description != null)
+			//	Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (s.name, s.description));
 
 			//s.parent.symbols.add (s);
 			var prev = current;

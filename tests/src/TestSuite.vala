@@ -22,8 +22,8 @@ public static int main(string[] args) {
   // add_tests (new ParameterTestCase());
   // Has the "vala_data_type_copy" bug
   // CRITICAL **: vala_data_type_copy: assertion 'self != NULL' failed
-  // add_tests (new CompletionTestCase ());
-  add_tests (new CompletionDocumentationTestCase ());
+  add_tests (new CompletionTestCase ());
+  // add_tests (new CompletionDocumentationTestCase ());
   //add_tests (new CrashingEchoTestCase ());
   var result = Test.run ();
   print_report ();
