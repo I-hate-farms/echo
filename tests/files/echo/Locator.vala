@@ -1,7 +1,7 @@
 
 namespace Echo
 {
-	class Locator : Vala.CodeVisitor
+	public class Locator : Vala.CodeVisitor
 	{
 		Vala.Symbol? closest;
 		int current_line;
@@ -10,31 +10,27 @@ namespace Echo
 
 		public Vala.Symbol? find_closest_block (Vala.SourceFile src, int line, int column)
 		{
-			lock (this) {
-				closest = null;
-				current_line = line;
-				current_column = column;
-				exact_symbol = false;
+			closest = null;
+			current_line = line;
+			current_column = column;
+			exact_symbol = false;
 
-				// we now run through the doc and have check_location called repeatedly
-				src.accept_children (this);
+			// we now run through the doc and have check_location called repeatedly
+			src.accept_children (this);
 
-				return closest;
-			}
+			return closest;
 		}
 
 		public Vala.Symbol? find_symbol_at_position (Vala.SourceFile src, int line, int column)
 		{
-			lock (this) {
-				closest = null;
-				current_line = line;
-				current_column = column;
-				exact_symbol = true;
+			closest = null;
+			current_line = line;
+			current_column = column;
+			exact_symbol = true;
 
-				src.accept_children (this);
+			src.accept_children (this);
 
-				return closest;
-			}
+			return closest;
 		}
 
 		bool location_before (Vala.SourceLocation a, Vala.SourceLocation b)
@@ -125,7 +121,7 @@ namespace Echo
 		 * non block types from here on, for exact matching
 		 */
 
-		public override void visit_addressof_expression (Vala.AddressofExpression symbol)
+		/*public override void visit_addressof_expression (Vala.AddressofExpression symbol)
 		{
 			if (exact_symbol)
 				check_location (symbol);
@@ -156,12 +152,6 @@ namespace Echo
 			symbol.accept_children (this);
 		}
 		public override void visit_boolean_literal (Vala.BooleanLiteral symbol)
-		{
-			if (exact_symbol)
-				check_location (symbol);
-			symbol.accept_children (this);
-		}
-		public override void visit_break_statement (Vala.BreakStatement symbol)
 		{
 			if (exact_symbol)
 				check_location (symbol);
@@ -544,7 +534,7 @@ namespace Echo
 			if (exact_symbol)
 				check_location (symbol);
 			symbol.accept_children (this);
-		}
+		}*/
 	}
 }
 

@@ -9,19 +9,27 @@ void main (string[] args)
 	project.add_external_package ("gobject-2.0");
 	project.add_external_package ("clutter-gtk-1.0");
 	project.add_external_package ("granite");
+	project.add_external_package ("libvala-0.28");
 
-	// project.add_file ("./test.vala");
-	project.add_file ("./tests/files/main_namespace.vala");
+	var files = new Gee.ArrayList<string>();
+	var full_path = File.new_for_path ("./tests/files/echo");
+	var enumerator = full_path.enumerate_children (FileAttribute.STANDARD_NAME, 0);
+	FileInfo file_info;
+	while ((file_info = enumerator.next_file ()) != null) {
+		var path = full_path.get_path () + "/" + file_info.get_name ();
+		print ("ADDING %s\n", path);
+		project.add_file (path);
+		files.add (path);
+	}
 
 	project.update.begin (() => {
-		print ("UPDATE FINISHED\n");
-		try {
-			project.complete ("./tests/files/main_namespace.vala", 20, 10);
-		} catch (Error e) {
-			warning (e.message);
-		}
+		print ("UPDATE DONE\n");
+
+		var root = project.context.root;
+
 		loop.quit ();
 	});
+
 	loop.run ();
 }
 

@@ -4,7 +4,6 @@ namespace Echo
 	{
 
 		Vala.SourceFile current_file;
-		public Gee.List<Symbol> current_symbol_list = new Gee.ArrayList<Symbol> ();
 		Symbol current;
 
 		public class Visitor (Symbol current, Vala.SourceFile current_file) {
@@ -26,8 +25,11 @@ namespace Echo
 			}
 
 			if (symbol.source_reference.file != current_file) {
-				print ("VISITED %s\n", Utils.symbol_to_string (symbol));
-				return;
+				// apparently, if we quit namespaces, we just stop visiting those all
+				// together, so we have to continue on namespaces
+				if (!(symbol is Vala.Namespace)) {
+					return;
+				}
 			}
 
 			var s = new Symbol ();
@@ -51,8 +53,6 @@ namespace Echo
 			//s.symbols = current.symbols;
 			if( s.description != "" && s.description != null)
 				Utils.report_debug ("Symbol.from_vala", "DESC: '%s' has '%s'".printf (s.name, s.description));
-
-			current_symbol_list.add (s);
 
 			//s.parent.symbols.add (s);
 			var prev = current;

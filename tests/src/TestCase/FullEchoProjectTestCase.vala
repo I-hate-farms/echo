@@ -17,7 +17,6 @@ namespace Echo.Tests {
 		public void test_simple_main () {
 
 			var project = new Project ("echo");
-			// project.target_glib232 = true;
 			// Sample libs
 			project.add_external_package ("glib-2.0");
 			project.add_external_package ("gobject-2.0");

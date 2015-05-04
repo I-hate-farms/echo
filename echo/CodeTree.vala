@@ -17,29 +17,42 @@ namespace Echo
 
 		public void update_code_tree (Vala.SourceFile src)
 		{
-			//message ("update_code_tree (%s)", src.filename);
 			var symbols = new Gee.ArrayList<Symbol> ();
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
 			root.verbose_name = root.name = src.filename;
-			// root.symbols = symbols;
-			//symbols.add (root);
 
-			//current_symbol_list = new Gee.ArrayList<Symbol> ();
-
-			//current_file = src;
-			//current = root;
 			var visitor = new Visitor (root, src);
-			var reporter = (Reporter) context.report;
-			// reporter.clear_errors (src.filename);
 
-			//context.accept (this);
+			Gee.List<Symbol> symbol_list = new Gee.ArrayList<Symbol> ();
+
 			context.accept (visitor);
-			// FIXME : sort the symbol tree also
 			sort_symbols (root.children);
-			sort_symbols (visitor.current_symbol_list, true);
+			post_process (root, ref symbol_list);
+
 			trees[src.filename] = root;
-			lists[src.filename] = visitor.current_symbol_list;
+			lists[src.filename] = symbol_list;
+		}
+
+		private void post_process (Symbol parent, ref Gee.List<Symbol> global_collection)
+		{
+			var it = parent.children.list_iterator ();
+
+			while (it.next ()) {
+				var symbol = it.@get ();
+
+				// FIXME we need to visit all namespaces, or all children from that
+				//       namespace will not be reported to our visitor. This results
+				//       in a number of superfluous namespaces, which we need to remove
+				//       in a second pass. Only problem is that actually empty namespaces
+				//       won't appear anywhere.
+				if (symbol.symbol_type == SymbolType.NAMESPACE && symbol.children.size == 0)
+					it.remove ();
+				else {
+					global_collection.add (symbol);
+					post_process (symbol, ref global_collection);
+				}
+			}
 		}
 
 		private void sort_symbols (Gee.List<Symbol> symbols, bool flat = false) {
