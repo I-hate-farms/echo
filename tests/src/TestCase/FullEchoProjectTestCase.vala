@@ -39,8 +39,8 @@ namespace Echo.Tests {
 
 			project.update_sync ();
 			foreach (var path in files) {
-				print ("Code for %s\n", path );
-				print ("----------\n");
+				//print ("Code for %s\n", path );
+				//print ("----------\n");
 				var result = project.get_symbols_for_file (path);
 				// Utils.print_symbols (result);
 				assert_symbol_count_not (result, 0 );

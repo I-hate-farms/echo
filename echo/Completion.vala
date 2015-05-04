@@ -85,8 +85,8 @@ namespace Echo
 				if( column < line_str.length)
 					line_str = line_str.substring (0, column);
 			}
-			var temp_line = prepare_line (src.get_source_line (line), column);
-			Utils.report_debug ("complete", "COMPLETING LINE: '%s' instead of '%s'".printf (line_str, temp_line));
+			//var temp_line = prepare_line (src.get_source_line (line), column);
+			//Utils.report_debug ("complete", "COMPLETING LINE: '%s' instead of '%s'".printf (line_str, temp_line));
 			MatchInfo match_info;
 			SearchType search_type = SearchType.ACCESSIBLE_SYMBOLS;
 			Vala.Expression? inner = null;
