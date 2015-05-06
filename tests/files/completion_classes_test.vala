@@ -36,26 +36,26 @@ public class HelloVala: GLib.Object {
 		var s = "my string";
 		var parent = new Parent ();
 		var child = new Child ();
-		child.
+		// child.
 		var file = File.new_for_uri ("/tmp");
-		file.
-		var enum AppInfoCreateFlags.
+		// file.
+		// var e AppInfoCreateFlags.
 		return 0;
 	}
 }
 
 
-public Namespace.OtherChild: Child {
+public class Namespace.OtherChild: Child {
 
-	public get_middle_name (string prefix) {
+	public void get_middle_name (string prefix) {
 		print ( prefix + "Oscar");
 	}
 }
 
 public static int main (string[] args) {
-		var child = new Namespace.OtherChild ()
-		child.
-		var other = new Namespace.
+		var child = new Namespace.OtherChild ();
+		// child.
+		// var other = new Namespace.
 		return 0;
 }
 

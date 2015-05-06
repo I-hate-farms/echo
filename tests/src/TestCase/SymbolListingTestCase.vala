@@ -57,6 +57,7 @@ namespace Echo.Tests {
 					SYM:       PublicClass.PublicClass - Constructor - 10:2
 					SYM:     sandbox - Namespace - 15:1
 					SYM:       sandbox.main_in_sandbox - Method - 16:3
+					SYM:     BIG - Constant - 23:1
 					SYM:     main2 - Method - 25:1
 			""";
 			var symbols = get_root_symbols ("./tests/files/EnclosingSymbol.vala");

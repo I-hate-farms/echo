@@ -63,7 +63,7 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-member-completion",
 					"./tests/files/completion_doc_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 6, 16);
+			var results = project.complete (project_file_path, 6, 16, "\t\taction.");
 			assert_symbols_contains (results, new string [] {"name_is_valid", "name", "state"});
 			assert_symbols_doesnt_contain (results, new string [] {"List"});
 

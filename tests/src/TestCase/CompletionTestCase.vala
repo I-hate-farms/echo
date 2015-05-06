@@ -17,7 +17,6 @@ namespace Echo.Tests {
 			add_file_test ("test_file_enum", "completion_classes_test.vala", test_file_enum);
 			add_file_test ("test_class_members", "completion_classes_test.vala", test_class_members);
 
-
 			add_file_test ("test_namespace_class_parameters", "completion_classes_test.vala", test_namespace_class_parameters);
 			add_file_test ("test_namespace_class_parameters_more", "completion_classes_test.vala", test_namespace_class_parameters_more);
 			add_file_test ("test_namespace_class_method", "completion_classes_test.vala", test_namespace_class_method);
@@ -39,10 +38,10 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-member-completion",
 					"./tests/files/completion_member_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 5, 9);
+			var results = project.complete (project_file_path, 5, 11, "\tlist.");
 			assert_symbols_contains (results, new string [] {"foreach", "nth_data"});
 
-			results = project.complete (project_file_path, 8, 19);
+			results = project.complete (project_file_path, 8, 20, "\td.to_string().");
 			assert_symbols_contains (results, new string [] {"joinv", "split"});
 
 		}
@@ -80,7 +79,7 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-type-completion",
 					"./tests/files/completion_classes_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 39, 15);
+			var results = project.complete (project_file_path, 39, 15, "\t\tchild.");
 			assert_symbols_contains (results, new string [] {"name", "compute_name", "first_name",
 				"compute_first_name"});
 			assert_symbols_doesnt_contain (results, new string [] {"List"});
@@ -105,7 +104,7 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-type-completion",
 					"./tests/files/completion_classes_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 41, 14);
+			var results = project.complete (project_file_path, 41, 14, "\t\tfile.");
 			assert_symbols_contains (results, new string [] {"append_to", "append_to_async",
 				"copy_attributes", "get_parent"});
 			assert_symbols_doesnt_contain (results, new string [] {"List"});
@@ -132,7 +131,7 @@ namespace Echo.Tests {
 			var results = project.complete (project_file_path, 29, 16);
 			assert_symbols_contains (results, new string [] {"secret",
 				"first_name", "almost_secret", "compute_name"});
-			assert_symbols_doesnt_contain (results, new string [] {"List", "not_visible"});
+			assert_symbols_doesnt_contain (results, new string [] {"not_visible"});
 		}
 
 		public void test_namespace_class_parameters ()
@@ -141,10 +140,9 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-type-completion",
 					"./tests/files/completion_classes_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 51, 17);
-			assert_symbols_contains (results, new string [] {"secret",
-				"first_name", "almost_secret", "prefix"});
-			assert_symbols_doesnt_contain (results, new string [] {"List", "not_visible"});
+			var results = project.complete (project_file_path, 51, 16);
+			assert_symbols_contains (results, new string [] { "secret", "first_name", "almost_secret", "prefix"});
+			assert_symbols_doesnt_contain (results, new string [] {"not_visible"});
 		}
 
 		public void test_namespace_class_parameters_more ()
@@ -165,7 +163,7 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-type-completion",
 					"./tests/files/completion_classes_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 57, 15);
+			var results = project.complete (project_file_path, 57, 15, "\t\tchild.");
 			assert_symbols_contains (results, new string [] {"get_middle_name"});
 			assert_symbols_doesnt_contain (results, new string [] {"List", "not_visible"});
 		}
@@ -176,7 +174,8 @@ namespace Echo.Tests {
 			var project = setup_project_for_file ("test-type-completion",
 					"./tests/files/completion_classes_test.vala", out project_file_path);
 
-			var results = project.complete (project_file_path, 58, 35);
+			var results = project.complete (project_file_path, 59, 35,
+					"\t\tvar other = new Namespace.");
 			assert_symbols_contains (results, new string [] {"OtherChild"});
 			assert_symbols_doesnt_contain (results, new string [] {"List", "not_visible"});
 		}

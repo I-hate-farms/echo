@@ -1,12 +1,6 @@
 
 namespace Echo
 {
-	public errordomain CompleterError
-	{
-		NO_ACCESSOR,
-		NAME_TOO_SHORT
-	}
-
 	public class Project : Object
 	{
 
@@ -91,7 +85,7 @@ namespace Echo
 					full_path, content);
 			var source = new SourceFile (file) ;
 			files[full_path] = source;
-			clear_file (source.source_file);
+			clear_file (source);
 			context.add_source_file (source.source_file);
 		}
 
@@ -153,7 +147,7 @@ namespace Echo
 			}
 			file.status = ParsingStatus.PARSING ;
 			file.source_file.content = content;
-			clear_file (file.source_file);
+			clear_file (file);
 
 			if (!schedule_update)
 				return;
@@ -175,8 +169,10 @@ namespace Echo
 		/**
 		 * Remove all parsed nodes from a given source file
 		 */
-		void clear_file (Vala.SourceFile file)
+		void clear_file (SourceFile source)
 		{
+			source.status = ParsingStatus.PARSING ;
+			var file = source.source_file ;
 			// copied from anjuta
 			var nodes = new Gee.ArrayList<Vala.CodeNode> ();
 			foreach (var node in file.get_nodes()) {
@@ -199,6 +195,7 @@ namespace Echo
 			var ns_ref = new Vala.UsingDirective (new Vala.UnresolvedSymbol (null, "GLib"));
 			file.add_using_directive (ns_ref);
 			context.root.add_using_directive (ns_ref);
+			source.status = ParsingStatus.PARSED ;
 		}
 
 		/**
@@ -340,7 +337,6 @@ namespace Echo
 
 
 		public Gee.List<Symbol> complete (string file_full_path, int line, int column, string? line_text=null)
-			throws CompleterError
 		{
 			var source = files[file_full_path];
 			if (source == null) {

@@ -15,7 +15,7 @@ namespace Echo
 			try {
 				// TODO may match at irrelevant places, check that
 				override_stmt_regex = new Regex ("override [^\\s]+ (" + VARIABLE + "*)");
-				match_type_regex = new Regex ("(?:(?:is|as) (" + VARIABLE + "*))|(?:new (" + VARIABLE + "*))");
+				match_type_regex = new Regex ("(?:(?:is|as) (" + VARIABLE + "*))$|(?:new (" + VARIABLE + "*))$");
 
 				// copied from anjuta
 				member_access_regex = new Regex ("""((?:\w+(?:\s*\([^()]*\))?\.)*)(\w*)$""");
@@ -112,7 +112,8 @@ namespace Echo
 			var smart_case_is_lower = searched == null || searched == "" ||
 				searched.down () == searched;
 
-			// print ("%s `%s`\n", search_type.to_string (), searched);
+			// print ("ATTEMPTING %s COMPLETION FOR `%s` LOOKING FOR `%s`\n",
+			//		search_type.to_string (), line_str, searched);
 
 			var block = locator.find_closest_block (src, line, column);
 			var symbols = lookup_symbol (inner, searched, block as Vala.Block, search_type,
@@ -218,7 +219,7 @@ namespace Echo
 			} else if (inner is Vala.MemberAccess) {
 				var inner_ma = (Vala.MemberAccess) inner;
 				var matching = lookup_symbol (inner_ma.inner, inner_ma.member_name,
-					block, search_type, match_type);
+					block, search_type, MatchType.EXACT);
 				if (matching.size > 0)
 					matching_symbols.add_all (symbol_lookup_inherited (matching[0], name, search_type, match_type));
 			} else if (inner is Vala.MethodCall) {
@@ -253,7 +254,6 @@ namespace Echo
 
 			var table = symbol.scope.get_symbol_table ();
 
-			// print ("FROM: %s <%s>\n", symbol.name, symbol.type_name);
 			if (table != null) {
 				foreach (var key in table.get_keys ()) {
 					var candidate = table[key];

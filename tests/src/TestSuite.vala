@@ -11,17 +11,17 @@ public static int main(string[] args) {
 
   // working ones (update as you go by)
   add_tests (new FullEchoProjectTestCase ());
-  // add_tests (new SymbolListingTestCase ());
-  // add_tests (new EnclosingSymbolTestCase ());
-  // add_tests (new CompletionDocumentationTestCase ());
+  add_tests (new SymbolListingTestCase ());
+  add_tests (new EnclosingSymbolTestCase ());
+  add_tests (new CompletionDocumentationTestCase ());
+  add_tests (new ParameterTestCase());
+  add_tests (new ExtraSymbolsTestCase ());
+  add_tests (new CompletionTestCase ());
 
   // WIP
   // add_tests (new SymbolPositionTestCase ());
 
   // failing test cases
-  // add_tests (new ParameterTestCase());
-  // add_tests (new CompletionTestCase ());
-  // add_tests (new ExtraSymbolsTestCase ());
 
   // To be addressed "some day"
   // add_tests (new CrashingEchoTestCase ());

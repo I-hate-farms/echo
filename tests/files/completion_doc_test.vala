@@ -1,8 +1,8 @@
 public static int main (string[] args) {
 		var s = "my string";
-		//s.
+		// s.
 		// FileUtils.
 		Action action = null;
-		action.
+		// action.
 		return 0;
 }

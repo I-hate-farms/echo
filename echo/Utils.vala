@@ -213,8 +213,6 @@ namespace Echo.Utils
 		var data = new DataType ();
 		data.name = name;
 
-
-
 		data.type_name = type.to_string ();
 
 		// type.to_string messes the type names

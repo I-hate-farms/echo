@@ -116,5 +116,17 @@ namespace Echo
 		{
 			check_location (symbol, SymbolType.SIGNAL);
 		}
+		public override void visit_error_domain (Vala.ErrorDomain symbol)
+		{
+			check_location (symbol, SymbolType.ERRORDOMAIN);
+		}
+		public override void visit_constant (Vala.Constant symbol)
+		{
+			check_location (symbol, SymbolType.CONSTANT);
+		}
+		public override void visit_delegate (Vala.Delegate symbol)
+		{
+			check_location (symbol, SymbolType.DELEGATE);
+		}
 	}
 }

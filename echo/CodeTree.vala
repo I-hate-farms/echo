@@ -17,7 +17,7 @@ namespace Echo
 
 		public void update_code_tree (SourceFile source)
 		{
-
+			source.status = ParsingStatus.PARSING ;
 			var src = source.source_file ;
 			var symbols = new Gee.ArrayList<Symbol> ();
 			var root = new Symbol ();

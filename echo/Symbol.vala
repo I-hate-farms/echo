@@ -219,7 +219,6 @@ namespace Echo
 			if( symbol.parent_node != null)
 			{
 				var name = Type.from_instance(symbol.parent_node).name ();
-				Utils.report_error ("Symbol.from_vala", "Symbol '%s' parent '%s'".printf(symbol.name, name));
 
 				if ( symbol.parent_node is Vala.Symbol) {
 					var parent_symbol = (Symbol) symbol.parent_node;

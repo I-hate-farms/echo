@@ -62,7 +62,7 @@ namespace Echo.Tests {
 
 			var results = project.get_symbols ();
 			assert_symbol_count (results, 1 );
-			assert_symbol_count (results.@get (0).children, 12 );
+			assert_symbol_count (results.@get (0).children, 13 );
 
 		  // assert_symbol_type (get_root_symbols ("./files/main.vala"), SymbolType.CLASS);
 		 }

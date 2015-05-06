@@ -2,9 +2,9 @@
 void main ()
 {
 	var list = new List<string> ();
-	list.
+	// list.
 
 	var d = new DateTime.now_local ();
-	d.to_string ().
+	// d.to_string ().
 }
 
