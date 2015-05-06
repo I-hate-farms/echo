@@ -185,13 +185,6 @@ namespace Echo.Utils
 		return list;
 	}
 
-	/**
-	 * Returns the return_type of the given symbol, or %null if the given
-	 * symbol has no parameters.
-	 *
-	 * @param symbol The symbol for which to return a parameter list
-	 * @return       A list of parameters or %null
-	 */
 	public DataType? extract_return_type (Vala.Symbol symbol)
 	{
 
@@ -202,6 +195,14 @@ namespace Echo.Utils
 		else if (symbol is Vala.Signal) {
 			var sig =  ((Vala.Signal) symbol);
 			return extract_data_type (symbol.name, sig.return_type);
+		}
+		else if (symbol is Vala.Property) {
+			var prop =  (Vala.Property) symbol;
+			return extract_data_type (symbol.name, prop.property_type);
+		}
+		else if (symbol is Vala.Field) {
+			var prop =  (Vala.Field) symbol;
+			return extract_data_type (symbol.name, prop.variable_type);
 		}
 		else
 			return null;

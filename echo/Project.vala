@@ -89,6 +89,15 @@ namespace Echo
 			context.add_source_file (source.source_file);
 		}
 
+		private SourceFile? find_source_file (string filename) {
+			foreach (var source in files.values)
+			{
+				if (source.source_file.filename == filename)
+					return source ;
+			}
+			return null ;
+		}
+
 		public void update_sync ()
 		{
 			var monitor = new Monitor ();
@@ -99,6 +108,9 @@ namespace Echo
 				Vala.CodeContext.push (context);
 
 				foreach (var src in context.get_source_files ()) {
+					var source = find_source_file (src.filename) ;
+					if( source != null)
+						source.status = ParsingStatus.PARSING ;
 					if (cancellable.is_cancelled ())
 						break;
 
@@ -195,7 +207,7 @@ namespace Echo
 			var ns_ref = new Vala.UsingDirective (new Vala.UnresolvedSymbol (null, "GLib"));
 			file.add_using_directive (ns_ref);
 			context.root.add_using_directive (ns_ref);
-			source.status = ParsingStatus.PARSED ;
+			source.status = ParsingStatus.NOT_PARSED ;
 		}
 
 		/**
