@@ -15,8 +15,10 @@ namespace Echo
 			this.context = context;
 		}
 
-		public void update_code_tree (Vala.SourceFile src)
+		public void update_code_tree (SourceFile source)
 		{
+
+			var src = source.source_file ;
 			var symbols = new Gee.ArrayList<Symbol> ();
 			var root = new Symbol ();
 			root.symbol_type = SymbolType.FILE;
@@ -32,6 +34,8 @@ namespace Echo
 
 			trees[src.filename] = root;
 			lists[src.filename] = symbol_list;
+
+			source.status = ParsingStatus.PARSED ;
 		}
 
 		private void post_process (Symbol parent, ref Gee.List<Symbol> global_collection)
@@ -64,27 +68,29 @@ namespace Echo
 					sort_symbols (sym.children, flat);
 		}
 
-		public Symbol? get_code_tree (Vala.SourceFile src)
+		public Symbol? get_code_tree (SourceFile source)
 		{
+			var src = source.source_file ;
 			var tree = trees[src.filename];
 			if (tree == null)
-				update_code_tree (src);
+				update_code_tree (source);
 
 			return trees[src.filename];
 		}
 
-		public Symbol? find_root_symbol (Vala.SourceFile src) {
-			var result = get_code_tree (src);
+		public Symbol? find_root_symbol (SourceFile source) {
+			var result = get_code_tree (source);
 			if (result == null)
-				message ("find_root_symbol: NULL for '%s'", src.filename);
+				message ("find_root_symbol: NULL for '%s'", source.source_file.filename);
 
 			return result;
 		}
 
-		public Gee.List<Symbol>? find_symbols (Vala.SourceFile src) {
+		public Gee.List<Symbol>? find_symbols (SourceFile source) {
+			var src = source.source_file ;
 			var list = lists[src.filename];
 			if (list == null)
-				update_code_tree (src);
+				update_code_tree (source);
 
 			return lists[src.filename];
 		}

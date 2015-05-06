@@ -21,8 +21,8 @@ namespace Echo
 		Reporter reporter;
 		string name;
 
-		Gee.HashMap<string,Vala.SourceFile> files =
-			new Gee.HashMap<string,Vala.SourceFile> ();
+		Gee.HashMap<string,SourceFile> files =
+			new Gee.HashMap<string,SourceFile> ();
 
 		uint scheduled_update_id;
 
@@ -89,9 +89,10 @@ namespace Echo
 		{
 			var file = new Vala.SourceFile (context, Vala.SourceFileType.SOURCE,
 					full_path, content);
-			files[full_path] = file;
-			clear_file (file);
-			context.add_source_file (file);
+			var source = new SourceFile (file) ;
+			files[full_path] = source;
+			clear_file (source.source_file);
+			context.add_source_file (source.source_file);
 		}
 
 		public void update_sync ()
@@ -111,6 +112,7 @@ namespace Echo
 						continue;
 
 					parser.visit_source_file (src);
+
 				}
 
 				context.check ();
@@ -149,8 +151,9 @@ namespace Echo
 				Utils.report_error ( "update_file_contents", "Exiting: can't find source for '%s'".printf (full_filepath));
 				return;
 			}
-			file.content = content;
-			clear_file (file);
+			file.status = ParsingStatus.PARSING ;
+			file.source_file.content = content;
+			clear_file (file.source_file);
 
 			if (!schedule_update)
 				return;
@@ -322,7 +325,7 @@ namespace Echo
 			var src = files[file_full_path];
 			assert (src != null);
 
-			var block = locator.find_closest_block (src, line, column);
+			var block = locator.find_closest_block (src.source_file, line, column);
 			print ("%s\n", Utils.symbol_to_string (block));
 
 			var table = block.scope.get_symbol_table ();
@@ -345,7 +348,7 @@ namespace Echo
 				return new Gee.ArrayList<string> ();
 			}
 
-			return completor.complete (source, locator, line, column, line_text);
+			return completor.complete (source.source_file, locator, line, column, line_text);
 		}
 	}
 }
