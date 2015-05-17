@@ -76,7 +76,9 @@ namespace Echo
 		}
 
 		public void add_external_package (string package) {
+			Vala.CodeContext.push (context);
 			context.add_external_package (package);
+			Vala.CodeContext.pop ();
 		}
 
 		public void add_file (string full_path, string? content = null)

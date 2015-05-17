@@ -15,7 +15,7 @@ namespace Echo.Tests {
 		}
 
 		private void init ( ) {
-			var project = new Project ("test-vapi");
+			project = new Project ("test-vapi");
 			// Sample libs
 			project.add_external_package ("glib-2.0");
 			project.add_external_package ("gio-2.0");
@@ -28,7 +28,7 @@ namespace Echo.Tests {
 
 			file = File.new_for_path ("./tests/files/noise/ClassUsingNoise.vala");
 			file_path = file.get_path ();
-			project.add_external_package (file_path);
+			project.add_file (file_path);
 			project.update_sync ();
 
 		}
