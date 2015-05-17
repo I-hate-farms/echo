@@ -1,3 +1,4 @@
+
 namespace Echo {
 	public class DocParser {
 
@@ -16,11 +17,13 @@ namespace Echo {
 				var file_path = "/home/cran/Documents/Projects/i-hate-farms/ide/echo/comments/";
 				if( File.new_for_path (file_path).query_exists ())
 				{
-					var file_names = new string[] {"GLib-2.0.gir", "Gee-0.8.gir", "Gio-2.0.gir",
-						"Gtk-3.0.gir", "Gdk-3.0.gir" };
+					/*var file_names = new string[] {"GLib-2.0.gir", "Gee-0.8.gir", "Gio-2.0.gir",
+						"Gtk-3.0.gir", "Gdk-3.0.gir" }; */
+
+					var file_names = new string[] {"glib-2.0" } ;
 
 					foreach (var file_name in file_names) {
-						_instance.load_from_file (file_path + file_name + ".comments");
+						_instance.load_from_file (file_path + file_name + ".docs");
 					}
 				}
 			}
@@ -28,17 +31,16 @@ namespace Echo {
 		}
 
 		public class DocEntry {
-			public string name = "";
-			public string parent = "";
+			public string full_name = "";
+			//public string parent = "";
 			public string comment = "";
 
-			public DocEntry (string parent, string name, string comment) {
-				this.parent = parent;
-				this.name = name;
+			public DocEntry (/*string parent,*/ string full_name, string comment) {
+				this.full_name = full_name;
 				this.comment = comment;
 			}
 			public string to_string () {
-				return "%s.%s: %s".printf (parent, name, comment.substring (0, int.min (comment.length, 30)));
+				return "%s: %s".printf (full_name, comment.substring (0, int.min (comment.length, 30)));
 			}
 		}
 
@@ -47,9 +49,9 @@ namespace Echo {
 		// HACK Remove the first part of the namespace because
 		// we need to cross reference gir files with vapi files
 		// to get everything right.
-		private Gee.TreeMap<string, DocEntry> hacked_entries = new Gee.TreeMap<string, DocEntry>();
+		// private Gee.TreeMap<string, DocEntry> hacked_entries = new Gee.TreeMap<string, DocEntry>();
 
-		public int parse (string gir_file_path) {
+		public int parse_gir (string gir_file_path) {
 			//entries.clear ();
 			var node = fetch_xml_node (gir_file_path);
 			if( node != null )
@@ -68,8 +70,8 @@ namespace Echo {
 				var output = new DataOutputStream (file.create (FileCreateFlags.REPLACE_DESTINATION));
 				foreach (var entry in entries.values) {
 					if( entry.comment != "" && entry.comment != null) {
-						write (output, "#NAME: %s".printf (entry.name));
-						write (output, "#PARENT: %s".printf (entry.parent));
+						write (output, "#FULL_NAME: %s".printf (entry.full_name));
+						// write (output, "#PARENT: %s".printf (entry.parent));
 						write (output, "#COMMENT: %s".printf (entry.comment));
 					}
 				}
@@ -97,29 +99,27 @@ namespace Echo {
 		        var dis = new DataInputStream (file.read ());
 		        string line;
 		        var name = "";
-		        var parent = "";
 		        var comment = new StringBuilder ();
 		        // Read lines until end of file (null) is reached
 		        while ((line = dis.read_line (null)) != null) {
-		            if( line.has_prefix ("#NAME: ")) {
+		            if( line.has_prefix ("#FULL_NAME: ")) {
 		            	// Save the previous values
-		            	var entry = new DocEntry (parent, name, comment.str);
+		            	var entry = new DocEntry ( name, comment.str);
 		            	// HACK because we can't get the package right
-		            	var index = parent.index_of (".");
+		            	/*var index = parent.index_of (".");
 		            	if ( index > -1) {
 		            		var hacked_parent = parent.substring (index+1);
 		            		// print ("%s\n", hacked_parent);
 		            		hacked_entries.@set(hacked_parent+"."+name, entry);
-		            	}
+		            	}*/
 
-		            	entries.@set(parent+"."+name, entry);
-		            	parent = "";
+		            	entries.@set(name, entry);
+		            	//parent = "";
 		            	comment = new StringBuilder ();
 
-		            	name = line.substring ("#NAME: ".length);
-		            } else if ( line.has_prefix ("#PARENT: ")) {
-		            	parent = line.substring ("#PARENT: ".length);
-		            } else if ( line.has_prefix ("#COMMENT: ")) {
+		            	name = line.substring ("#FULL_NAME: ".length);
+		            }
+		         	else if ( line.has_prefix ("#COMMENT: ")) {
 		            	comment.append (line.substring ("#COMMENT: ".length));
 		            }
 		            else {
@@ -139,18 +139,18 @@ namespace Echo {
 
 			var path = fully_qualified_path;
 			// HACK because we can't get the package right
-        	var index = path.index_of (".");
-        	if ( index > -1) {
-        		path = path.substring (index+1);
-        		// print ("%s\n", hacked_parent);
-        		// hacked_entries.@set(hacked_parent+"."+name, entry);
-        	}
+	    	/*var index = path.index_of (".");
+	    	if ( index > -1) {
+	    		path = path.substring (index+1);
+	    		// print ("%s\n", hacked_parent);
+	    		// hacked_entries.@set(hacked_parent+"."+name, entry);
+	    	}*/
 
-			var result = hacked_entries.@get (path);
-			// var result = entries.@get (path);
+			//var result = hacked_entries.@get (path);
+			var result = entries.@get (path);
 			if (result == null ) {
-				if (hacked_entries.size != 0)
-					Utils.report_debug ("DocParser", "No comment for '%s'".printf (path));
+				//if (entries.size != 0)
+				//	Utils.report_debug ("DocParser", "No comment for '%s'".printf (path));
 				return "";
 			}
 			return result.comment;
@@ -197,8 +197,7 @@ namespace Echo {
 	                    	entry_name = ns.substring (index+1);
 	                    	ns = ns.substring (0, index);
 	                    }
-	                    var entry = new DocEntry (ns,
-	                    	entry_name,
+	                    var entry = new DocEntry (ns+"."+entry_name,
 	                    	node_content);
 	                    //print (entry.to_string () + "\n");
 	                    entries.@set (ns + "." + entry_name, entry);
@@ -212,6 +211,5 @@ namespace Echo {
 	                parse_nodes (iter, parent + node_name, name_space + "." + parent_node_name);
 	            }
 	        }
-
 	}
 }

@@ -10,14 +10,14 @@ public static int main(string[] args) {
   Ivy.Stacktrace.register_handlers ();
 
   // working ones (update as you go by)
-  add_tests (new FullEchoProjectTestCase ());
-  add_tests (new SymbolListingTestCase ());
-  add_tests (new EnclosingSymbolTestCase ());
-  add_tests (new CompletionDocumentationTestCase ());
-  add_tests (new ParameterTestCase());
-  add_tests (new ExtraSymbolsTestCase ());
-  add_tests (new CompletionTestCase ());
-
+  //add_tests (new FullEchoProjectTestCase ());
+  //add_tests (new SymbolListingTestCase ());
+  //add_tests (new EnclosingSymbolTestCase ());
+  //add_tests (new CompletionDocumentationTestCase ());
+  //add_tests (new ParameterTestCase());
+  //add_tests (new ExtraSymbolsTestCase ());
+  //add_tests (new CompletionTestCase ());
+  add_tests (new VapiTestCase ()) ;
   // WIP
   // add_tests (new SymbolPositionTestCase ());
 

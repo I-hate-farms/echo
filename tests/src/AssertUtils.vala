@@ -25,7 +25,12 @@ public static void assert_symbol_type_and_name ( Gee.List<Symbol> symbols, strin
 	report_passed (symbols, true);
 }
 
-public static void assert_symbol_count (Gee.List<Symbol> symbols, int expected_count) {
+public static void assert_symbol_count (Gee.List<Symbol>? symbols, int expected_count) {
+	if( symbols == null ) {
+		report_error (symbols, "The symbols list was null");
+		return ;
+	}
+
 	if ( symbols.size == expected_count) {
 		report_passed (symbols);
 		return;
@@ -36,7 +41,12 @@ public static void assert_symbol_count (Gee.List<Symbol> symbols, int expected_c
 	// assert (false);
 }
 
-public static void assert_symbol_count_not (Gee.List<Symbol> symbols, int unexpected_count) {
+public static void assert_symbol_count_not (Gee.List<Symbol>? symbols, int unexpected_count) {
+	if( symbols == null ) {
+		report_error (symbols, "The symbols list was null");
+		return ;
+	}
+
 	if ( symbols.size != unexpected_count) {
 		report_passed (symbols);
 		return;
@@ -181,7 +191,7 @@ public static void assert_parameter_type_equals (Symbol? symbol, string expected
 		report_passed (symbols);
 		return;
 	}
-	report_error (symbols, "Found parameter of type '%s' [base: '%s'] when '%s' was expected".printf (
+	report_error (symbols, "Found parameter of type '%s' [base: '%s'] when '%s' was expected.".printf (
 		parameter.type_name, parameter.base_type_name, expected_parameter_type));
 
 
@@ -211,7 +221,7 @@ public static void assert_symbols_contains (Gee.List<Symbol> symbols, string[] n
 	}
 	else
 	{
-		report_error (symbols, "The symbols doesn't contain the list of expected symbols %s".printf (missing_symbols));
+		report_error (symbols, "The symbols doesn't contain the list of expected symbols %s.".printf (missing_symbols));
 	}
 }
 
@@ -228,6 +238,26 @@ public static void assert_symbols_doesnt_contain (Gee.List<Symbol> symbols, stri
 	}
 	else
 	{
-		report_error (symbols, "The symbols contain the list of unexpected symbols %s".printf (missing_symbols));
+		report_error (symbols, "The symbols contain the list of unexpected symbols %s.".printf (missing_symbols));
 	}
+}
+
+public static void assert_has_description (Gee.List<Symbol> symbols, string name) {
+	var symbol = Utils.find_symbol (symbols, name);
+	if( symbol == null)
+	{
+		report_error (symbols, "The expected symbol '%s' is not present in actual of symbols.".printf(name)) ;
+	}
+	else
+	{
+		if( symbol.description != "" && symbol.description != null)
+		{
+			report_passed (symbols) ;
+		}
+		else
+		{
+			report_error (symbols, "The symbol '%s' has no documentation.".printf(name)) ;
+		}
+	}
+
 }
